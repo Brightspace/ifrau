@@ -1,0 +1,41 @@
+{
+  "name": "ifrau",
+  "version": "0.0.1",
+  "description": "Free-range app utility for IFRAME-based FRAs",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "browserify -s ifrau index.js -t babelify > ./dist/ifrau.js",
+    "clean": "rimraf dist && mkdir dist",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brightspace/ifrau.git"
+  },
+  "keywords": [
+    "d2l",
+    "frau",
+    "iframe",
+    "postMessage"
+  ],
+  "author": "D2L Corporation",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/Brightspace/ifrau/issues"
+  },
+  "homepage": "https://github.com/Brightspace/ifrau",
+  "dependencies": {
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.3",
+    "rimraf": "^2.3.4"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
+}
