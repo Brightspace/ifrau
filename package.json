@@ -2,12 +2,20 @@
   "name": "ifrau",
   "version": "0.0.1",
   "description": "Free-range app utility for IFRAME-based FRAs",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "prebuild": "npm run clean",
-    "build": "browserify -s ifrau index.js -t babelify > ./dist/ifrau.js",
-    "clean": "rimraf dist && mkdir dist",
-    "test": "npm test"
+    "prebuild": "npm run clean && npm run transpile",
+    "build": "browserify -s ifrau ./lib/index.js | uglifyjs > ./dist/ifrau.js",
+    "clean": "rimraf dist && rimraf lib && mkdir dist",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "jshint src/*.js",
+    "lint:test": "jshint test/*.js",
+    "prepublish": "npm run build",
+    "publish": "gulp publish",
+    "test:unit": "istanbul cover _mocha -- test/*.js",
+    "test": "npm run lint -s && npm run test:unit -s",
+    "transpile": "babel src --out-dir lib",
+    "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -29,9 +37,18 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
-    "babelify": "^6.1.2",
+    "babel": "^5.5.6",
     "browserify": "^10.2.3",
-    "rimraf": "^2.3.4"
+    "chai": "^3.0.0",
+    "gulp": "^3.9.0",
+    "gulp-frau-publisher": "^2.2.0",
+    "istanbul-harmony": "^0.3.12",
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5",
+    "peanut-gallery": "^1.0.0",
+    "rimraf": "^2.3.4",
+    "sinon": "^1.15.1",
+    "uglify-js": "^2.4.23"
   },
   "browserify": {
     "transform": [

@@ -10,7 +10,6 @@ export default class Port {
 		this.waitingRequests = [];
 		this.requestId = 0;
 		this.debugEnabled = false;
-		return this;
 	}
 	close() {
 		window.removeEventListener('message', this.receiveMessage);

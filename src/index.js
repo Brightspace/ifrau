@@ -1,5 +1,5 @@
-import Host from './lib/host';
-import Client from './lib/client';
+import Host from './host';
+import Client from './client';
 var Q = require('q');
 
 export function createHost(data) {
