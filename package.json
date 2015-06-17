@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "npm run clean && npm run transpile",
     "build": "browserify -s ifrau ./lib/index.js | uglifyjs > ./dist/ifrau.js",
-    "clean": "rimraf dist && rimraf lib && mkdir dist",
+    "clean": "rimraf dist && mkdir dist",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "jshint src/*.js",
     "lint:test": "jshint test/*.js",
@@ -14,7 +14,8 @@
     "publish": "gulp publish",
     "test:unit": "babel-istanbul cover _mocha -- test/*.js",
     "test": "npm run lint -s && npm run test:unit -s",
-    "transpile": "babel src --out-dir lib",
+    "pretranspile": "rimraf lib",
+    "transpile": "babel src --optional runtime --out-dir lib",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
@@ -34,7 +35,7 @@
   },
   "homepage": "https://github.com/Brightspace/ifrau",
   "dependencies": {
-    "q": "^1.4.1"
+    "babel-runtime": "^5.5.8"
   },
   "devDependencies": {
     "babel": "^5.5.6",
@@ -51,10 +52,5 @@
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
     "uglify-js": "^2.4.23"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
   }
 }
