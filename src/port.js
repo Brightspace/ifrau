@@ -1,5 +1,3 @@
-var Q = require('q');
-
 export default class Port {
 	constructor(endpoint, targetOrigin) {
 		this.endpoint = endpoint;
@@ -25,13 +23,13 @@ export default class Port {
 		}
 		dic[key].push(obj);
 	}
-	on(eventType, handler) {
+	onEvent(eventType, handler) {
 		this.initHashArrAndPush(this.eventHandlers, eventType, handler);
 		return this;
 	}
 	onRequest(requestType, handler) {
 		if(this.requestHandlers[requestType] !== undefined) {
-			throw `Duplicate onRequest handler for type "${requestType}"`;
+			throw new Error(`Duplicate onRequest handler for type "${requestType}"`);
 		}
 		this.requestHandlers[requestType] = handler;
 		this.sendRequestResponse(requestType);
@@ -85,31 +83,26 @@ export default class Port {
 			if(req.id !== payload.id) {
 				continue;
 			}
-			req.promise.resolve(payload.val);
+			req.promise(payload.val);
 			requests.splice(i, 1);
 			return;
 		}
 
 	}
 	request(requestType) {
-
-		var deferred = Q.defer();
-
-		var id = ++this.requestId;
-
-		this.initHashArrAndPush(
-				this.pendingRequests,
-				requestType,
-				{
-					id: id,
-					promise: deferred,
-				}
-			);
-
-		this.sendMessage(`req.${requestType}`,{id: id});
-
-		return deferred.promise;
-
+		var me = this;
+		return new Promise((resolve, reject) => {
+			var id = ++me.requestId;
+			me.initHashArrAndPush(
+					me.pendingRequests,
+					requestType,
+					{
+						id: id,
+						promise: resolve,
+					}
+				);
+			me.sendMessage(`req.${requestType}`,{id: id});
+		});
 	}
 	sendMessage(key, data) {
 		var message = {
@@ -132,12 +125,13 @@ export default class Port {
 		}
 
 		var me = this;
-		Q.when(handler(), function(val) {
-			me.waitingRequests[requestType].forEach(function(id) {
-				me.sendMessage(`res.${requestType}`, { id: id, val: val });
+		Promise.resolve(handler())
+			.then((val) => {
+				waiting.forEach(function(id) {
+					me.sendMessage(`res.${requestType}`, { id: id, val: val });
+				});
+				delete me.waitingRequests[requestType];
 			});
-			delete me.waitingRequests[requestType];
-		});
 
 	}
 }

@@ -8,7 +8,7 @@ export default class Client extends Port {
 		this.lastHeight = 0;
 		var hasCsrfToken = false;
 		var me = this;
-		this.on('csrf', function(data) {
+		this.onEvent('csrf', function(data) {
 				localStorage['XSRF.Token@' + data.origin] = data.token;
 				if(!hasCsrfToken) {
 					hasCsrfToken = true;

@@ -10,17 +10,17 @@ export default class Host extends Port {
 		super(iframe.contentWindow, '*');
 
 		var me = this;
-		this.on('ready', function() {
+		this.onEvent('ready', function() {
 				me.sendEvent('csrf', {
 					origin: window.location.origin,
 					token: localStorage['XSRF.Token']
 				});
 				cb(me);
-			}).on('height', function(height) {
+			}).onEvent('height', function(height) {
 				iframe.style.height = height + 'px';
-			}).on('title', function(title) {
+			}).onEvent('title', function(title) {
 				document.title = title;
-			}).on('navigate', function(url) {
+			}).onEvent('navigate', function(url) {
 				document.location.href = url;
 			}).open();
 
