@@ -1,7 +1,7 @@
 import Port from './port';
 
 export default class Host extends Port {
-	constructor(id, src, cb) {
+	constructor(id, src) {
 
 		var iframe = Host.createIFrame(src);
 		var parent = document.getElementById(id);
@@ -9,21 +9,28 @@ export default class Host extends Port {
 
 		super(iframe.contentWindow, '*');
 
+		this.iframe = iframe;
+
+	}
+	connect() {
 		var me = this;
-		this.onEvent('ready', function() {
-				me.sendEvent('csrf', {
+		return new Promise((resolve, reject) => {
+			me.onEvent('ready', function() {
+				me.sendEventRaw('csrf', {
 					origin: window.location.origin,
 					token: localStorage['XSRF.Token']
 				});
-				cb(me);
+				super.connect();
+				resolve();
 			}).onEvent('height', function(height) {
-				iframe.style.height = height + 'px';
+				me.iframe.style.height = height + 'px';
 			}).onEvent('title', function(title) {
 				document.title = title;
 			}).onEvent('navigate', function(url) {
 				document.location.href = url;
-			}).open();
-
+			});
+			super.open();
+		});
 	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');
