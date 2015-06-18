@@ -26,10 +26,33 @@ describe('port', () => {
 
 	describe('close', () => {
 
+		it('should throw if port is not already open', () => {
+			expect(() => {
+				port.close();
+			}).to.throw(Error, 'Port cannot be closed, call open() first');
+		});
+
 		it('should stop listening for "message" events', () => {
+			port.open();
 			port.close();
 			global.window.removeEventListener
 				.should.have.been.calledWith('message', port.receiveMessage );
+		});
+
+		it('should disconnect port', () => {
+			port.open();
+			port.close();
+			expect(port.isConnected).to.be.false;
+		});
+
+	});
+
+	describe('connect', () => {
+
+		it('should return a  promise', () => {
+			var p = port.connect();
+			expect(p).to.be.defined;
+			expect(p.then).to.be.defined;
 		});
 
 	});
@@ -106,6 +129,13 @@ describe('port', () => {
 			expect(p).to.equal(port);
 		});
 
+		it('should throw if already connected', () => {
+			port.connect();
+			expect(() => {
+				port.onEvent('foo', () => {});
+			}).to.throw(Error, 'Add event handlers before connecting');
+		});
+
 	});
 
 	describe('onRequest', () => {
@@ -143,6 +173,13 @@ describe('port', () => {
 			expect(p).to.equal(port);
 		});
 
+		it('should throw if already connected', () => {
+			port.connect();
+			expect(() => {
+				port.onRequest('foo', 'bar');
+			}).to.throw(Error, 'Add request handlers before connecting');
+		});
+
 	});
 
 	describe('open', () => {
@@ -156,6 +193,13 @@ describe('port', () => {
 		it('should return "this"', () => {
 			var val = port.open();
 			expect(val).to.equal(port);
+		});
+
+		it('should throw if already open', () => {
+			port.open();
+			expect(() => {
+				port.open();
+			}).to.throw(Error, 'Port is already open.');
 		});
 
 	});
@@ -314,14 +358,20 @@ describe('port', () => {
 			initHashArrAndPush.restore();
 		});
 
+		it('should throw if not connected', () => {
+			expect(() => {
+				port.request('foo');
+			}).to.throw(Error, 'Cannot request() before connect() has completed');
+		});
+
 		it('should return a promise', () => {
-			var promise = port.request('foo');
+			var promise = port.connect().request('foo');
 			expect(promise).to.be.defined;
 			expect(promise.then).to.be.defined;
 		});
 
 		it('should add to "pendingRequests"', () => {
-			port.request('foo');
+			port.connect().request('foo');
 			initHashArrAndPush.should.have.been.calledWith(
 				port.pendingRequests,
 				'foo'
@@ -329,11 +379,12 @@ describe('port', () => {
 		});
 
 		it('should send message', () => {
-			port.request('foo');
+			port.connect().request('foo');
 			sendMessage.should.have.been.calledWith('req.foo', { id: 1 } );
 		});
 
 		it('should send each message with a new ID', () => {
+			port.connect();
 			port.request('foo');
 			port.request('bar');
 			sendMessage.should.have.been.calledWith('req.foo', { id: 1 } );
@@ -371,13 +422,19 @@ describe('port', () => {
 			sendMessage.restore();
 		});
 
+		it('should throw if not connected', () => {
+			expect(() => {
+				port.sendEvent('foo', 'bar');
+			}).to.throw(Error, 'Cannot sendEvent() before connect() has completed');
+		});
+
 		it('should "sendMessage" prepended with "evt"', () => {
-			port.sendEvent('foo', 'bar');
+			port.connect().sendEvent('foo', 'bar');
 			sendMessage.should.have.been.calledWith('evt.foo', 'bar');
 		});
 
 		it('should return result of "sendMessage"', () => {
-			var val = port.sendEvent('foo', 'bar');
+			var val = port.connect().sendEvent('foo', 'bar');
 			expect(val).to.equal(14);
 		});
 
@@ -395,8 +452,32 @@ describe('port', () => {
 			sendMessage.restore();
 		});
 
+		[
+			{name: 'value', val: 'foo', expect: 'foo'},
+			{name: 'function', val: () => 'hello', expect: 'hello'},
+			{name: 'promise', val: new Promise((resolve) => {
+				resolve(true);
+			}), expect: true},
+			{name: 'function-promise', val: () => new Promise((resolve) => {
+				resolve(49);
+			}), expect: 49}
+		].forEach((test) => {
+			it(`should handle ${test.name}-based responses`, (done) => {
+				port.requestHandlers.bar = test.val;
+				port.waitingRequests.bar = [1];
+				port.sendRequestResponse('bar');
+				setTimeout(() => {
+					sendMessage.should.have.been.calledWith(
+						'res.bar',
+						{id: 1, val: test.expect}
+					);
+					done();
+				});
+			});
+		});
+
 		it('should send handler value to each waiting request', (done) => {
-			port.requestHandlers.bar = () => 'hello';
+			port.requestHandlers.bar = 'hello';
 			port.waitingRequests.bar = [1, 2];
 			port.sendRequestResponse('bar');
 			setTimeout(() => {
@@ -407,21 +488,6 @@ describe('port', () => {
 				sendMessage.should.have.been.calledWith(
 					'res.bar',
 					{id: 2, val: 'hello'}
-				);
-				done();
-			});
-		});
-
-		it('should handle promise-based responses', (done) => {
-			port.requestHandlers.bar = () => new Promise((resolve) => {
-				resolve(49);
-			});
-			port.waitingRequests.bar = [1];
-			port.sendRequestResponse('bar');
-			setTimeout(() => {
-				sendMessage.should.have.been.calledWith(
-					'res.bar',
-					{id: 1, val: 49}
 				);
 				done();
 			});

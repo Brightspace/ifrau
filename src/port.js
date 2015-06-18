@@ -8,9 +8,20 @@ export default class Port {
 		this.waitingRequests = [];
 		this.requestId = 0;
 		this.debugEnabled = false;
+		this.isConnected = false;
+		this.isOpen = false;
 	}
 	close() {
+		if(!this.isOpen) {
+			throw new Error('Port cannot be closed, call open() first');
+		}
+		this.isOpen = false;
+		this.isConnected = false;
 		window.removeEventListener('message', this.receiveMessage);
+	}
+	connect() {
+		this.isConnected = true;
+		return this;
 	}
 	debug(msg) {
 		if(this.debugEnabled) {
@@ -24,10 +35,16 @@ export default class Port {
 		dic[key].push(obj);
 	}
 	onEvent(eventType, handler) {
+		if(this.isConnected) {
+			throw new Error('Add event handlers before connecting');
+		}
 		this.initHashArrAndPush(this.eventHandlers, eventType, handler);
 		return this;
 	}
 	onRequest(requestType, handler) {
+		if(this.isConnected) {
+			throw new Error('Add request handlers before connecting');
+		}
 		if(this.requestHandlers[requestType] !== undefined) {
 			throw new Error(`Duplicate onRequest handler for type "${requestType}"`);
 		}
@@ -36,6 +53,10 @@ export default class Port {
 		return this;
 	}
 	open() {
+		if(this.isOpen) {
+			throw new Error('Port is already open.');
+		}
+		this.isOpen = true;
 		window.addEventListener('message', this.receiveMessage.bind(this), false);
 		return this;
 	}
@@ -90,6 +111,12 @@ export default class Port {
 
 	}
 	request(requestType) {
+		if(!this.isConnected) {
+			throw new Error('Cannot request() before connect() has completed');
+		}
+		return this.requestRaw(requestType);
+	}
+	requestRaw(requestType) {
 		var me = this;
 		return new Promise((resolve, reject) => {
 			var id = ++me.requestId;
@@ -114,6 +141,12 @@ export default class Port {
 		return this;
 	}
 	sendEvent(eventType, data) {
+		if(!this.isConnected) {
+			throw new Error('Cannot sendEvent() before connect() has completed');
+		}
+		return this.sendEventRaw(eventType, data);
+	}
+	sendEventRaw(eventType, data) {
 		return this.sendMessage(`evt.${eventType}`, data);
 	}
 	sendRequestResponse(requestType) {
@@ -124,8 +157,12 @@ export default class Port {
 			return;
 		}
 
+		if(typeof(handler) === 'function') {
+			handler = handler();
+		}
+
 		var me = this;
-		Promise.resolve(handler())
+		Promise.resolve(handler)
 			.then((val) => {
 				waiting.forEach(function(id) {
 					me.sendMessage(`res.${requestType}`, { id: id, val: val });
