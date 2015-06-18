@@ -9,34 +9,62 @@ import Host from '../src/host';
 
 describe('host', () => {
 
-	var host, callback, onEvent, sendEventRaw;
+	describe('constructor', () => {
 
-	beforeEach(() => {
-		global.window = {
-			addEventListener: sinon.stub(),
-			location: { origin: 'origin' }
-		};
-		global.document = {
-			createElement: sinon.stub().returns({style:{}}),
-			getElementById: sinon.stub().returns({
-				appendChild: sinon.spy()
-			})
-		};
-		global.localStorage = {
-			'XSRF.Token': 'token'
-		};
-		callback = sinon.spy();
-		host = new Host('id', '', callback);
-		onEvent = sinon.spy(host, 'onEvent');
-		sendEventRaw = sinon.stub(host, 'sendEventRaw');
-	});
+		[
+			undefined,
+			null,
+			'',
+			'foo',
+			'ftp://foo.com',
+			'foo.com'
+		].forEach((src) => {
+			it(`should throw invalid origin "${src}"`, () => {
+				expect(() => {
+					var host = new Host('id', src);
+				}).to.throw(Error, /Unable to extract origin/);
+			});
+		});
 
-	afterEach(() => {
-		onEvent.restore();
-		sendEventRaw.restore();
+		it('should throw if parent missing', () => {
+			global.document = {
+				getElementById: sinon.stub().returns(null)
+			};
+			expect(() => {
+				var host = new Host('id', 'http://cdn.com/foo.html');
+			}).to.throw(Error, /Could not find parent/);
+		});
+
 	});
 
 	describe('connect', () => {
+
+		var host, callback, onEvent, sendEventRaw;
+
+		beforeEach(() => {
+			global.window = {
+				addEventListener: sinon.stub(),
+				location: { origin: 'origin' }
+			};
+			global.document = {
+				createElement: sinon.stub().returns({style:{}}),
+				getElementById: sinon.stub().returns({
+					appendChild: sinon.spy()
+				})
+			};
+			global.localStorage = {
+				'XSRF.Token': 'token'
+			};
+			callback = sinon.spy();
+			host = new Host('id', 'http://cdn.com/app/index.html', callback);
+			onEvent = sinon.spy(host, 'onEvent');
+			sendEventRaw = sinon.stub(host, 'sendEventRaw');
+		});
+
+		afterEach(() => {
+			onEvent.restore();
+			sendEventRaw.restore();
+		});
 
 		it('should return a promise', () => {
 			var p = host.connect();

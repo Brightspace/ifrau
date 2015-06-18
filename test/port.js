@@ -7,7 +7,7 @@ chai.use(require('sinon-chai'));
 
 import Port from '../src/port';
 
-var targetOrigin = '*';
+var targetOrigin = 'http://cdn.com/app/index.html';
 
 describe('port', () => {
 
@@ -204,64 +204,6 @@ describe('port', () => {
 
 	});
 
-	describe('receiveMessage', () => {
-
-		var receiveEvent, receiveRequest, receiveRequestResponse;
-
-		beforeEach(() => {
-			receiveEvent = sinon.stub(port, 'receiveEvent');
-			receiveRequest = sinon.stub(port, 'receiveRequest');
-			receiveRequestResponse = sinon.stub(port, 'receiveRequestResponse');
-		});
-
-		afterEach(() => {
-			receiveEvent.restore();
-			receiveRequest.restore();
-			receiveRequestResponse.restore();
-		});
-
-		[
-			{ source: 'evil', data: {} },
-			{ data: {} },
-			{ data: { key: 'whateves' } },
-			{ data: { key: 'frau.foo.bar' } }
-		].forEach((evt, index) => {
-			it(`should not handle malformed events ${index}`, () => {
-				evt.source = evt.source || endpoint;
-				port.receiveMessage(evt);
-				receiveEvent.should.not.have.been.called;
-				receiveRequest.should.not.have.been.called;
-				receiveRequestResponse.should.not.have.been.called;
-			});
-		});
-
-		it('should pass "evt" messages to "receiveEvent"', () => {
-			port.receiveMessage({
-				source: endpoint,
-				data: { key: 'frau.evt.myEvent', payload: 'bar' }
-			});
-			receiveEvent.should.have.been.calledWith('myEvent', 'bar');
-		});
-
-		it('should pass "req" messages to "receiveRequest"', () => {
-			port.receiveMessage({
-				source: endpoint,
-				data: { key: 'frau.req.myRequest', payload: 'foo' }
-			});
-			receiveRequest.should.have.been.calledWith('myRequest', 'foo');
-		});
-
-		it('should pass "res" messages to "receiveRequestResponse"', () => {
-			port.receiveMessage({
-				source: endpoint,
-				data: { key: 'frau.res.myResponse', payload: 23 }
-			});
-			receiveRequestResponse
-				.should.have.been.calledWith('myResponse', 23);
-		});
-
-	});
-
 	describe('receiveEvent', () => {
 
 		it('should not call handlers for different events', () => {
@@ -279,6 +221,70 @@ describe('port', () => {
 			port.receiveEvent('foo', 'bar');
 			handler1.should.have.been.calledWith('bar');
 			handler2.should.have.been.calledWith('bar');
+		});
+
+	});
+
+	describe('receiveMessage', () => {
+
+		var receiveEvent, receiveRequest, receiveRequestResponse;
+
+		beforeEach(() => {
+			receiveEvent = sinon.stub(port, 'receiveEvent');
+			receiveRequest = sinon.stub(port, 'receiveRequest');
+			receiveRequestResponse = sinon.stub(port, 'receiveRequestResponse');
+		});
+
+		afterEach(() => {
+			receiveEvent.restore();
+			receiveRequest.restore();
+			receiveRequestResponse.restore();
+		});
+
+		it('should not handle invalid events', () => {
+			port.receiveMessage({ source: 'evil' });
+			receiveEvent.should.not.have.been.called;
+			receiveRequest.should.not.have.been.called;
+			receiveRequestResponse.should.not.have.been.called;
+		});
+
+		it('should not handle unrecognized message types', () => {
+			port.receiveMessage({
+				source: endpoint,
+				origin: targetOrigin,
+				data: { key: 'frau.foo.bar' }
+			});
+			receiveEvent.should.not.have.been.called;
+			receiveRequest.should.not.have.been.called;
+			receiveRequestResponse.should.not.have.been.called;
+		});
+
+		it('should pass "evt" messages to "receiveEvent"', () => {
+			port.receiveMessage({
+				source: endpoint,
+				origin: targetOrigin,
+				data: { key: 'frau.evt.myEvent', payload: 'bar' }
+			});
+			receiveEvent.should.have.been.calledWith('myEvent', 'bar');
+		});
+
+		it('should pass "req" messages to "receiveRequest"', () => {
+			port.receiveMessage({
+				source: endpoint,
+				origin: targetOrigin,
+				data: { key: 'frau.req.myRequest', payload: 'foo' }
+			});
+			receiveRequest.should.have.been.calledWith('myRequest', 'foo');
+		});
+
+		it('should pass "res" messages to "receiveRequestResponse"', () => {
+			port.receiveMessage({
+				source: endpoint,
+				origin: targetOrigin,
+				data: { key: 'frau.res.myResponse', payload: 23 }
+			});
+			receiveRequestResponse
+				.should.have.been.calledWith('myResponse', 23);
 		});
 
 	});
@@ -513,6 +519,27 @@ describe('port', () => {
 			});
 		});
 
+	});
+
+	describe('validateEvent', () => {
+		[
+			{endpoint: 'a', source: 'b', expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: 'c', origin: 'd', expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: 'c', origin: 'c', key: undefined, expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: 'c', origin: 'c', key: 'invalid', expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: 'c', origin: 'c', key: 'foo.frau.bar', expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: 'c', origin: 'c', key: 'frau.valid', expect: true },
+			{endpoint: 'a', source: 'a', targetOrigin: '*', origin: 'c', key: 'frau.valid', expect: true }
+		].forEach((item, index) => {
+			it(`should validate origin "${index}" to "${item.expect}"`, () => {
+				var isValid = Port.validateEvent(
+					item.targetOrigin,
+					item.endpoint,
+					{ source: item.source, origin: item.origin, data: { key: item.key } }
+				);
+				expect(isValid).to.equal(item.expect);
+			});
+		});
 	});
 
 });
