@@ -62,7 +62,7 @@ export default class Port {
 	}
 	receiveMessage(e) {
 
-		if(e.source !== this.endpoint || !e.data.key || e.data.key.indexOf('frau.') !== 0) {
+		if(!Port.validateEvent(this.targetOrigin, this.endpoint, e)) {
 			return;
 		}
 
@@ -170,5 +170,13 @@ export default class Port {
 				delete me.waitingRequests[requestType];
 			});
 
+	}
+	static validateEvent(targetOrigin, endpoint, e) {
+		var isValid = (e.source === endpoint) &&
+			(targetOrigin === '*' || targetOrigin === e.origin) &&
+			(e.data.key !== undefined) &&
+			(e.data.key !== null) &&
+			(e.data.key.indexOf('frau.') === 0);
+		return isValid;
 	}
 }

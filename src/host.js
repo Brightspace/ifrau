@@ -1,13 +1,24 @@
 import Port from './port';
 
+var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
+
 export default class Host extends Port {
 	constructor(id, src) {
 
-		var iframe = Host.createIFrame(src);
+		var origin = Host.tryGetOrigin(src);
+		if(origin === null) {
+			throw new Error(`Unable to extract origin from "${src}"`);
+		}
+
 		var parent = document.getElementById(id);
+		if(parent === null) {
+			throw new Error(`Could not find parent node with id "${id}"`);
+		}
+
+		var iframe = Host.createIFrame(src);
 		parent.appendChild(iframe);
 
-		super(iframe.contentWindow, '*');
+		super(iframe.contentWindow, origin);
 
 		this.iframe = iframe;
 
@@ -40,5 +51,9 @@ export default class Host extends Port {
 		iframe.scrolling = 'no';
 		iframe.src = src;
 		return iframe;
+	}
+	static tryGetOrigin(url) {
+		var match = originRe.exec(url);
+		return (match !== null) ? match[0] : null;
 	}
 }
