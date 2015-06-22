@@ -1,17 +1,16 @@
 {
   "name": "ifrau",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "main": "lib/index.js",
   "scripts": {
-    "prebuild": "npm run clean && npm run transpile",
-    "build": "browserify -s ifrau ./lib/index.js | uglifyjs > ./dist/ifrau.js",
-    "clean": "rimraf dist && mkdir dist",
+    "prebrowserify": "rimraf dist && mkdir dist && npm run transpile",
+    "browserify": "browserify -s ifrau-host ./lib/host.js > ./dist/host.js",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "jshint src/*.js",
     "lint:test": "jshint test/*.js",
-    "prepublish": "npm run build",
-    "publish": "gulp publish",
+    "prepublish:cdn": "npm run browserify",
+    "publish:cdn": "gulp publish",
     "test:unit": "istanbul cover _mocha -- test/*.js",
     "test": "npm run lint -s && npm run test:unit -s",
     "pretranspile": "rimraf lib",
@@ -29,7 +28,7 @@
     "postMessage"
   ],
   "author": "D2L Corporation",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Brightspace/ifrau/issues"
   },
@@ -38,7 +37,7 @@
     "babel-runtime": "^5.5.8"
   },
   "devDependencies": {
-    "babel": "^5.5.6",
+    "babel": "^5.6.4",
     "browserify": "^10.2.3",
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
