@@ -22,7 +22,7 @@ describe('ifrau', () => {
 	});
 
 	it('should export Host', () => {
-		var host = new Host('id', 'http://cdn.com/app/index.html');
+		var host = new Host(() => document.getElementById('id'), 'http://cdn.com/app/index.html');
 		expect(host).to.be.defined;
 	});
 
