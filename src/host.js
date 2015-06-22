@@ -3,7 +3,7 @@ import Port from './port';
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
 export default class Host extends Port {
-	constructor(id, src) {
+	constructor(id, src, options) {
 
 		var origin = Host.tryGetOrigin(src);
 		if(origin === null) {
@@ -18,7 +18,7 @@ export default class Host extends Port {
 		var iframe = Host.createIFrame(src);
 		parent.appendChild(iframe);
 
-		super(iframe.contentWindow, origin);
+		super(iframe.contentWindow, origin, options);
 
 		this.iframe = iframe;
 
