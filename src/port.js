@@ -1,5 +1,6 @@
 export default class Port {
-	constructor(endpoint, targetOrigin) {
+	constructor(endpoint, targetOrigin, options) {
+		options = options || {};
 		this.endpoint = endpoint;
 		this.targetOrigin = targetOrigin;
 		this.eventHandlers = {};
@@ -7,7 +8,7 @@ export default class Port {
 		this.pendingRequests = {};
 		this.waitingRequests = [];
 		this.requestId = 0;
-		this.debugEnabled = false;
+		this.debugEnabled = options.debug || false;
 		this.isConnected = false;
 		this.isOpen = false;
 	}
@@ -18,9 +19,11 @@ export default class Port {
 		this.isOpen = false;
 		this.isConnected = false;
 		window.removeEventListener('message', this.receiveMessage);
+		this.debug('closed');
 	}
 	connect() {
 		this.isConnected = true;
+		this.debug('connected');
 		return this;
 	}
 	debug(msg) {
@@ -58,6 +61,7 @@ export default class Port {
 		}
 		this.isOpen = true;
 		window.addEventListener('message', this.receiveMessage.bind(this), false);
+		this.debug('opened');
 		return this;
 	}
 	receiveMessage(e) {

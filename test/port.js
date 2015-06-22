@@ -11,7 +11,7 @@ var targetOrigin = 'http://cdn.com/app/index.html';
 
 describe('port', () => {
 
-	var port, endpoint;
+	var port, endpoint, consoleSpy;
 
 	beforeEach(() => {
 		global.window = {
@@ -69,20 +69,22 @@ describe('port', () => {
 			consoleSpy.restore();
 		});
 
+
 		it('should not write to console by default', () => {
-			port.debug('hello');
+			var p = new Port(endpoint, targetOrigin);
+			p.debug('hello');
 			consoleSpy.should.not.have.been.called;
 		});
 
 		it('should not write to console when disabled', () => {
-			port.debugEnabled = false;
-			port.debug('hello');
+			var p = new Port(endpoint, targetOrigin,{ debug: false});
+			p.debug('hello');
 			consoleSpy.should.not.have.been.called;
 		});
 
 		it('should write to console when enabled', () => {
-			port.debugEnabled = true;
-			port.debug('hello');
+			var p = new Port(endpoint, targetOrigin,{ debug: true});
+			p.debug('hello');
 			consoleSpy.should.have.been.calledWith('hello');
 		});
 

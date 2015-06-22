@@ -1,9 +1,9 @@
 import Port from './port';
 
 export default class Client extends Port {
-	constructor() {
+	constructor(options) {
 
-		super(window.parent, '*');
+		super(window.parent, '*', options);
 
 		this.lastHeight = 0;
 
