@@ -1,11 +1,11 @@
 {
   "name": "ifrau",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "main": "lib/index.js",
   "scripts": {
     "prebrowserify": "rimraf dist && mkdir dist && npm run transpile",
-    "browserify": "browserify -s ifrau-host ./lib/host.js > ./dist/host.js",
+    "browserify": "browserify -s ifrau ./lib/index.js | uglifyjs > ./dist/ifrau.js",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "jshint src/*.js",
     "lint:test": "jshint test/*.js",
