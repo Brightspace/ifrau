@@ -14,11 +14,11 @@ var gulp = require('gulp'),
 	publisher = require('gulp-frau-publisher').lib(opts);
 
 gulp.task( 'publish', function( cb ) {
-	gulp.src('./dist/ifrau.js')
+	gulp.src('./dist/host.js')
 		.pipe( publisher.getStream() )
 		.on( 'end', function() {
 			var message = '[Deployment available online](' +
-				publisher.getLocation() + 'ifrau.js)';
+				publisher.getLocation() + 'host.js)';
 
 			pg.comment( message, {}, function( error, response ) {
 				if( error )
