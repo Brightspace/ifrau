@@ -93,7 +93,7 @@ export default class Port {
 		});
 	}
 	receiveRequest(requestType, payload) {
-		this.initHashArrAndPush(this.waitingRequests, requestType, payload.id);
+		this.initHashArrAndPush(this.waitingRequests, requestType, payload);
 		this.sendRequestResponse(requestType);
 	}
 	receiveRequestResponse(requestType, payload) {
@@ -114,13 +114,17 @@ export default class Port {
 		}
 
 	}
-	request(requestType) {
+	request() {
 		if(!this.isConnected) {
 			throw new Error('Cannot request() before connect() has completed');
 		}
-		return this.requestRaw(requestType);
+		return this.requestRaw.apply(this, arguments);
 	}
 	requestRaw(requestType) {
+		var args = [];
+		for(var i=1; i<arguments.length; i++) {
+			args.push(arguments[i]);
+		}
 		var me = this;
 		return new Promise((resolve, reject) => {
 			var id = ++me.requestId;
@@ -132,7 +136,7 @@ export default class Port {
 						promise: resolve,
 					}
 				);
-			me.sendMessage(`req.${requestType}`,{id: id});
+			me.sendMessage(`req.${requestType}`,{id: id, args: args});
 		});
 	}
 	sendMessage(key, data) {
@@ -161,22 +165,25 @@ export default class Port {
 
 		var handler = this.requestHandlers[requestType];
 		var waiting = this.waitingRequests[requestType];
+		delete this.waitingRequests[requestType];
+
 		if(handler === undefined || waiting === undefined || waiting.length === 0) {
 			return;
 		}
 
-		if(typeof(handler) === 'function') {
-			handler = handler();
-		}
-
 		var me = this;
-		Promise.resolve(handler)
-			.then((val) => {
-				waiting.forEach(function(id) {
-					me.sendMessage(`res.${requestType}`, { id: id, val: val });
+
+		waiting.forEach(function(w) {
+			var handlerResult = handler;
+			if(typeof(handler) === 'function') {
+				handlerResult = handler.apply(handler, w.args);
+			}
+			Promise
+				.resolve(handlerResult)
+				.then((val) => {
+					me.sendMessage(`res.${requestType}`, { id: w.id, val: val });
 				});
-				delete me.waitingRequests[requestType];
-			});
+		});
 
 	}
 	static validateEvent(targetOrigin, endpoint, e) {

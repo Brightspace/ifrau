@@ -313,14 +313,16 @@ describe('port', () => {
 		});
 
 		it('should queue request in "waitingRequests"', () => {
-			port.receiveRequest('foo', { id: 'rId' });
+			port.receiveRequest('foo', { id: 'rId', args: ['bar', false, -1] });
 			initHashArrAndPush.should.have.been.calledWith(
-				port.waitingRequests, 'foo', 'rId'
+				port.waitingRequests,
+				'foo',
+				{ id: 'rId', args: ['bar', false, -1] }
 			);
 		});
 
 		it('should attempt to send response', () => {
-			port.receiveRequest('foo', { id: 'rId' });
+			port.receiveRequest('foo', { id: 'rId', args: [] });
 			sendRequestResponse.should.have.been.calledWith('foo');
 		});
 
@@ -395,15 +397,26 @@ describe('port', () => {
 
 		it('should send message', () => {
 			port.connect().request('foo');
-			sendMessage.should.have.been.calledWith('req.foo', { id: 1 } );
+			sendMessage.should.have.been.calledWith(
+				'req.foo',
+				{ id: 1, args: [] }
+			);
+		});
+
+		it('should pass arguments', () => {
+			port.connect().request('foo', 'bar', true, -3);
+			sendMessage.should.have.been.calledWith(
+				'req.foo',
+				{ id: 1, args: ['bar', true, -3] }
+			);
 		});
 
 		it('should send each message with a new ID', () => {
 			port.connect();
 			port.request('foo');
 			port.request('bar');
-			sendMessage.should.have.been.calledWith('req.foo', { id: 1 } );
-			sendMessage.should.have.been.calledWith('req.bar', { id: 2 } );
+			sendMessage.should.have.been.calledWith('req.foo', { id: 1, args: [] } );
+			sendMessage.should.have.been.calledWith('req.bar', { id: 2, args: [] } );
 		});
 
 	});
@@ -484,7 +497,7 @@ describe('port', () => {
 		].forEach((test) => {
 			it(`should handle ${test.name}-based responses`, (done) => {
 				port.requestHandlers.bar = test.val;
-				port.waitingRequests.bar = [1];
+				port.waitingRequests.bar = [{id: 1, args:[]}];
 				port.sendRequestResponse('bar');
 				setTimeout(() => {
 					sendMessage.should.have.been.calledWith(
@@ -496,9 +509,35 @@ describe('port', () => {
 			});
 		});
 
+		it('should pass arguments to handler', (done) => {
+			var handler = sinon.spy();
+			port.requestHandlers.bar = handler;
+			port.waitingRequests.bar = [{id: 1, args:['p1', 'p2', true]}];
+			port.sendRequestResponse('bar');
+			setTimeout(() => {
+				handler.should.have.been.calledWith('p1', 'p2', true);
+				done();
+			});
+		});
+
+		it('should pass different arguments to handler', (done) => {
+			var handler = sinon.spy();
+			port.requestHandlers.bar = handler;
+			port.waitingRequests.bar = [
+				{id: 1, args:['p1', 'p2', true]},
+				{id: 2, args:['p3', 'p4', false]}
+			];
+			port.sendRequestResponse('bar');
+			setTimeout(() => {
+				handler.should.have.been.calledWith('p1', 'p2', true);
+				handler.should.have.been.calledWith('p3', 'p4', false);
+				done();
+			});
+		});
+
 		it('should send handler value to each waiting request', (done) => {
 			port.requestHandlers.bar = 'hello';
-			port.waitingRequests.bar = [1, 2];
+			port.waitingRequests.bar = [{id: 1, args:[]}, {id: 2, args:[]}];
 			port.sendRequestResponse('bar');
 			setTimeout(() => {
 				sendMessage.should.have.been.calledWith(
@@ -514,7 +553,7 @@ describe('port', () => {
 		});
 
 		it('should not send a message if there is not handler', (done) => {
-			port.waitingRequests.bar = [1];
+			port.waitingRequests.bar = [{id: 1, args: []}];
 			port.sendRequestResponse('bar');
 			setTimeout(() => {
 				sendMessage.should.not.have.been.called;
