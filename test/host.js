@@ -81,7 +81,8 @@ describe('host', () => {
 			host.connect().then(() => {
 				sendEventRaw.should.have.been.calledWith(
 					'csrf',
-					{origin: 'origin', token: 'token'}
+					'origin',
+					'token'
 				);
 				done();
 			});

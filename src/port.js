@@ -89,7 +89,7 @@ export default class Port {
 			return;
 		}
 		this.eventHandlers[eventType].forEach(function(handler) {
-			handler.call(handler, payload);
+			handler.apply(handler, payload);
 		});
 	}
 	receiveRequest(requestType, payload) {
@@ -144,11 +144,15 @@ export default class Port {
 		this.endpoint.postMessage(message, this.targetOrigin);
 		return this;
 	}
-	sendEvent(eventType, data) {
+	sendEvent(eventType) {
 		if(!this.isConnected) {
 			throw new Error('Cannot sendEvent() before connect() has completed');
 		}
-		return this.sendEventRaw(eventType, data);
+		var args = [];
+		for(var i=1; i<arguments.length; i++) {
+			args.push(arguments[i]);
+		}
+		return this.sendEventRaw(eventType, args);
 	}
 	sendEventRaw(eventType, data) {
 		return this.sendMessage(`evt.${eventType}`, data);
