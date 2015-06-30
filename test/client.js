@@ -37,7 +37,7 @@ describe('client', () => {
 	});
 
 	function sendCsrfToken() {
-		client.receiveEvent('csrf', {origin:'origin', token:'token'});
+		client.receiveEvent('csrf', ['origin', 'token']);
 	}
 
 	describe('adjustHeight', () => {

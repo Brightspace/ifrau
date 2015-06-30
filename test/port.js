@@ -215,12 +215,19 @@ describe('port', () => {
 			handler.should.not.have.been.called;
 		});
 
+		it('should pass payload as arguments to handler', () => {
+			var handler = sinon.spy();
+			port.onEvent('foo', handler);
+			port.receiveEvent('foo', ['bar', true, -2]);
+			handler.should.have.been.calledWith('bar', true, -2);
+		});
+
 		it('should call each handler for the event with payload', () => {
 			var handler1 = sinon.spy();
 			var handler2 = sinon.spy();
 			port.onEvent('foo', handler1)
 				.onEvent('foo', handler2);
-			port.receiveEvent('foo', 'bar');
+			port.receiveEvent('foo', ['bar']);
 			handler1.should.have.been.calledWith('bar');
 			handler2.should.have.been.calledWith('bar');
 		});
@@ -265,9 +272,9 @@ describe('port', () => {
 			port.receiveMessage({
 				source: endpoint,
 				origin: targetOrigin,
-				data: { key: 'frau.evt.myEvent', payload: 'bar' }
+				data: { key: 'frau.evt.myEvent', payload: ['bar', false] }
 			});
-			receiveEvent.should.have.been.calledWith('myEvent', 'bar');
+			receiveEvent.should.have.been.calledWith('myEvent', ['bar', false]);
 		});
 
 		it('should pass "req" messages to "receiveRequest"', () => {
@@ -437,8 +444,13 @@ describe('port', () => {
 		});
 
 		it('should "sendMessage" prepended with "evt"', () => {
-			port.connect().sendEvent('foo', 'bar');
-			sendMessage.should.have.been.calledWith('evt.foo', 'bar');
+			port.connect().sendEvent('foo');
+			sendMessage.should.have.been.calledWith('evt.foo', []);
+		});
+
+		it('should pass arguments to "sendMessage"', () => {
+			port.connect().sendEvent('foo', 'bar', true, -3);
+			sendMessage.should.have.been.calledWith('evt.foo', ['bar', true, -3]);
 		});
 
 		it('should return result of "sendMessage"', () => {

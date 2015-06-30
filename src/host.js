@@ -27,10 +27,11 @@ export default class Host extends Port {
 		var me = this;
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
-				me.sendEventRaw('csrf', {
-					origin: window.location.origin,
-					token: localStorage['XSRF.Token']
-				});
+				me.sendEventRaw(
+					'csrf',
+					window.location.origin,
+					localStorage['XSRF.Token']
+				);
 				super.connect();
 				resolve();
 			}).onEvent('height', function(height) {
