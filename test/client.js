@@ -23,7 +23,6 @@ describe('client', () => {
 				scrollHeight: 100
 			}
 		};
-		global.localStorage = {};
 		client = new Client();
 		sendEvent = sinon.stub(client, 'sendEvent');
 		sendEventRaw = sinon.stub(client, 'sendEventRaw');
@@ -35,10 +34,6 @@ describe('client', () => {
 		sendEventRaw.restore();
 		clock.restore();
 	});
-
-	function sendCsrfToken() {
-		client.receiveEvent('csrf', ['origin', 'token']);
-	}
 
 	describe('adjustHeight', () => {
 
@@ -76,15 +71,6 @@ describe('client', () => {
 			expect(p.then).to.be.defined;
 		});
 
-		it('should resolve promise when csrf token event fires', (done) => {
-			client.connect().then(() => {
-				expect(client.isConnected).to.be.true;
-				expect(global.localStorage['XSRF.Token@origin']).to.equal('token');
-				done();
-			});
-			sendCsrfToken();
-		});
-
 		it('should open the port', () => {
 			client.connect();
 			open.should.have.been.called;
@@ -114,7 +100,6 @@ describe('client', () => {
 				sendEvent.should.have.been.calledWith('navigate', 'some-url');
 				done();
 			});
-			sendCsrfToken();
 		});
 
 	});
@@ -127,7 +112,6 @@ describe('client', () => {
 				sendEvent.should.have.been.calledWith('title', 'my title');
 				done();
 			});
-			sendCsrfToken();
 		});
 
 	});

@@ -52,9 +52,6 @@ describe('host', () => {
 					appendChild: sinon.spy()
 				})
 			};
-			global.localStorage = {
-				'XSRF.Token': 'token'
-			};
 			callback = sinon.spy();
 			host = new Host('id', 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
@@ -78,16 +75,7 @@ describe('host', () => {
 		});
 
 		it('should resolve promise when "ready" event is received', (done) => {
-			host.connect().then(() => {
-				sendEventRaw.should.have.been.calledWith(
-					'csrf',
-					[
-						'origin',
-						'token'
-					]
-				);
-				done();
-			});
+			host.connect().then(() => done());
 			host.receiveEvent('ready');
 		});
 
