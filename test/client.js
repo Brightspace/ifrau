@@ -48,10 +48,10 @@ describe('client', () => {
 			sendEventRaw.should.not.have.been.called;
 		});
 
-		it('should not send event if height has not changed', () => {
+		it('should send event if height has changed', () => {
 			global.document.body.scrollHeight = 200;
 			client.adjustHeight();
-			sendEventRaw.should.have.been.calledWith('height', 200);
+			sendEventRaw.should.have.been.calledWith('height', [200]);
 		});
 
 	});

@@ -29,8 +29,10 @@ export default class Host extends Port {
 			me.onEvent('ready', function() {
 				me.sendEventRaw(
 					'csrf',
-					window.location.origin,
-					localStorage['XSRF.Token']
+					[
+						window.location.origin,
+						localStorage['XSRF.Token']
+					]
 				);
 				super.connect();
 				resolve();
