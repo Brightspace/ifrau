@@ -3,16 +3,16 @@ import Port from './port';
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
 export default class Host extends Port {
-	constructor(id, src, options) {
+	constructor(elementProvider, src, options) {
 
 		var origin = Host.tryGetOrigin(src);
 		if(origin === null) {
 			throw new Error(`Unable to extract origin from "${src}"`);
 		}
 
-		var parent = document.getElementById(id);
-		if(parent === null) {
-			throw new Error(`Could not find parent node with id "${id}"`);
+		var parent = elementProvider();
+		if (parent === null) {
+			throw new Error(`Could not find parent node`);
 		}
 
 		var iframe = Host.createIFrame(src);

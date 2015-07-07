@@ -21,17 +21,14 @@ describe('host', () => {
 		].forEach((src) => {
 			it(`should throw invalid origin "${src}"`, () => {
 				expect(() => {
-					var host = new Host('id', src);
+					var host = new Host(() => null, src);
 				}).to.throw(Error, /Unable to extract origin/);
 			});
 		});
 
 		it('should throw if parent missing', () => {
-			global.document = {
-				getElementById: sinon.stub().returns(null)
-			};
 			expect(() => {
-				var host = new Host('id', 'http://cdn.com/foo.html');
+				var host = new Host(() => null, 'http://cdn.com/foo.html');
 			}).to.throw(Error, /Could not find parent/);
 		});
 
@@ -39,7 +36,7 @@ describe('host', () => {
 
 	describe('connect', () => {
 
-		var host, callback, onEvent, sendEventRaw;
+		var host, callback, onEvent, sendEventRaw, element;
 
 		beforeEach(() => {
 			global.window = {
@@ -48,15 +45,14 @@ describe('host', () => {
 			};
 			global.document = {
 				createElement: sinon.stub().returns({style:{}}),
-				getElementById: sinon.stub().returns({
-					appendChild: sinon.spy()
-				})
+				getElementById: sinon.stub().returns()
 			};
 			global.localStorage = {
 				'XSRF.Token': 'token'
 			};
 			callback = sinon.spy();
-			host = new Host('id', 'http://cdn.com/app/index.html', callback);
+			element = { appendChild: sinon.spy() };
+			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
 			sendEventRaw = sinon.stub(host, 'sendEventRaw');
 		});
