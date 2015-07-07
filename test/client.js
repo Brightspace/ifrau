@@ -35,33 +35,15 @@ describe('client', () => {
 		clock.restore();
 	});
 
-	describe('adjustHeight', () => {
-
-		it('should not send event if height has not changed', () => {
-			global.document.body.scrollHeight = 0;
-			client.adjustHeight();
-			sendEventRaw.should.not.have.been.called;
-		});
-
-		it('should send event if height has changed', () => {
-			global.document.body.scrollHeight = 200;
-			client.adjustHeight();
-			sendEventRaw.should.have.been.calledWith('height', [200]);
-		});
-
-	});
-
 	describe('connect', () => {
 
-		var adjustHeight, open;
+		var open;
 
 		beforeEach(() => {
-			adjustHeight = sinon.stub(client, 'adjustHeight');
 			open = sinon.stub(client, 'open');
 		});
 
 		afterEach(() => {
-			adjustHeight.restore();
 			open.restore();
 		});
 
@@ -79,15 +61,6 @@ describe('client', () => {
 		it('should send the "ready" event', () => {
 			client.connect();
 			sendEventRaw.should.have.been.calledWith('ready');
-		});
-
-		it('should adjustHeight every 100ms', () => {
-			client.connect();
-			adjustHeight.should.not.have.been.called;
-			clock.tick(100);
-			adjustHeight.should.have.been.calledOnce;
-			clock.tick(100);
-			adjustHeight.should.have.been.calledTwice;
 		});
 
 	});
