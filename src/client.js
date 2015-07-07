@@ -12,7 +12,7 @@ export default class Client extends Port {
 		var height = document.body.scrollHeight;
 		if(height != this.lastHeight) {
 			this.lastHeight = height;
-			this.sendEventRaw('height', height);
+			this.sendEventRaw('height', [height]);
 		}
 	}
 	connect() {
