@@ -34,7 +34,11 @@ To create a Host:
 ```javascript
 var Host = require('ifrau').Host;
 
-var host = new Host(parentId, endpoint, options)
+function parentProvider() {
+    return document.getElementById('myParentId');
+}
+
+var host = new Host(parentProvider, endpoint, options)
 host.connect().then(function() {
 	console.log('connected to client');
 });
@@ -42,7 +46,7 @@ host.connect().then(function() {
 
 Parameters:
 
-* `parentId`: id of the parent HTML element into which to insert the `IFRAME`
+* `parentProvider`: function which will return the parent HTML element into which to insert the `IFRAME`
 * `endpoint`: URL of the free-range app endpoint (the `src` of the `IFRAME`)
 * `options`
  * `debug`: whether to enable console debugging, `false` by default
