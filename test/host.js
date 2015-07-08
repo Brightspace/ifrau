@@ -47,9 +47,6 @@ describe('host', () => {
 				createElement: sinon.stub().returns({style:{}}),
 				getElementById: sinon.stub().returns()
 			};
-			global.localStorage = {
-				'XSRF.Token': 'token'
-			};
 			callback = sinon.spy();
 			element = { appendChild: sinon.spy() };
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
@@ -74,16 +71,7 @@ describe('host', () => {
 		});
 
 		it('should resolve promise when "ready" event is received', (done) => {
-			host.connect().then(() => {
-				sendEventRaw.should.have.been.calledWith(
-					'csrf',
-					[
-						'origin',
-						'token'
-					]
-				);
-				done();
-			});
+			host.connect().then(() => done());
 			host.receiveEvent('ready');
 		});
 

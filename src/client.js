@@ -19,19 +19,12 @@ export default class Client extends Port {
 		var me = this;
 		return new Promise((resolve, reject) => {
 
-			var hasCsrfToken = false;
-			me.onEvent('csrf', function(origin, token) {
-					localStorage['XSRF.Token@' + origin] = token;
-					if(!hasCsrfToken) {
-						hasCsrfToken = true;
-						super.connect();
-						resolve();
-					}
-				});
-
 			me.open();
 			me.sendEventRaw('ready');
 			setInterval(me.adjustHeight.bind(me), 100);
+
+			super.connect();
+			resolve();
 
 		});
 	}
