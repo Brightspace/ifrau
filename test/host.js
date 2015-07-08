@@ -1,6 +1,7 @@
 var chai = require('chai'),
 	expect = chai.expect,
-	sinon = require('sinon');
+	sinon = require('sinon'),
+	resizer = require('iframe-resizer');
 
 chai.should();
 chai.use(require('sinon-chai'));
@@ -44,8 +45,12 @@ describe('host', () => {
 				location: { origin: 'origin' }
 			};
 			global.document = {
-				createElement: sinon.stub().returns({style:{}}),
-				getElementById: sinon.stub().returns()
+				createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
+				getElementById: sinon.stub().returns(),
+				title: 'title',
+				location: {
+					href: 'url'
+				}
 			};
 			callback = sinon.spy();
 			element = { appendChild: sinon.spy() };
@@ -75,11 +80,23 @@ describe('host', () => {
 			host.receiveEvent('ready');
 		});
 
-		['ready', 'height', 'title', 'navigate'].forEach((evt) => {
+		['ready', 'title', 'navigate'].forEach((evt) => {
 			it(`should register for the "${evt}" event`, () => {
 				host.connect();
 				onEvent.should.have.been.calledWith(evt);
 			});
+		});
+
+		it('should update the document title', () => {
+			host.connect();
+			host.receiveEvent('title', ['new title']);
+			global.document.title.should.equal('new title');
+		});
+
+		it('should update the document location', () => {
+			host.connect();
+			host.receiveEvent('navigate', ['new url']);
+			global.document.location.href.should.equal('new url');
 		});
 
 	});

@@ -1,4 +1,5 @@
 import Port from './port';
+import {default as resizer} from 'iframe-resizer';
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
@@ -22,6 +23,7 @@ export default class Host extends Port {
 
 		this.iframe = iframe;
 
+		resizer.iframeResizer({}, iframe);
 	}
 	connect() {
 		var me = this;
@@ -29,8 +31,6 @@ export default class Host extends Port {
 			me.onEvent('ready', function() {
 				super.connect();
 				resolve();
-			}).onEvent('height', function(height) {
-				me.iframe.style.height = height + 'px';
 			}).onEvent('title', function(title) {
 				document.title = title;
 			}).onEvent('navigate', function(url) {

@@ -14,7 +14,7 @@ describe('ifrau', () => {
 			addEventListener: sinon.stub()
 		};
 		global.document = {
-			createElement: sinon.stub().returns({style:{}}),
+			createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
 			getElementById: sinon.stub().returns({
 				appendChild: sinon.spy()
 			})
