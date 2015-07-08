@@ -35,7 +35,7 @@
   "homepage": "https://github.com/Brightspace/ifrau",
   "dependencies": {
     "babel-runtime": "^5.5.8",
-    "iframe-resizer": "git://github.com/rschick/iframe-resizer.git#optional_window"
+    "iframe-resizer": "git://github.com/rschick/iframe-resizer.git#cleanup"
   },
   "devDependencies": {
     "babel": "^5.6.4",

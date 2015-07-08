@@ -23,7 +23,7 @@ export default class Host extends Port {
 
 		this.iframe = iframe;
 
-		resizer.iframeResizer({}, iframe);
+		this.resizer = resizer.iframeResizer({}, iframe);
 	}
 	connect() {
 		var me = this;
@@ -38,6 +38,10 @@ export default class Host extends Port {
 			});
 			super.open();
 		});
+	}
+	close() {
+		this.resizer.close(this.iframe);
+		super.close();
 	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');
