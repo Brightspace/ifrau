@@ -1,16 +1,19 @@
+let typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
+
 export default class Port {
 	constructor(endpoint, targetOrigin, options) {
 		options = options || {};
-		this.endpoint = endpoint;
-		this.targetOrigin = targetOrigin;
-		this.eventHandlers = {};
-		this.requestHandlers = {};
-		this.pendingRequests = {};
-		this.waitingRequests = [];
-		this.requestId = 0;
 		this.debugEnabled = options.debug || false;
+		this.endpoint = endpoint;
+		this.eventHandlers = {};
 		this.isConnected = false;
 		this.isOpen = false;
+		this.pendingRequests = {};
+		this.requestHandlers = {};
+		this.requestId = 0;
+		this.services = {};
+		this.targetOrigin = targetOrigin;
+		this.waitingRequests = [];
 	}
 	close() {
 		if(!this.isOpen) {
@@ -31,6 +34,30 @@ export default class Port {
 			console.log(msg);
 		}
 	}
+	getService(serviceType, version) {
+		if(!this.isConnected) {
+			throw new Error('Cannot getService() before connect() has completed');
+		}
+		let serviceVersionPrefix = `service:${serviceType}:${version}`;
+		let me = this;
+		function createProxyMethod(name) {
+			return function() {
+				let args = [`${serviceVersionPrefix}:${name}`];
+				for(let i=0; i<arguments.length; i++) {
+					args.push(arguments[i]);
+				}
+				return me.requestRaw.apply(me, args);
+			};
+		}
+		function createProxy(methodNames) {
+			let proxy = {};
+			methodNames.forEach((name) => {
+				proxy[name] = createProxyMethod(name);
+			});
+			return proxy;
+		}
+		return me.requestRaw(serviceVersionPrefix).then(createProxy);
+	}
 	initHashArrAndPush(dic, key, obj) {
 		if(dic[key] === undefined ) {
 			dic[key] = [];
@@ -41,6 +68,7 @@ export default class Port {
 		if(this.isConnected) {
 			throw new Error('Add event handlers before connecting');
 		}
+		this.debug(`onEvent handler added for "${eventType}"`);
 		this.initHashArrAndPush(this.eventHandlers, eventType, handler);
 		return this;
 	}
@@ -51,6 +79,7 @@ export default class Port {
 		if(this.requestHandlers[requestType] !== undefined) {
 			throw new Error(`Duplicate onRequest handler for type "${requestType}"`);
 		}
+		this.debug(`onRequest handler added for "${requestType}"`);
 		this.requestHandlers[requestType] = handler;
 		this.sendRequestResponse(requestType);
 		return this;
@@ -113,6 +142,23 @@ export default class Port {
 			return;
 		}
 
+	}
+	registerService(serviceType, version, service) {
+		if(this.isConnected) {
+			throw new Error('Register services before connecting');
+		}
+		if(!typeNameValidator.test(serviceType)) {
+			throw new Error(`Invalid service type "${serviceType}"`);
+		}
+		let methodNames = [];
+		for(let p in service) {
+			if(typeof(service[p]) === 'function') {
+				methodNames.push(p);
+				this.onRequest(`service:${serviceType}:${version}:${p}`, service[p]);
+			}
+		}
+		this.onRequest(`service:${serviceType}:${version}`, methodNames);
+		return this;
 	}
 	request() {
 		if(!this.isConnected) {

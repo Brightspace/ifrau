@@ -123,28 +123,65 @@ Finally, if the result isn't available immediately, the function can return a pr
 
 ```javascript
 host.onRequest('addSlower', function(a, b) {
-		return new Promise(function(resolve, reject) {
-			setTimeout(function() {
-				resolve(a + b);
-			}, 1000);
-		});
+	return new Promise(function(resolve, reject) {
+		setTimeout(function() {
+			resolve(a + b);
+		}, 1000);
 	});
+});
 ```
 
 On the other side, making `request()`s uses a promise-based API:
 
 ```javascript
 var client = new Client();
-client.connect().then(function() {
-	client.request('addThesePlease', 2, 3).then(function(val) {
+client.connect()
+    .then(function() {
+	    return client.request('addThesePlease', 2, 3);
+    }).then(function(val) {
 		console.log(val); // 5
 	});
-})
+```
+
+## Services
+
+Building on the concept of requests, services can be registered by both the host and client. Services provide a way to wrap a set of methods in an API which can be versioned.
+
+Again, services must be registered before connecting:
+
+```javascript
+var host = new Host(...);
+host.registerService('calculator', '1.0', {
+    add: function(a, b) {
+        return a + b;
+    },
+    subtract: function(a, b) {
+        return a - b;
+    }
+});
+```
+
+To support breaking changes to your APIs while maintaining backwards compatibility, multiple versions of a service may be registered by passing in different values for the `version`.
+
+**Note:** service methods become static, so any reference to `this` inside your methods will refer to the method itself.
+
+Calling service APIs after connecting is simple and promise-based:
+
+```javascript
+var client = new Client();
+client.connect()
+    .then(function() {
+        return client.getService('calculator', '1.0');
+    }).then(function(calculator) {
+        return calculator.add(1, 5);
+    }).then(function(result) {
+        console.log(result); // 6
+    });
 ```
 
 ## Chaining
 
-When setting up your event and request handlers on the host or client, they can be chained:
+When setting up your event, request handlers and services on the host or client, they can be chained:
 
 ```javascript
 var client = new Client();
@@ -155,7 +192,7 @@ client.onEvent('jump', function() {
 }).onRequest('time', new Date())
 .onRequest('sayMyName', function() {
 	return 'Heisenberg';
-});
+}).registerService('myService', '1.2', {...});
 ```
 
 ## Contributing
