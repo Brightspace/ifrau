@@ -1,7 +1,7 @@
 var chai = require('chai'),
 	expect = chai.expect,
-	sinon = require('sinon'),
-	resizer = require('iframe-resizer');
+	sinon = require('sinon')/*,
+	resizer = require('iframe-resizer')*/;
 
 chai.should();
 chai.use(require('sinon-chai'));
@@ -35,14 +35,15 @@ describe('host', () => {
 
 	});
 
-	describe('connect', () => {
+	describe('methods', () => {
 
-		var host, callback, onEvent, sendEventRaw, element;
+		let host, callback, onEvent, sendEventRaw, element, resizerClose;
 
 		beforeEach(() => {
 			global.window = {
 				addEventListener: sinon.stub(),
-				location: { origin: 'origin' }
+				location: { origin: 'origin' },
+				removeEventListener: sinon.stub()
 			};
 			global.document = {
 				createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
@@ -57,46 +58,65 @@ describe('host', () => {
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
 			sendEventRaw = sinon.stub(host, 'sendEventRaw');
+			resizerClose = sinon.stub(host.resizer, 'close');
 		});
 
 		afterEach(() => {
 			onEvent.restore();
 			sendEventRaw.restore();
+			resizerClose.restore();
 		});
 
-		it('should return a promise', () => {
-			var p = host.connect();
-			expect(p).to.be.defined;
-			expect(p.then).to.be.defined;
-		});
+		describe('close', () => {
 
-		it('should open the port', () => {
-			host.connect();
-			global.window.addEventListener.should.have.been.called;
-		});
-
-		it('should resolve promise when "ready" event is received', (done) => {
-			host.connect().then(() => done());
-			host.receiveEvent('ready');
-		});
-
-		['ready', 'title', 'navigate'].forEach((evt) => {
-			it(`should register for the "${evt}" event`, () => {
-				host.connect();
-				onEvent.should.have.been.calledWith(evt);
+			it('should close resizer', (done) => {
+				host.connect().then(() => {
+					host.close();
+					resizerClose.should.have.been.calledWith(host.iframe);
+					done();
+				});
+				host.receiveEvent('ready');
 			});
+
 		});
 
-		it('should update the document title', () => {
-			host.connect();
-			host.receiveEvent('title', ['new title']);
-			global.document.title.should.equal('new title');
-		});
+		describe('connect', () => {
 
-		it('should update the document location', () => {
-			host.connect();
-			host.receiveEvent('navigate', ['new url']);
-			global.document.location.href.should.equal('new url');
+			it('should return a promise', () => {
+				var p = host.connect();
+				expect(p).to.be.defined;
+				expect(p.then).to.be.defined;
+			});
+
+			it('should open the port', () => {
+				host.connect();
+				global.window.addEventListener.should.have.been.called;
+			});
+
+			it('should resolve promise when "ready" event is received', (done) => {
+				host.connect().then(() => done());
+				host.receiveEvent('ready');
+			});
+
+			['ready', 'title', 'navigate'].forEach((evt) => {
+				it(`should register for the "${evt}" event`, () => {
+					host.connect();
+					onEvent.should.have.been.calledWith(evt);
+				});
+			});
+
+			it('should update the document title', () => {
+				host.connect();
+				host.receiveEvent('title', ['new title']);
+				global.document.title.should.equal('new title');
+			});
+
+			it('should update the document location', () => {
+				host.connect();
+				host.receiveEvent('navigate', ['new url']);
+				global.document.location.href.should.equal('new url');
+			});
+
 		});
 
 	});
