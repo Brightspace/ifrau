@@ -43,6 +43,10 @@ export default class Host extends Port {
 		this.resizer.close(this.iframe);
 		super.close();
 	}
+	using(plugin) {
+		plugin(this);
+		return this;
+	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');
 		iframe.width = '100%';
