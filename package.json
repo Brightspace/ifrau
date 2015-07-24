@@ -1,6 +1,6 @@
 {
   "name": "ifrau",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "main": "lib/index.js",
   "scripts": {
