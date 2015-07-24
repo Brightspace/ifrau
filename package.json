@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "prebrowserify": "rimraf dist && mkdir dist && npm run transpile",
-    "browserify": "browserify -s ifrau ./lib/index.js | uglifyjs > ./dist/ifrau.js",
+    "browserify": "browserify -g uglifyify -s ifrau ./lib/index.js > ./dist/ifrau.js",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "jshint src/*.js",
     "lint:test": "jshint test/*.js",
@@ -52,6 +52,6 @@
     "rimraf": "^2.3.4",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
-    "uglify-js": "^2.4.23"
+    "uglifyify": "^3.0.1"
   }
 }
