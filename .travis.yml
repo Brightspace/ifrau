@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '0.12.4'
+- 0.12.4
 sudo: false
 after_success:
 - npm run report-coverage
@@ -9,7 +9,7 @@ deploy:
   provider: npm
   email: d2ltravisdeploy@d2l.com
   api_key:
-    secure: Fbm2VHncm53sh5/TzEkJYRkDPhTmVnRDqWkgRq9Drtz0+Qoi0w6LFqwE2XLME/rwyDp/MDWVGm/VZvI/YJ3y7dpaNtJR7xMZ+/S8WF1Xl2VwOQn+mBw+aSH55OVuQpm1mh1d+VFJXN4+PWp5dTj1I7pXvqQk07ODUQy2Du+EeQpG5uasA+8LgxFL70K5bIfFLVpQofJzMKCWiB/6U4qNOj5/fjuLgfdgKJCSOFukMhv1HZuQr9VSf1xYrSGLq8xOAr5o7XCcZ3lpJhUw7TtI9dWIXjsOYcMNQIiJltxBW5gZZKK7k3wCJJ3UmHh3EoZKGSTNkP1WyK7jdzkhldTr7L0QFz5vEgXhg6aTCrwvI0gnXIENfQ1v9xMTdV06jH+ZBRh/ZXwtjQGvGlSFAfxXfRtTm+IyBlXHjMasd+qMFJO3DqASa27SIQr6V5kTFWvLhQpqVC+i6invuF3If1Au2nUB2sp7VWRjCu8vTo/nv/Lx6Rub8tLGeB9CvaeaS9ADmWsqmV0j05ULL/9youBEaXq0ilkkRKXMlATYRjKa+ESOkVhpDspEwwvkxoCutARC+es1tldeV5dKkBLtUv+/4JmPihsYV2vXwokUJdoduIQsuMdF2Imq8/ra83tfg7akEa5vVh8JQN1hYYZljZMGqAtR41w3g61S4vLBLaqDzgw=
+    secure: sgujRlTRG58yHqxlKFItHWg0LmIdDG/eB93E6cXYQ71wuo1sfC5yxj1ByP7P7o+wUWT6Awqck7dUGdhTXsp9ZtDshIWPZVcUL2Gc1QqJ1oHxt9UAt70RfIVizOoP7mgnMgk3NxPH7C4nNt0pNJAtNS2tCkL0loSJ7jDbBiLDtLUuyoFPq1dBFf++8EixWDCbvg6ybvgeYOHIAMAXUbNxjm1zF1gsUm/m0AB7/kZKiAq6d/N6AFFInb/Ee3FOb5opQuJT6i9bN6ocPN8oV9AXs0IW1DyayZGrs/VdvC+WyuIkQXyIVlzmQ+DrxQq6OeWmSpbCzyzp9hes3hwWhDGe0TR7fv0p9bqZa90a3ZEyRxIHjedwvWo+3PDOc+jrWj+stY4yOGcNMSl9AS3GhvbbuOEWfB48XKD3OF//GzgIXGtYJOeKV+bQsF0n4LEas0cyYC//pfLL1O3t4PJT4JPsG5GhDc3d9m4dWXqNGBcN3x8AQ0QzQZFNT56diK4aimt29wlLG9o7JJJTeF4RQTpeFDII9vNMrYawG9FUJ7i63rgMvK2bi5JYQt6j57fFebPLl5mxQAZM574fcfmHJq4IW9NxRvai8GtMCXcS3VAUbQzX8n2eN7PjbGU+KKyWdITJ68WphXfitxB1v+iq+bgn8gTOzGxvfVGaXjndUBzHlTU=
   on:
     tags: true
     repo: Brightspace/ifrau
