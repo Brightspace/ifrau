@@ -1,3 +1,5 @@
+import uuid from 'uuid';
+
 let typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
 
 export default class Port {
@@ -10,10 +12,12 @@ export default class Port {
 		this.isOpen = false;
 		this.pendingRequests = {};
 		this.requestHandlers = {};
-		this.requestId = 0;
 		this.services = {};
 		this.targetOrigin = targetOrigin;
 		this.waitingRequests = [];
+
+		this.id = uuid();
+		this.requestCounter = 0;
 	}
 	close() {
 		if(!this.isOpen) {
@@ -173,7 +177,7 @@ export default class Port {
 		}
 		var me = this;
 		return new Promise((resolve, reject) => {
-			var id = ++me.requestId;
+			const id = `${me.id}_${++me.requestCounter}`;
 			me.initHashArrAndPush(
 					me.pendingRequests,
 					requestType,
