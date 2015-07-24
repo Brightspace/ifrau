@@ -23,13 +23,14 @@ export default class Host extends Port {
 
 		this.iframe = iframe;
 
-		this.resizer = resizer.iframeResizer({}, iframe);
+		this.resizer = null;
 	}
 	connect() {
 		var me = this;
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
 				super.connect();
+				me.resizer = resizer.iframeResizer({}, me.iframe);
 				resolve();
 			}).onEvent('title', function(title) {
 				document.title = title;
@@ -40,8 +41,8 @@ export default class Host extends Port {
 		});
 	}
 	close() {
-		this.resizer.close(this.iframe);
 		super.close();
+		this.resizer.close(this.iframe);
 	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');

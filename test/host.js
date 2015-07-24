@@ -37,7 +37,7 @@ describe('host', () => {
 
 	describe('methods', () => {
 
-		let host, callback, onEvent, sendEventRaw, element, resizerClose;
+		let host, callback, onEvent, sendEventRaw, element;
 
 		beforeEach(() => {
 			global.window = {
@@ -58,21 +58,21 @@ describe('host', () => {
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
 			sendEventRaw = sinon.stub(host, 'sendEventRaw');
-			resizerClose = sinon.stub(host.resizer, 'close');
 		});
 
 		afterEach(() => {
 			onEvent.restore();
 			sendEventRaw.restore();
-			resizerClose.restore();
 		});
 
 		describe('close', () => {
 
 			it('should close resizer', (done) => {
 				host.connect().then(() => {
+					let resizerClose = sinon.stub(host.resizer, 'close');
 					host.close();
 					resizerClose.should.have.been.calledWith(host.iframe);
+					resizerClose.restore();
 					done();
 				});
 				host.receiveEvent('ready');
