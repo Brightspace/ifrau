@@ -141,7 +141,22 @@ export default class Port {
 			if(req.id !== payload.id) {
 				continue;
 			}
-			req.promise(payload.val);
+
+			if (payload.hasOwnProperty('err')) {
+				const sentError = payload.err;
+
+				const e = new Error(sentError.message);
+				e.name = sentError.name;
+
+				for (let prop of Object.keys(sentError.props)) {
+					e[prop] = sentError.props[prop];
+				}
+
+				req.promise(Promise.reject(e));
+			} else {
+				req.promise(payload.val);
+			}
+
 			requests.splice(i, 1);
 			return;
 		}
@@ -232,6 +247,18 @@ export default class Port {
 				.resolve(handlerResult)
 				.then((val) => {
 					me.sendMessage(`res.${requestType}`, { id: w.id, val: val });
+				})
+				.catch((e) => {
+					const err = {
+						message: e.message,
+						name: e.name,
+						props: {}
+					};
+					for (let prop of Object.keys(e)) {
+						err.props[prop] = e[prop];
+					}
+
+					me.sendMessage(`res.${requestType}`, { id: w.id, err });
 				});
 		});
 
