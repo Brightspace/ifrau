@@ -30,7 +30,12 @@ export default class Host extends Port {
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
 				super.connect();
-				me.resizer = resizer.iframeResizer({}, me.iframe);
+				me.resizer = resizer.iframeResizer(
+					{
+						log: me.debugEnabled
+					},
+					me.iframe
+				);
 				resolve();
 			}).onEvent('title', function(title) {
 				document.title = title;
