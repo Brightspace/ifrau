@@ -54,6 +54,9 @@ export default class Host extends Port {
 		return iframe;
 	}
 	static tryGetOrigin(url) {
+		if(url && url.indexOf('//') === 0) {
+			url = window.location.protocol + url;
+		}
 		var match = originRe.exec(url);
 		return (match !== null) ? match[0] : null;
 	}
