@@ -10,6 +10,18 @@ import Host from '../src/host';
 
 describe('host', () => {
 
+	var element;
+
+	beforeEach(() => {
+		global.window = {
+			location: { protocol: 'https:' }
+		};
+		global.document = {
+			createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
+		};
+		element = { appendChild: sinon.spy() };
+	});
+
 	describe('constructor', () => {
 
 		[
@@ -27,6 +39,22 @@ describe('host', () => {
 			});
 		});
 
+		[
+			'http://foo.com',
+			'https://foo.com',
+			'HTTP://foo.com'
+		].forEach((src) => {
+			it(`should not throw for valid origin "${src}"`, () => {
+				var host = new Host(() => element, src);
+				expect(host.targetOrigin).to.equal(src);
+			});
+		});
+
+		it(`should resolve protocol-relative origin`, () => {
+			var host = new Host(() => element, '//foo.com');
+			expect(host.targetOrigin).to.equal('https://foo.com');
+		});
+
 		it('should throw if parent missing', () => {
 			expect(() => {
 				var host = new Host(() => null, 'http://cdn.com/foo.html');
@@ -37,24 +65,16 @@ describe('host', () => {
 
 	describe('methods', () => {
 
-		let host, callback, onEvent, sendEventRaw, element;
+		let host, callback, onEvent, sendEventRaw;
 
 		beforeEach(() => {
-			global.window = {
-				addEventListener: sinon.stub(),
-				location: { origin: 'origin' },
-				removeEventListener: sinon.stub()
-			};
-			global.document = {
-				createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
-				getElementById: sinon.stub().returns(),
-				title: 'title',
-				location: {
-					href: 'url'
-				}
-			};
+			global.window.addEventListener = sinon.stub();
+			global.window.location.origin = 'origin';
+			global.window.removeEventListener = sinon.stub();
+			global.document.getElementById = sinon.stub().returns();
+			global.document.title = 'title';
+			global.document.location = { href: 'url' };
 			callback = sinon.spy();
-			element = { appendChild: sinon.spy() };
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
 			sendEventRaw = sinon.stub(host, 'sendEventRaw');
