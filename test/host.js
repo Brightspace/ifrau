@@ -1,7 +1,6 @@
 var chai = require('chai'),
 	expect = chai.expect,
-	sinon = require('sinon')/*,
-	resizer = require('iframe-resizer')*/;
+	sinon = require('sinon');
 
 chai.should();
 chai.use(require('sinon-chai'));
