@@ -240,12 +240,16 @@ export default class Port {
 		var me = this;
 
 		waiting.forEach(function(w) {
-			var handlerResult = handler;
-			if(typeof(handler) === 'function') {
-				handlerResult = handler.apply(handler, w.args);
-			}
 			Promise
-				.resolve(handlerResult)
+				.resolve()
+				.then(() => {
+					if (typeof(handler) === 'function') {
+						return handler.apply(handler, w.args);
+					}
+
+					// otherwise "handler" is a value / Promise
+					return handler;
+				})
 				.then((val) => {
 					me.sendMessage(`res.${requestType}`, { id: w.id, val: val });
 				})
