@@ -152,9 +152,9 @@ export default class Port {
 					e[prop] = sentError.props[prop];
 				}
 
-				req.promise(Promise.reject(e));
+				req.reject(e);
 			} else {
-				req.promise(payload.val);
+				req.resolve(payload.val);
 			}
 
 			requests.splice(i, 1);
@@ -198,7 +198,8 @@ export default class Port {
 					requestType,
 					{
 						id: id,
-						promise: resolve,
+						resolve,
+						reject
 					}
 				);
 			me.sendMessage(`req.${requestType}`,{id: id, args: args});

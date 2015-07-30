@@ -387,29 +387,36 @@ describe('port', () => {
 
 		it('should ignore responses which aren\'t pending', (done) => {
 			var req = {
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			port.pendingRequests.foo = [req];
 			port.receiveRequestResponse('bar', {id: port.requestId});
 			setTimeout(() => {
-				req.promise.should.not.have.been.called; done(); }
-			);
+				req.resolve.should.not.have.been.called;
+				req.reject.should.not.have.been.called;
+				done();
+			});
 		});
 
 		it('should only respond to request with matching id', (done) => {
 			var req1 = {
 				id: 1,
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			var req2 = {
 				id: 2,
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			port.pendingRequests.foo = [req1, req2];
 			port.receiveRequestResponse('foo', {id: 2});
 			setTimeout(() => {
-				req1.promise.should.not.have.been.called;
-				req2.promise.should.have.been.calledOnce;
+				req1.resolve.should.not.have.been.called;
+				req1.reject.should.not.have.been.called;
+				req2.resolve.should.have.been.calledOnce;
+				req2.reject.should.not.have.been.called;
 				done();
 			});
 		});
