@@ -1,5 +1,7 @@
 import uuid from 'uuid';
 
+import { fromError, toError } from './transform-error';
+
 let typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
 
 export default class Port {
@@ -143,16 +145,8 @@ export default class Port {
 			}
 
 			if (payload.hasOwnProperty('err')) {
-				const sentError = payload.err;
-
-				const e = new Error(sentError.message);
-				e.name = sentError.name;
-
-				for (let prop of Object.keys(sentError.props)) {
-					e[prop] = sentError.props[prop];
-				}
-
-				req.reject(e);
+				const error = toError(payload.err);
+				req.reject(error);
 			} else {
 				req.resolve(payload.val);
 			}
@@ -254,14 +248,7 @@ export default class Port {
 					me.sendMessage(`res.${requestType}`, { id: w.id, val: val });
 				})
 				.catch((e) => {
-					const err = {
-						message: e.message,
-						name: e.name,
-						props: {}
-					};
-					for (let prop of Object.keys(e)) {
-						err.props[prop] = e[prop];
-					}
+					const err = fromError(e);
 
 					me.sendMessage(`res.${requestType}`, { id: w.id, err });
 				});

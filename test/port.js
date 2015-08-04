@@ -5,6 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
+import { fromError, toError, ERROR_OBJECT_SENTINEL } from '../src/transform-error';
 import Port from '../src/port';
 
 var targetOrigin = 'http://cdn.com/app/index.html';
@@ -436,15 +437,24 @@ describe('port', () => {
 
 			port.pendingRequests.foo = [errored, succeeded];
 
-			port.receiveRequestResponse('foo', { id: errored.id, err: { name: 'TypeError', message: 'bad things', props: { someProp: 'moo' } } });
+			const error = new Error('bad things');
+			error.someProp = ['moo'];
+			error.nullProp = null;
+			error.fnProp = function () {};
+			error.objProp = { foo: 'bar' };
+
+			port.receiveRequestResponse('foo', { id: errored.id, err: fromError(error) });
 			port.receiveRequestResponse('foo', { id: succeeded.id });
 
 			setTimeout(() => {
 				errored.resolve.should.not.have.been.called;
 				const rej = errored.reject;
 				rej.should.have.been.calledWithMatch(sinon.match.instanceOf(Error));
-				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('message', 'bad things'));
-				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('someProp', 'moo'));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('message', error.message));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('someProp', error.someProp));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('nullProp', error.nullProp));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('fnProp', null));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('objProp', error.objProp));
 
 				succeeded.resolve.should.have.been.called;
 				succeeded.reject.should.not.have.been.called;
@@ -741,6 +751,7 @@ describe('port', () => {
 			function handler () {
 				const e = new TypeError('bad things');
 				e.someProp = 'moo';
+				e.errorProp = new Error('specificer things');
 				throw e;
 			}
 
@@ -759,8 +770,15 @@ describe('port', () => {
 							name: 'TypeError',
 							message: 'bad things',
 							props: {
-								someProp: 'moo'
-							}
+								someProp: 'moo',
+								errorProp: {
+									name: 'Error',
+									message: 'specificer things',
+									props: {},
+									[ERROR_OBJECT_SENTINEL]: true
+								}
+							},
+							[ERROR_OBJECT_SENTINEL]: true
 						}
 					}
 				);
@@ -773,6 +791,7 @@ describe('port', () => {
 			function handler () {
 				const e = new TypeError('bad things');
 				e.someProp = 'moo';
+				e.errorProp = new Error('specificer things');
 				return Promise.reject(e);
 			}
 
@@ -791,8 +810,15 @@ describe('port', () => {
 							name: 'TypeError',
 							message: 'bad things',
 							props: {
-								someProp: 'moo'
-							}
+								someProp: 'moo',
+								errorProp: {
+									name: 'Error',
+									message: 'specificer things',
+									props: {},
+									[ERROR_OBJECT_SENTINEL]: true
+								}
+							},
+							[ERROR_OBJECT_SENTINEL]: true
 						}
 					}
 				);
