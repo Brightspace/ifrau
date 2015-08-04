@@ -421,6 +421,38 @@ describe('port', () => {
 			});
 		});
 
+		it('should reject request with an Error when the response has "err" property', (done) => {
+			const
+				errored = {
+					id: 1,
+					resolve: sinon.spy(),
+					reject: sinon.spy()
+				},
+				succeeded = {
+					id: 2,
+					resolve: sinon.spy(),
+					reject: sinon.spy()
+				};
+
+			port.pendingRequests.foo = [errored, succeeded];
+
+			port.receiveRequestResponse('foo', { id: errored.id, err: { name: 'TypeError', message: 'bad things', props: { someProp: 'moo' } } });
+			port.receiveRequestResponse('foo', { id: succeeded.id });
+
+			setTimeout(() => {
+				errored.resolve.should.not.have.been.called;
+				const rej = errored.reject;
+				rej.should.have.been.calledWithMatch(sinon.match.instanceOf(Error));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('message', 'bad things'));
+				rej.should.have.been.calledWithMatch(sinon.match.hasOwn('someProp', 'moo'));
+
+				succeeded.resolve.should.have.been.called;
+				succeeded.reject.should.not.have.been.called;
+
+				done();
+			});
+		});
+
 	});
 
 	describe('registerService', () => {
