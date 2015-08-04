@@ -737,6 +737,69 @@ describe('port', () => {
 			});
 		});
 
+		it('should propogate error to the client if handler throws', (done) => {
+			function handler () {
+				const e = new TypeError('bad things');
+				e.someProp = 'moo';
+				throw e;
+			}
+
+			const reqType = 'bar';
+			port.requestHandlers[reqType] = handler;
+			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+
+			port.sendRequestResponse(reqType);
+
+			setTimeout(() => {
+				sendMessage.should.have.been.calledWith(
+					'res.bar',
+					{
+						id: 1,
+						err: {
+							name: 'TypeError',
+							message: 'bad things',
+							props: {
+								someProp: 'moo'
+							}
+						}
+					}
+				);
+
+				done();
+			});
+		});
+
+		it('should propogate error to the client if handler returns rejected Promise', (done) => {
+			function handler () {
+				const e = new TypeError('bad things');
+				e.someProp = 'moo';
+				return Promise.reject(e);
+			}
+
+			const reqType = 'bar';
+			port.requestHandlers[reqType] = handler;
+			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+
+			port.sendRequestResponse(reqType);
+
+			setTimeout(() => {
+				sendMessage.should.have.been.calledWith(
+					'res.bar',
+					{
+						id: 1,
+						err: {
+							name: 'TypeError',
+							message: 'bad things',
+							props: {
+								someProp: 'moo'
+							}
+						}
+					}
+				);
+
+				done();
+			});
+		});
 	});
 
 	describe('validateEvent', () => {
