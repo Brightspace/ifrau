@@ -1,5 +1,7 @@
 import uuid from 'uuid';
 
+import { fromError, toError } from './transform-error';
+
 let typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
 
 export default class Port {
@@ -141,7 +143,14 @@ export default class Port {
 			if(req.id !== payload.id) {
 				continue;
 			}
-			req.promise(payload.val);
+
+			if (payload.hasOwnProperty('err')) {
+				const error = toError(payload.err);
+				req.reject(error);
+			} else {
+				req.resolve(payload.val);
+			}
+
 			requests.splice(i, 1);
 			return;
 		}
@@ -183,7 +192,8 @@ export default class Port {
 					requestType,
 					{
 						id: id,
-						promise: resolve,
+						resolve,
+						reject
 					}
 				);
 			me.sendMessage(`req.${requestType}`,{id: id, args: args});
@@ -224,14 +234,23 @@ export default class Port {
 		var me = this;
 
 		waiting.forEach(function(w) {
-			var handlerResult = handler;
-			if(typeof(handler) === 'function') {
-				handlerResult = handler.apply(handler, w.args);
-			}
 			Promise
-				.resolve(handlerResult)
+				.resolve()
+				.then(() => {
+					if (typeof(handler) === 'function') {
+						return handler.apply(handler, w.args);
+					}
+
+					// otherwise "handler" is a value / Promise
+					return handler;
+				})
 				.then((val) => {
 					me.sendMessage(`res.${requestType}`, { id: w.id, val: val });
+				})
+				.catch((e) => {
+					const err = fromError(e);
+
+					me.sendMessage(`res.${requestType}`, { id: w.id, err });
 				});
 		});
 

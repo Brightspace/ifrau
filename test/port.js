@@ -5,6 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
+import { fromError, toError } from '../src/transform-error';
 import Port from '../src/port';
 
 var targetOrigin = 'http://cdn.com/app/index.html';
@@ -387,29 +388,67 @@ describe('port', () => {
 
 		it('should ignore responses which aren\'t pending', (done) => {
 			var req = {
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			port.pendingRequests.foo = [req];
 			port.receiveRequestResponse('bar', {id: port.requestId});
 			setTimeout(() => {
-				req.promise.should.not.have.been.called; done(); }
-			);
+				req.resolve.should.not.have.been.called;
+				req.reject.should.not.have.been.called;
+				done();
+			});
 		});
 
 		it('should only respond to request with matching id', (done) => {
 			var req1 = {
 				id: 1,
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			var req2 = {
 				id: 2,
-				promise: sinon.spy()
+				resolve: sinon.spy(),
+				reject: sinon.spy()
 			};
 			port.pendingRequests.foo = [req1, req2];
 			port.receiveRequestResponse('foo', {id: 2});
 			setTimeout(() => {
-				req1.promise.should.not.have.been.called;
-				req2.promise.should.have.been.calledOnce;
+				req1.resolve.should.not.have.been.called;
+				req1.reject.should.not.have.been.called;
+				req2.resolve.should.have.been.calledOnce;
+				req2.reject.should.not.have.been.called;
+				done();
+			});
+		});
+
+		it('should reject request with an Error when the response has "err" property', (done) => {
+			const
+				errored = {
+					id: 1,
+					resolve: sinon.spy(),
+					reject: sinon.spy()
+				},
+				succeeded = {
+					id: 2,
+					resolve: sinon.spy(),
+					reject: sinon.spy()
+				};
+
+			port.pendingRequests.foo = [errored, succeeded];
+
+			const err = fromError(new Error('bad things'));
+
+			port.receiveRequestResponse('foo', { id: errored.id, err });
+			port.receiveRequestResponse('foo', { id: succeeded.id });
+
+			setTimeout(() => {
+				errored.resolve.should.not.have.been.called;
+				errored.reject.should.have.been.calledWithMatch(sinon.match.instanceOf(Error));
+
+				succeeded.resolve.should.have.been.called;
+				succeeded.reject.should.not.have.been.called;
+
 				done();
 			});
 		});
@@ -698,6 +737,47 @@ describe('port', () => {
 			});
 		});
 
+		it('should propogate error to the client if handler throws', (done) => {
+			const e = new TypeError('bad things');
+			function handler () {
+				throw e;
+			}
+
+			const reqType = 'bar';
+			port.requestHandlers[reqType] = handler;
+			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+
+			port.sendRequestResponse(reqType);
+
+			setTimeout(() => {
+				sendMessage.should.have.been.calledWith('res.bar', {
+					id: 1,
+					err: fromError(e)
+				});
+				done();
+			});
+		});
+
+		it('should propogate error to the client if handler returns rejected Promise', (done) => {
+			const e = new TypeError('bad things');
+			function handler () {
+				return Promise.reject(e);
+			}
+
+			const reqType = 'bar';
+			port.requestHandlers[reqType] = handler;
+			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+
+			port.sendRequestResponse(reqType);
+
+			setTimeout(() => {
+				sendMessage.should.have.been.calledWith('res.bar', {
+					id: 1,
+					err: fromError(e)
+				});
+				done();
+			});
+		});
 	});
 
 	describe('validateEvent', () => {
