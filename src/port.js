@@ -71,10 +71,10 @@ export default class Port {
 		dic[key].push(obj);
 	}
 	onEvent(eventType, handler) {
-		if(this.isConnected) {
-			throw new Error('Add event handlers before connecting');
-		}
 		this.debug(`onEvent handler added for "${eventType}"`);
+		if(this.isConnected) {
+			this.debug('You\'ve attached event handlers after connecting, you may have missed some events');
+		}
 		this.initHashArrAndPush(this.eventHandlers, eventType, handler);
 		return this;
 	}

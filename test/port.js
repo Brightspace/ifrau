@@ -12,7 +12,7 @@ var targetOrigin = 'http://cdn.com/app/index.html';
 
 describe('port', () => {
 
-	var port, endpoint, consoleSpy;
+	var port, endpoint;
 
 	beforeEach(() => {
 		global.window = {
@@ -69,7 +69,6 @@ describe('port', () => {
 		afterEach(() => {
 			consoleSpy.restore();
 		});
-
 
 		it('should not write to console by default', () => {
 			var p = new Port(endpoint, targetOrigin);
@@ -164,14 +163,16 @@ describe('port', () => {
 
 	describe('onEvent', () => {
 
-		var initHashArrAndPush;
+		var initHashArrAndPush, debug;
 
 		beforeEach(() => {
 			initHashArrAndPush = sinon.stub(port, 'initHashArrAndPush');
+			debug = sinon.stub(port, 'debug');
 		});
 
 		afterEach(() => {
 			initHashArrAndPush.restore();
+			debug.restore();
 		});
 
 		it('should add to eventHandlers', () => {
@@ -187,11 +188,10 @@ describe('port', () => {
 			expect(p).to.equal(port);
 		});
 
-		it('should throw if already connected', () => {
+		it('should debug if already connected', () => {
 			port.connect();
-			expect(() => {
-				port.onEvent('foo', () => {});
-			}).to.throw(Error, 'Add event handlers before connecting');
+			port.onEvent('foo', () => {});
+			debug.should.have.been.called;
 		});
 
 	});
