@@ -72,6 +72,9 @@ export default class Port {
 	}
 	onEvent(eventType, handler) {
 		this.debug(`onEvent handler added for "${eventType}"`);
+		if(this.isConnected) {
+			this.debug('You\'ve attached event handlers after connecting, you may have missed some events');
+		}
 		this.initHashArrAndPush(this.eventHandlers, eventType, handler);
 		return this;
 	}
