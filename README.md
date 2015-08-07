@@ -85,7 +85,7 @@ client.onEvent('sessionExpired', function(who, when) {
 });
 ```
 
-Notice that the handler must be added *before* the call to `connect()`, otherwise it could miss events.
+The handler should be added *before* the call to `connect()`, otherwise it could miss events.
 
 From the host's perspective, events must be triggered *after* a connection is established:
 
