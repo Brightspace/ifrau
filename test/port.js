@@ -187,13 +187,6 @@ describe('port', () => {
 			expect(p).to.equal(port);
 		});
 
-		it('should throw if already connected', () => {
-			port.connect();
-			expect(() => {
-				port.onEvent('foo', () => {});
-			}).to.throw(Error, 'Add event handlers before connecting');
-		});
-
 	});
 
 	describe('onRequest', () => {
