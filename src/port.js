@@ -255,6 +255,10 @@ export default class Port {
 		});
 
 	}
+	use(fn) {
+		fn(this);
+		return this;
+	}
 	static validateEvent(targetOrigin, endpoint, e) {
 		var isValid = (e.source === endpoint) &&
 			(targetOrigin === '*' || targetOrigin === e.origin) &&

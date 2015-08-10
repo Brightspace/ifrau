@@ -179,6 +179,18 @@ client.connect()
     });
 ```
 
+## Plugins
+
+`ifrau` hosts and clients can be extended with plugins:
+
+```javascript
+var myPlugin require('ifrau-someplugin');
+var client = new Client()
+	.use(myPlugin);
+``` 
+
+Please prefix plugin names with `ifrau-*` so that it can be easily found.
+
 ## Chaining
 
 When setting up your event, request handlers and services on the host or client, they can be chained:

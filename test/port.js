@@ -780,6 +780,21 @@ describe('port', () => {
 		});
 	});
 
+	describe('use', () => {
+
+		it('should call plugin with port', () => {
+			const plugin = sinon.spy();
+			port.use(plugin);
+			plugin.should.have.been.calledWith(port);
+		});
+
+		it('should return port', () => {
+			const result = port.use(() => {});
+			expect(result).to.equal(port);
+		});
+
+	});
+
 	describe('validateEvent', () => {
 		[
 			{endpoint: 'a', source: 'b', expect: false },
