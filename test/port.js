@@ -615,10 +615,15 @@ describe('port', () => {
 			sendMessage.restore();
 		});
 
-		it('should throw if not connected', () => {
-			expect(() => {
-				port.sendEvent('foo', 'bar');
-			}).to.throw(Error, 'Cannot sendEvent() before connect() has completed');
+		it('should queue if not connected', () => {
+			port.sendEvent('foo', 'bar');
+			sendMessage.should.not.have.been.called;
+			expect(port.eventQueue.length).to.equal(1);
+		});
+
+		it('should send queued messages after connect', () => {
+			port.sendEvent('foo', 'bar').connect();
+			sendMessage.should.have.been.calledWith('evt.foo', ['bar']);
 		});
 
 		it('should "sendMessage" prepended with "evt"', () => {
