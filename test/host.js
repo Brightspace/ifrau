@@ -1,11 +1,12 @@
+import './mock-dom';
+import Host from '../src/host';
+
 var chai = require('chai'),
 	expect = chai.expect,
 	sinon = require('sinon');
 
 chai.should();
 chai.use(require('sinon-chai'));
-
-import Host from '../src/host';
 
 describe('host', () => {
 
@@ -88,7 +89,8 @@ describe('host', () => {
 
 			it('should close resizer', (done) => {
 				host.connect().then(() => {
-					let resizerClose = sinon.stub(host.resizer, 'close');
+					host.iframe.iFrameResizer = {close: function(){}};
+					let resizerClose = sinon.stub(host.iframe.iFrameResizer, 'close');
 					host.close();
 					resizerClose.should.have.been.calledWith(host.iframe);
 					resizerClose.restore();

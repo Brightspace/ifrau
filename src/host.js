@@ -22,15 +22,13 @@ export default class Host extends Port {
 		super(iframe.contentWindow, origin, options);
 
 		this.iframe = iframe;
-
-		this.resizer = null;
 	}
 	connect() {
 		var me = this;
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
 				super.connect();
-				me.resizer = resizer.iframeResizer(
+				resizer.iframeResizer(
 					{
 						log: me.debugEnabled
 					},
@@ -47,7 +45,7 @@ export default class Host extends Port {
 	}
 	close() {
 		super.close();
-		this.resizer.close(this.iframe);
+		this.iframe.iFrameResizer.close(this.iframe);
 	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');
