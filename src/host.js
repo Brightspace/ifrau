@@ -1,10 +1,13 @@
 import Port from './port';
 import {default as resizer} from 'iframe-resizer';
+import {hostSyncTitle} from './plugins/sync-title';
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
 export default class Host extends Port {
 	constructor(elementProvider, src, options) {
+
+		options = options || {};
 
 		var origin = Host.tryGetOrigin(src);
 		if(origin === null) {
@@ -22,6 +25,9 @@ export default class Host extends Port {
 		super(iframe.contentWindow, origin, options);
 
 		this.iframe = iframe;
+
+		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
+
 	}
 	connect() {
 		var me = this;
@@ -35,8 +41,6 @@ export default class Host extends Port {
 					me.iframe
 				);
 				resolve();
-			}).onEvent('title', function(title) {
-				document.title = title;
 			}).onEvent('navigate', function(url) {
 				document.location.href = url;
 			});

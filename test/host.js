@@ -65,7 +65,7 @@ describe('host', () => {
 
 	describe('methods', () => {
 
-		let host, callback, onEvent, sendEventRaw;
+		let host, callback, onEvent, sendEvent;
 
 		beforeEach(() => {
 			global.window.addEventListener = sinon.stub();
@@ -77,12 +77,12 @@ describe('host', () => {
 			callback = sinon.spy();
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
-			sendEventRaw = sinon.stub(host, 'sendEventRaw');
+			sendEvent = sinon.stub(host, 'sendEvent');
 		});
 
 		afterEach(() => {
 			onEvent.restore();
-			sendEventRaw.restore();
+			sendEvent.restore();
 		});
 
 		describe('close', () => {
@@ -119,17 +119,11 @@ describe('host', () => {
 				host.receiveEvent('ready');
 			});
 
-			['ready', 'title', 'navigate'].forEach((evt) => {
+			['ready', 'navigate'].forEach((evt) => {
 				it(`should register for the "${evt}" event`, () => {
 					host.connect();
 					onEvent.should.have.been.calledWith(evt);
 				});
-			});
-
-			it('should update the document title', () => {
-				host.connect();
-				host.receiveEvent('title', ['new title']);
-				global.document.title.should.equal('new title');
 			});
 
 			it('should update the document location', () => {

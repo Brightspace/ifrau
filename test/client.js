@@ -9,7 +9,7 @@ import Client from '../src/client';
 
 describe('client', () => {
 
-	var client, callback, sendEvent, sendEventRaw, clock;
+	var client, callback, sendEvent, sendMessage, clock;
 
 	beforeEach(() => {
 		global.window = {
@@ -23,15 +23,15 @@ describe('client', () => {
 				scrollHeight: 100
 			}
 		};
-		client = new Client();
+		client = new Client({syncTitle: false});
 		sendEvent = sinon.stub(client, 'sendEvent');
-		sendEventRaw = sinon.stub(client, 'sendEventRaw');
+		sendMessage = sinon.stub(client, 'sendMessage');
 		clock = sinon.useFakeTimers();
 	});
 
 	afterEach(() => {
 		sendEvent.restore();
-		sendEventRaw.restore();
+		sendMessage.restore();
 		clock.restore();
 	});
 
@@ -60,7 +60,7 @@ describe('client', () => {
 
 		it('should send the "ready" event', () => {
 			client.connect();
-			sendEventRaw.should.have.been.calledWith('ready');
+			sendMessage.should.have.been.calledWith('evt.ready');
 		});
 
 	});
@@ -71,18 +71,6 @@ describe('client', () => {
 			client.connect().then(() => {
 				client.navigate('some-url');
 				sendEvent.should.have.been.calledWith('navigate', 'some-url');
-				done();
-			});
-		});
-
-	});
-
-	describe('setTitle', () => {
-
-		it('should fire "title" event', (done) => {
-			client.connect().then(() => {
-				client.setTitle('my title');
-				sendEvent.should.have.been.calledWith('title', 'my title');
 				done();
 			});
 		});

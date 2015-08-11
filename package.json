@@ -11,7 +11,7 @@
     "lint:test": "jshint test/*.js",
     "prepublish:cdn": "npm run browserify",
     "publish:cdn": "gulp publish",
-    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- test/*.js",
+    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
     "test": "npm run lint -s && npm run test:unit -s",
     "pretranspile": "rimraf lib",
     "transpile": "babel src --optional runtime --out-dir lib",

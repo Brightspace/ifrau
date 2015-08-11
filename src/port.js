@@ -10,6 +10,7 @@ export default class Port {
 		this.debugEnabled = options.debug || false;
 		this.endpoint = endpoint;
 		this.eventHandlers = {};
+		this.eventQueue = [];
 		this.isConnected = false;
 		this.isOpen = false;
 		this.pendingRequests = {};
@@ -33,6 +34,8 @@ export default class Port {
 	connect() {
 		this.isConnected = true;
 		this.debug('connected');
+		this.eventQueue.forEach((evt) => evt());
+		this.eventQueue = [];
 		return this;
 	}
 	debug(msg) {
@@ -209,17 +212,18 @@ export default class Port {
 		return this;
 	}
 	sendEvent(eventType) {
-		if(!this.isConnected) {
-			throw new Error('Cannot sendEvent() before connect() has completed');
-		}
-		var args = [];
-		for(var i=1; i<arguments.length; i++) {
+		let args = [];
+		for(let i=1; i<arguments.length; i++) {
 			args.push(arguments[i]);
 		}
-		return this.sendEventRaw(eventType, args);
-	}
-	sendEventRaw(eventType, data) {
-		return this.sendMessage(`evt.${eventType}`, data);
+		if(!this.isConnected) {
+			const me = this;
+			this.eventQueue.push(() => {
+				me.sendMessage(`evt.${eventType}`, args);
+			});
+			return this;
+		}
+		return this.sendMessage(`evt.${eventType}`, args);
 	}
 	sendRequestResponse(requestType) {
 
