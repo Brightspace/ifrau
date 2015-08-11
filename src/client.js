@@ -8,8 +8,6 @@ export default class Client extends Port {
 
 		super(window.parent, '*', options);
 
-		this.lastHeight = 0;
-
 		if(options.syncTitle !== false) {
 			this.use(clientSyncTitle);
 		}

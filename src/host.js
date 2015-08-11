@@ -1,5 +1,5 @@
 import Port from './port';
-import {default as resizer} from 'iframe-resizer';
+import {default as resizer} from './plugins/iframe-resizer';
 import {hostSyncTitle} from './plugins/sync-title';
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
@@ -27,6 +27,9 @@ export default class Host extends Port {
 		this.iframe = iframe;
 
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
+		if(options.resizeFrame !== false) {
+			this.use(resizer);
+		}
 
 	}
 	connect() {
@@ -34,22 +37,12 @@ export default class Host extends Port {
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
 				super.connect();
-				resizer.iframeResizer(
-					{
-						log: me.debugEnabled
-					},
-					me.iframe
-				);
 				resolve();
 			}).onEvent('navigate', function(url) {
 				document.location.href = url;
 			});
 			super.open();
 		});
-	}
-	close() {
-		super.close();
-		this.iframe.iFrameResizer.close(this.iframe);
 	}
 	static createIFrame(src) {
 		var iframe = document.createElement('iframe');
