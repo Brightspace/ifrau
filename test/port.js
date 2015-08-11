@@ -813,7 +813,8 @@ describe('port', () => {
 			{endpoint: 'a', source: 'a', targetOrigin: 'C', origin: 'c', key: 'frau.valid', expect: true },
 			{endpoint: 'a', source: 'a', targetOrigin: null, origin: null, key: 'frau.valid', expect: false },
 			{endpoint: 'a', source: 'a', targetOrigin: undefined, origin: undefined, key: 'frau.valid', expect: false },
-			{endpoint: 'a', source: 'a', targetOrigin: 'C', origin: undefined, key: 'frau.valid', expect: false }
+			{endpoint: 'a', source: 'a', targetOrigin: 'C', origin: undefined, key: 'frau.valid', expect: false },
+			{endpoint: 'a', source: 'a', targetOrigin: '', origin: '', key: 'frau.valid', expect: false }
 		].forEach((item, index) => {
 			it(`should validate origin "${index}" to "${item.expect}"`, () => {
 				var isValid = Port.validateEvent(
