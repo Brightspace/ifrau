@@ -119,17 +119,11 @@ describe('host', () => {
 				host.receiveEvent('ready');
 			});
 
-			['ready', 'title', 'navigate'].forEach((evt) => {
+			['ready', 'navigate'].forEach((evt) => {
 				it(`should register for the "${evt}" event`, () => {
 					host.connect();
 					onEvent.should.have.been.calledWith(evt);
 				});
-			});
-
-			it('should update the document title', () => {
-				host.connect();
-				host.receiveEvent('title', ['new title']);
-				global.document.title.should.equal('new title');
 			});
 
 			it('should update the document location', () => {
