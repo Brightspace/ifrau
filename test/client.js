@@ -23,7 +23,7 @@ describe('client', () => {
 				scrollHeight: 100
 			}
 		};
-		client = new Client();
+		client = new Client({syncTitle: false});
 		sendEvent = sinon.stub(client, 'sendEvent');
 		sendMessage = sinon.stub(client, 'sendMessage');
 		clock = sinon.useFakeTimers();
@@ -71,18 +71,6 @@ describe('client', () => {
 			client.connect().then(() => {
 				client.navigate('some-url');
 				sendEvent.should.have.been.calledWith('navigate', 'some-url');
-				done();
-			});
-		});
-
-	});
-
-	describe('setTitle', () => {
-
-		it('should fire "title" event', (done) => {
-			client.connect().then(() => {
-				client.setTitle('my title');
-				sendEvent.should.have.been.calledWith('title', 'my title');
 				done();
 			});
 		});

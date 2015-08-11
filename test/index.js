@@ -27,7 +27,7 @@ describe('ifrau', () => {
 	});
 
 	it('should export Client', () => {
-		var client = new Client();
+		var client = new Client({syncTitle: false});
 		expect(client).to.be.defined;
 	});
 
