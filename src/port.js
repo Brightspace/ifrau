@@ -261,7 +261,7 @@ export default class Port {
 	}
 	static validateEvent(targetOrigin, endpoint, e) {
 		var isValid = (e.source === endpoint) &&
-			(targetOrigin === '*' || targetOrigin === e.origin) &&
+			(targetOrigin === '*' || targetOrigin != null && e.origin != null && targetOrigin.toUpperCase() === e.origin.toUpperCase()) &&
 			(e.data.key !== undefined) &&
 			(e.data.key !== null) &&
 			(e.data.key.indexOf('frau.') === 0);
