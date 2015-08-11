@@ -13,7 +13,7 @@ export default class Client extends Port {
 		return new Promise((resolve, reject) => {
 
 			me.open();
-			me.sendEventRaw('ready');
+			me.sendMessage('evt.ready');
 
 			super.connect();
 			resolve();

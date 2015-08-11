@@ -9,7 +9,7 @@ import Client from '../src/client';
 
 describe('client', () => {
 
-	var client, callback, sendEvent, sendEventRaw, clock;
+	var client, callback, sendEvent, sendMessage, clock;
 
 	beforeEach(() => {
 		global.window = {
@@ -25,13 +25,13 @@ describe('client', () => {
 		};
 		client = new Client();
 		sendEvent = sinon.stub(client, 'sendEvent');
-		sendEventRaw = sinon.stub(client, 'sendEventRaw');
+		sendMessage = sinon.stub(client, 'sendMessage');
 		clock = sinon.useFakeTimers();
 	});
 
 	afterEach(() => {
 		sendEvent.restore();
-		sendEventRaw.restore();
+		sendMessage.restore();
 		clock.restore();
 	});
 
@@ -60,7 +60,7 @@ describe('client', () => {
 
 		it('should send the "ready" event', () => {
 			client.connect();
-			sendEventRaw.should.have.been.calledWith('ready');
+			sendMessage.should.have.been.calledWith('evt.ready');
 		});
 
 	});

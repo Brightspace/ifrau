@@ -65,7 +65,7 @@ describe('host', () => {
 
 	describe('methods', () => {
 
-		let host, callback, onEvent, sendEventRaw;
+		let host, callback, onEvent, sendEvent;
 
 		beforeEach(() => {
 			global.window.addEventListener = sinon.stub();
@@ -77,12 +77,12 @@ describe('host', () => {
 			callback = sinon.spy();
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
 			onEvent = sinon.spy(host, 'onEvent');
-			sendEventRaw = sinon.stub(host, 'sendEventRaw');
+			sendEvent = sinon.stub(host, 'sendEvent');
 		});
 
 		afterEach(() => {
 			onEvent.restore();
-			sendEventRaw.restore();
+			sendEvent.restore();
 		});
 
 		describe('close', () => {
