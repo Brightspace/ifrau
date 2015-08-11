@@ -270,10 +270,13 @@ export default class Port {
 	}
 	static validateEvent(targetOrigin, endpoint, e) {
 		var isValid = (e.source === endpoint) &&
-			(targetOrigin === '*' || (targetOrigin && e.origin && targetOrigin.toUpperCase() === e.origin.toUpperCase()) === true) &&
+		  (targetOrigin === '*' || !Port.isStringEmpty(targetOrigin) && !Port.isStringEmpty(e.origin) && targetOrigin.toUpperCase() === e.origin.toUpperCase()) &&
 			(e.data.key !== undefined) &&
 			(e.data.key !== null) &&
 			(e.data.key.indexOf('frau.') === 0);
 		return isValid;
+	}
+	static isStringEmpty(str) {
+		return (!str || 0 === str.length);
 	}
 }
