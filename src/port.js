@@ -13,6 +13,7 @@ export default class Port {
 		this.eventQueue = [];
 		this.isConnected = false;
 		this.isOpen = false;
+		this.onCloseCallbacks = [];
 		this.pendingRequests = {};
 		this.requestHandlers = {};
 		this.services = {};
@@ -29,6 +30,7 @@ export default class Port {
 		this.isOpen = false;
 		this.isConnected = false;
 		window.removeEventListener('message', this.receiveMessage);
+		this.onCloseCallbacks.forEach((cb) => cb());
 		this.debug('closed');
 	}
 	connect() {
@@ -72,6 +74,9 @@ export default class Port {
 			dic[key] = [];
 		}
 		dic[key].push(obj);
+	}
+	onClose(cb) {
+		this.onCloseCallbacks.push(cb);
 	}
 	onEvent(eventType, handler) {
 		this.debug(`onEvent handler added for "${eventType}"`);

@@ -72,7 +72,6 @@ describe('host', () => {
 			global.window.location.origin = 'origin';
 			global.window.removeEventListener = sinon.stub();
 			global.document.getElementById = sinon.stub().returns();
-			global.document.title = 'title';
 			global.document.location = { href: 'url' };
 			callback = sinon.spy();
 			host = new Host(() => element, 'http://cdn.com/app/index.html', callback);
@@ -83,22 +82,6 @@ describe('host', () => {
 		afterEach(() => {
 			onEvent.restore();
 			sendEvent.restore();
-		});
-
-		describe('close', () => {
-
-			it('should close resizer', (done) => {
-				host.connect().then(() => {
-					host.iframe.iFrameResizer = {close: function(){}};
-					let resizerClose = sinon.stub(host.iframe.iFrameResizer, 'close');
-					host.close();
-					resizerClose.should.have.been.calledWith(host.iframe);
-					resizerClose.restore();
-					done();
-				});
-				host.receiveEvent('ready');
-			});
-
 		});
 
 		describe('connect', () => {
