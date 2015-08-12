@@ -46,6 +46,14 @@ describe('port', () => {
 			expect(port.isConnected).to.be.false;
 		});
 
+		it('should call onClose callbacks', () => {
+			let cb = sinon.spy();
+			port.onClose(cb);
+			port.open();
+			port.close();
+			expect(cb).to.have.been.calledOnce;
+		});
+
 	});
 
 	describe('connect', () => {
