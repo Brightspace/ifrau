@@ -15,6 +15,8 @@ Install from NPM:
 npm install ifrau
 ```
 
+# test test
+
 Or include it in your application as UMD/CommonJs from the Brightspace CDN:
 
 ```html
@@ -187,7 +189,7 @@ client.connect()
 var myPlugin require('ifrau-someplugin');
 var client = new Client()
 	.use(myPlugin);
-``` 
+```
 
 Please prefix plugin names with `ifrau-*` so that it can be easily found.
 
