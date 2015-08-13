@@ -92,6 +92,14 @@ describe('host', () => {
 				expect(p.then).to.be.defined;
 			});
 
+			it('should resolve with the host', (done) => {
+				host.connect().then((h) => {
+					expect(h).to.equal(host);
+					done();
+				});
+				host.receiveEvent('ready');
+			});
+
 			it('should open the port', () => {
 				host.connect();
 				global.window.addEventListener.should.have.been.called;
