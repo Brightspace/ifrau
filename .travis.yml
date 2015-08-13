@@ -4,7 +4,8 @@ node_js:
 sudo: false
 after_success:
 - npm run report-coverage
-- '[ "$TRAVIS_SECURE_ENV_VARS" = "true" ] && npm run publish:cdn'
+after_deploy:
+- npm run publish:cdn
 deploy:
   provider: npm
   email: d2ltravisdeploy@d2l.com
