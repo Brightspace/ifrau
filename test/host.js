@@ -102,17 +102,9 @@ describe('host', () => {
 				host.receiveEvent('ready');
 			});
 
-			['ready', 'navigate'].forEach((evt) => {
-				it(`should register for the "${evt}" event`, () => {
-					host.connect();
-					onEvent.should.have.been.calledWith(evt);
-				});
-			});
-
-			it('should update the document location', () => {
+			it(`should register for the "ready" event`, () => {
 				host.connect();
-				host.receiveEvent('navigate', ['new url']);
-				global.document.location.href.should.equal('new url');
+				onEvent.should.have.been.calledWith('ready');
 			});
 
 		});

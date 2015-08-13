@@ -46,8 +46,6 @@ export default class Host extends Port {
 			me.onEvent('ready', function() {
 				super.connect();
 				resolve();
-			}).onEvent('navigate', function(url) {
-				document.location.href = url;
 			});
 			super.open();
 		});
