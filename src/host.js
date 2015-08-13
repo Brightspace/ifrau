@@ -1,5 +1,6 @@
 import Port from './port';
 import {default as resizer} from './plugins/iframe-resizer';
+import {hostSyncFont} from './plugins/sync-font';
 import {hostSyncTitle} from './plugins/sync-title';
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
@@ -29,6 +30,9 @@ export default class Host extends Port {
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
 		if(options.resizeFrame !== false) {
 			this.use(resizer);
+		}
+		if(options.syncFont) {
+			this.use(hostSyncFont);
 		}
 
 	}
