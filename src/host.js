@@ -45,7 +45,7 @@ export default class Host extends Port {
 		return new Promise((resolve, reject) => {
 			me.onEvent('ready', function() {
 				super.connect();
-				resolve();
+				resolve(me);
 			});
 			super.open();
 		});

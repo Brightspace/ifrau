@@ -30,7 +30,7 @@ export default class Client extends Port {
 
 			super.connect();
 
-			resolve();
+			resolve(me);
 
 		});
 	}

@@ -53,6 +53,13 @@ describe('client', () => {
 			expect(p.then).to.be.defined;
 		});
 
+		it('should resolve with the client', (done) => {
+			client.connect().then((c) => {
+				expect(c).to.equal(client);
+				done();
+			});
+		});
+
 		it('should open the port', () => {
 			client.connect();
 			open.should.have.been.called;
