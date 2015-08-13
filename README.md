@@ -50,6 +50,10 @@ Parameters:
 * `endpoint`: URL of the free-range app endpoint (the `src` of the `IFRAME`)
 * `options`
  * `debug`: whether to enable console debugging, `false` by default
+ * `resizeFrame`: whether the `IFRAME` should automatically resize to fit its content, `true` by default
+ * `syncFont`: whether to allow client to automatically sync its font family and size with the host, `false` by default
+ * `syncLang`: whether to allow client to automatically sync its language with the host, `false` by default
+ * `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
 
 Creating a Client is even simpler:
 
@@ -68,6 +72,9 @@ Parameters:
 
 * `options`
  * `debug`: whether to enable console debugging, `false` by default
+ * `syncFont`: whether the font family and size should be automatically set to match the host page, `false` by default
+ * `syncLang`: whether the page's language tag should be automatically set to match the host page, `false` by default
+ * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
 
 ## Events
 
@@ -187,7 +194,7 @@ client.connect()
 var myPlugin require('ifrau-someplugin');
 var client = new Client()
 	.use(myPlugin);
-``` 
+```
 
 Please prefix plugin names with `ifrau-*` so that it can be easily found.
 
