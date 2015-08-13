@@ -1,6 +1,7 @@
 import Port from './port';
 import {clientSyncLang} from './plugins/sync-lang';
 import {clientSyncTitle} from './plugins/sync-title';
+import {clientSyncFont} from './plugins/sync-font';
 
 export default class Client extends Port {
 	constructor(options) {
@@ -15,6 +16,9 @@ export default class Client extends Port {
 		if(options.syncTitle !== false) {
 			this.use(clientSyncTitle);
 		}
+		if(options.syncFont) {
+			this.use(clientSyncFont);
+		}
 
 	}
 	connect() {
@@ -25,6 +29,7 @@ export default class Client extends Port {
 			me.sendMessage('evt.ready');
 
 			super.connect();
+
 			resolve();
 
 		});
