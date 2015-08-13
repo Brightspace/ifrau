@@ -5,7 +5,7 @@ sudo: false
 after_success:
 - npm run report-coverage
 after_deploy:
-- npm run publish:cdn
+- gulp publish
 deploy:
   provider: npm
   email: d2ltravisdeploy@d2l.com
