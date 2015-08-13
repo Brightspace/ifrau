@@ -1,7 +1,7 @@
 'use strict';
 
 var opts = {
-	id: 'ifrau',
+	targetDirectory: 'ifrau',
 	creds: {
 		key: 'AKIAIFWDFE37W7LZ52XQ',
 		secret: process.env.CDN_SECRET
