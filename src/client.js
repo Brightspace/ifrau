@@ -1,4 +1,5 @@
 import Port from './port';
+import {clientSyncLang} from './plugins/sync-lang';
 import {clientSyncTitle} from './plugins/sync-title';
 
 export default class Client extends Port {
@@ -8,6 +9,9 @@ export default class Client extends Port {
 
 		super(window.parent, '*', options);
 
+		if(options.syncLang) {
+			this.use(clientSyncLang);
+		}
 		if(options.syncTitle !== false) {
 			this.use(clientSyncTitle);
 		}

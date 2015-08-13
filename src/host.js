@@ -1,5 +1,6 @@
 import Port from './port';
 import {default as resizer} from './plugins/iframe-resizer';
+import {hostSyncLang} from './plugins/sync-lang';
 import {hostSyncTitle} from './plugins/sync-title';
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
@@ -26,6 +27,9 @@ export default class Host extends Port {
 
 		this.iframe = iframe;
 
+		if(options.syncLang) {
+			this.use(hostSyncLang);
+		}
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
 		if(options.resizeFrame !== false) {
 			this.use(resizer);
