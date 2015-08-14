@@ -7,10 +7,10 @@ let typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
 export default class Port {
 	constructor(endpoint, targetOrigin, options) {
 		options = options || {};
+		this.connectQueue = [];
 		this.debugEnabled = options.debug || false;
 		this.endpoint = endpoint;
 		this.eventHandlers = {};
-		this.eventQueue = [];
 		this.isConnected = false;
 		this.isOpen = false;
 		this.onCloseCallbacks = [];
@@ -36,8 +36,8 @@ export default class Port {
 	connect() {
 		this.isConnected = true;
 		this.debug('connected');
-		this.eventQueue.forEach((evt) => evt());
-		this.eventQueue = [];
+		this.connectQueue.forEach((func) => func());
+		this.connectQueue = [];
 		return this;
 	}
 	debug(msg) {
@@ -57,7 +57,7 @@ export default class Port {
 				for(let i=0; i<arguments.length; i++) {
 					args.push(arguments[i]);
 				}
-				return me.requestRaw.apply(me, args);
+				return me.request.apply(me, args);
 			};
 		}
 		function createProxy(methodNames) {
@@ -67,7 +67,7 @@ export default class Port {
 			});
 			return proxy;
 		}
-		return me.requestRaw(serviceVersionPrefix).then(createProxy);
+		return me.request(serviceVersionPrefix).then(createProxy);
 	}
 	initHashArrAndPush(dic, key, obj) {
 		if(dic[key] === undefined ) {
@@ -181,18 +181,12 @@ export default class Port {
 		this.onRequest(`service:${serviceType}:${version}`, methodNames);
 		return this;
 	}
-	request() {
-		if(!this.isConnected) {
-			throw new Error('Cannot request() before connect() has completed');
-		}
-		return this.requestRaw.apply(this, arguments);
-	}
-	requestRaw(requestType) {
-		var args = [];
-		for(var i=1; i<arguments.length; i++) {
+	request(requestType) {
+		let args = [];
+		for(let i=1; i<arguments.length; i++) {
 			args.push(arguments[i]);
 		}
-		var me = this;
+		const me = this;
 		return new Promise((resolve, reject) => {
 			const id = `${me.id}_${++me.requestCounter}`;
 			me.initHashArrAndPush(
@@ -204,7 +198,14 @@ export default class Port {
 						reject
 					}
 				);
-			me.sendMessage(`req.${requestType}`,{id: id, args: args});
+			const finish = () => {
+				me.sendMessage(`req.${requestType}`,{id: id, args: args});
+			};
+			if(!me.isConnected) {
+				me.connectQueue.push(finish);
+			} else {
+				finish();
+			}
 		});
 	}
 	sendMessage(key, data) {
@@ -223,7 +224,7 @@ export default class Port {
 		}
 		if(!this.isConnected) {
 			const me = this;
-			this.eventQueue.push(() => {
+			this.connectQueue.push(() => {
 				me.sendMessage(`evt.${eventType}`, args);
 			});
 			return this;

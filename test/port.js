@@ -100,22 +100,22 @@ describe('port', () => {
 
 	describe('getService', () => {
 
-		var requestRaw;
+		var request;
 
 		beforeEach(() => {
-			requestRaw = sinon.stub(port, 'requestRaw');
-			requestRaw.withArgs('service:foo:1.0').returns(
+			request = sinon.stub(port, 'request');
+			request.withArgs('service:foo:1.0').returns(
 				new Promise((resolve, reject) => {
 					setTimeout(() => {
 						resolve(['a', 'b']);
 					});
 				})
 			);
-			requestRaw.withArgs('service:foo:1.0:a', '1', true).returns(5);
+			request.withArgs('service:foo:1.0:a', '1', true).returns(5);
 		});
 
 		afterEach(() => {
-			requestRaw.restore();
+			request.restore();
 		});
 
 		it('should throw if not connected', () => {
@@ -133,7 +133,7 @@ describe('port', () => {
 		it('should create a proxy with each method exposed', (done) => {
 			port.connect().getService('foo', '1.0')
 				.then((foo) => {
-					requestRaw.should.have.been.calledWith('service:foo:1.0');
+					request.should.have.been.calledWith('service:foo:1.0');
 					expect(foo).to.be.defined;
 					expect(foo.a).to.be.defined;
 					expect(foo.b).to.be.defined;
@@ -145,7 +145,7 @@ describe('port', () => {
 			port.connect().getService('foo', '1.0')
 				.then((foo) => {
 					var result = foo.a('1', true);
-					requestRaw.should.have.been.calledWith('service:foo:1.0:a', '1', true);
+					request.should.have.been.calledWith('service:foo:1.0:a', '1', true);
 					expect(result).to.eql(5);
 					done();
 				});
@@ -548,10 +548,16 @@ describe('port', () => {
 			initHashArrAndPush.restore();
 		});
 
-		it('should throw if not connected', () => {
-			expect(() => {
-				port.request('foo');
-			}).to.throw(Error, 'Cannot request() before connect() has completed');
+		it('should queue if not connected', () => {
+			port.request('foo');
+			sendMessage.should.not.have.been.called;
+			expect(port.connectQueue.length).to.equal(1);
+		});
+
+		it('should send queued messages after connect', () => {
+			port.request('foo');
+			port.connect();
+			sendMessage.should.have.been.calledWith('req.foo');
 		});
 
 		it('should return a promise', () => {
@@ -626,7 +632,7 @@ describe('port', () => {
 		it('should queue if not connected', () => {
 			port.sendEvent('foo', 'bar');
 			sendMessage.should.not.have.been.called;
-			expect(port.eventQueue.length).to.equal(1);
+			expect(port.connectQueue.length).to.equal(1);
 		});
 
 		it('should send queued messages after connect', () => {
