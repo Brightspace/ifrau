@@ -33,7 +33,25 @@ export default class Host extends Port {
 		}
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
 		if(options.resizeFrame !== false) {
-			this.use(resizer);
+			if(options.isFullScreen) {
+				var me = this;
+
+				var handleResize = function() {
+					if(me.iframe) {
+						var rect = me.iframe.getBoundingClientRect();
+						me.iframe.style.height = (window.innerHeight - rect.top)+'px';
+					}
+				};
+
+				handleResize();
+				window.addEventListener('resize', handleResize);
+
+				this.onClose(function() {
+					window.removeEventListener('resize', handleResize);
+				});
+			} else {
+				this.use(resizer);
+			}
 		}
 		if(options.syncFont) {
 			this.use(hostSyncFont);
