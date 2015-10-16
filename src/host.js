@@ -7,7 +7,7 @@ import {hostSyncTitle} from './plugins/sync-title';
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
 export default class Host extends Port {
-	constructor(elementProvider, src, options) {
+	constructor(elementProvider, src, options, height, frameId) {
 
 		options = options || {};
 
@@ -21,7 +21,7 @@ export default class Host extends Port {
 			throw new Error(`Could not find parent node`);
 		}
 
-		var iframe = Host.createIFrame(src);
+		var iframe = Host.createIFrame(src, frameId);
 		parent.appendChild(iframe);
 
 		super(iframe.contentWindow, origin, options);
@@ -32,13 +32,23 @@ export default class Host extends Port {
 			this.use(hostSyncLang);
 		}
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
-		if(options.resizeFrame !== false) {
-			this.use(resizer);
+
+		if(height || height === 0) {
+			this.changeHeight(height);
+		} else {
+			if(options.resizeFrame !== false) {
+				this.use(resizer);
+			}
 		}
 		if(options.syncFont) {
 			this.use(hostSyncFont);
 		}
 
+	}
+	changeHeight(height) {
+		if(this.iframe) {
+			this.iframe.height = height;
+		}
 	}
 	connect() {
 		var me = this;
@@ -50,13 +60,16 @@ export default class Host extends Port {
 			super.open();
 		});
 	}
-	static createIFrame(src) {
+	static createIFrame(src, frameId) {
 		var iframe = document.createElement('iframe');
 		iframe.width = '100%';
 		iframe.style.border = 'none';
 		iframe.style.overflow = 'hidden';
 		iframe.scrolling = 'no';
 		iframe.src = src;
+		if(frameId)
+			iframe.id = frameId;
+
 		return iframe;
 	}
 	static tryGetOrigin(url) {
