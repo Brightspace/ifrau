@@ -54,6 +54,8 @@ Parameters:
  * `syncFont`: whether to allow client to automatically sync its font family and size with the host, `false` by default
  * `syncLang`: whether to allow client to automatically sync its language with the host, `false` by default
  * `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
+ * `height`: sets the iframe to a certain height, also disables automatic resizing
+ * `id`: sets the id of the iframe
 
 Creating a Client is even simpler:
 
