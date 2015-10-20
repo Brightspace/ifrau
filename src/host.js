@@ -21,7 +21,7 @@ export default class Host extends Port {
 			throw new Error(`Could not find parent node`);
 		}
 
-		var iframe = Host.createIFrame(src);
+		var iframe = Host.createIFrame(src, options.id, options.height);
 		parent.appendChild(iframe);
 
 		super(iframe.contentWindow, origin, options);
@@ -32,9 +32,11 @@ export default class Host extends Port {
 			this.use(hostSyncLang);
 		}
 		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
-		if(options.resizeFrame !== false) {
+
+		if(!(options.height || options.height === 0) && options.resizeFrame !== false) {
 			this.use(resizer);
 		}
+
 		if(options.syncFont) {
 			this.use(hostSyncFont);
 		}
@@ -50,13 +52,19 @@ export default class Host extends Port {
 			super.open();
 		});
 	}
-	static createIFrame(src) {
+	static createIFrame(src, frameId, height) {
 		var iframe = document.createElement('iframe');
 		iframe.width = '100%';
+		if(height || height === 0) {
+			iframe.height = height;
+		}
 		iframe.style.border = 'none';
 		iframe.style.overflow = 'hidden';
 		iframe.scrolling = 'no';
 		iframe.src = src;
+		if(frameId) {
+			iframe.id = frameId;
+		}
 		return iframe;
 	}
 	static tryGetOrigin(url) {
