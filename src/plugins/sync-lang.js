@@ -1,5 +1,7 @@
-export function clientSyncLang(client) {
-	return client.request('lang').then((lang) => {
+'use strict';
+
+module.exports.client = function clientSyncLang(client) {
+	return client.request('lang').then(function(lang) {
 		var htmlElem = document.getElementsByTagName('html')[0];
 		htmlElem.setAttribute('lang', lang.lang);
 		if(lang.fallback) {
@@ -9,10 +11,10 @@ export function clientSyncLang(client) {
 			document.body.dir = 'rtl';
 		}
 	});
-}
+};
 
-export function hostSyncLang(host) {
-	host.onRequest('lang', () => {
+module.exports.host = function hostSyncLang(host) {
+	host.onRequest('lang', function() {
 		var htmlElem = document.getElementsByTagName('html')[0];
 		var isRtl = (document.body.dir.toLowerCase() === 'rtl');
 		return {
@@ -21,4 +23,4 @@ export function hostSyncLang(host) {
 			fallback: htmlElem.getAttribute('data-lang-default')
 		};
 	});
-}
+};

@@ -1,77 +1,90 @@
-import Port from './port';
-import {default as resizer} from './plugins/iframe-resizer';
-import {hostSyncFont} from './plugins/sync-font';
-import {hostSyncLang} from './plugins/sync-lang';
-import {hostSyncTitle} from './plugins/sync-title';
+'use strict';
+
+var inherits = require('inherits'),
+	Promise = require('lie');
+
+var Port = require('./port'),
+	resizer = require('./plugins/iframe-resizer').host,
+	syncFont = require('./plugins/sync-font').host,
+	syncLang = require('./plugins/sync-lang').host,
+	syncTitle = require('./plugins/sync-title').host;
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
-export default class Host extends Port {
-	constructor(elementProvider, src, options) {
 
-		options = options || {};
-
-		var origin = Host.tryGetOrigin(src);
-		if(origin === null) {
-			throw new Error(`Unable to extract origin from "${src}"`);
-		}
-
-		var parent = elementProvider();
-		if (parent === null) {
-			throw new Error(`Could not find parent node`);
-		}
-
-		var iframe = Host.createIFrame(src, options.id, options.height);
-		parent.appendChild(iframe);
-
-		super(iframe.contentWindow, origin, options);
-
-		this.iframe = iframe;
-
-		if(options.syncLang) {
-			this.use(hostSyncLang);
-		}
-		this.use(hostSyncTitle({page: options.syncPageTitle ? true : false}));
-
-		if(!(options.height || options.height === 0) && options.resizeFrame !== false) {
-			this.use(resizer);
-		}
-
-		if(options.syncFont) {
-			this.use(hostSyncFont);
-		}
-
+function Host(elementProvider, src, options) {
+	if (!(this instanceof Host)) {
+		return new Host(elementProvider, src, options);
 	}
-	connect() {
-		var me = this;
-		return new Promise((resolve, reject) => {
-			me.onEvent('ready', function() {
-				super.connect();
-				resolve(me);
-			});
-			super.open();
-		});
+
+	options = options || {};
+
+	var origin = Host._tryGetOrigin(src);
+	if(origin === null) {
+		throw new Error('Unable to extract origin from "' + src + '"');
 	}
-	static createIFrame(src, frameId, height) {
-		var iframe = document.createElement('iframe');
-		iframe.width = '100%';
-		if(height || height === 0) {
-			iframe.height = height;
-		}
-		iframe.style.border = 'none';
-		iframe.style.overflow = 'hidden';
-		iframe.scrolling = 'no';
-		iframe.src = src;
-		if(frameId) {
-			iframe.id = frameId;
-		}
-		return iframe;
+
+	var parent = elementProvider();
+	if (parent === null) {
+		throw new Error('Could not find parent node');
 	}
-	static tryGetOrigin(url) {
-		if(url && url.indexOf('//') === 0) {
-			url = window.location.protocol + url;
-		}
-		var match = originRe.exec(url);
-		return (match !== null) ? match[0] : null;
+
+	var iframe = Host._createIFrame(src, options.id, options.height);
+	parent.appendChild(iframe);
+
+	Port.call(this, iframe.contentWindow, origin, options);
+
+	this.iframe = iframe;
+
+	if(options.syncLang) {
+		this.use(syncLang);
 	}
+	this.use(syncTitle({page: options.syncPageTitle ? true : false}));
+
+	if(!(options.height || options.height === 0) && options.resizeFrame !== false) {
+		this.use(resizer);
+	}
+
+	if(options.syncFont) {
+		this.use(syncFont);
+	}
+
 }
+inherits(Host, Port);
+
+Host.prototype.connect = function connect() {
+	var me = this;
+	return new Promise(function(resolve/*, reject*/) {
+		me.onEvent('ready', function() {
+			Port.prototype.connect.call(me);
+			resolve(me);
+		});
+		me.open();
+	});
+};
+
+Host._createIFrame = function createIFrame(src, frameId, height) {
+	var iframe = document.createElement('iframe');
+	iframe.width = '100%';
+	if(height || height === 0) {
+		iframe.height = height;
+	}
+	iframe.style.border = 'none';
+	iframe.style.overflow = 'hidden';
+	iframe.scrolling = 'no';
+	iframe.src = src;
+	if(frameId) {
+		iframe.id = frameId;
+	}
+	return iframe;
+};
+
+Host._tryGetOrigin = function tryGetOrigin(url) {
+	if(url && url.indexOf('//') === 0) {
+		url = window.location.protocol + url;
+	}
+	var match = originRe.exec(url);
+	return (match !== null) ? match[0] : null;
+};
+
+module.exports = Host;

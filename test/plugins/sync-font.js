@@ -5,7 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { clientSyncFont, hostSyncFont } from '../../src/plugins/sync-font';
+import { client as clientSyncFont, host as hostSyncFont } from '../../src/plugins/sync-font';
 
 let MockClient = function() {};
 MockClient.prototype.request = function() {};

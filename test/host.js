@@ -46,13 +46,13 @@ describe('host', () => {
 		].forEach((src) => {
 			it(`should not throw for valid origin "${src}"`, () => {
 				var host = new Host(() => element, src);
-				expect(host.targetOrigin).to.equal(src);
+				expect(host._targetOrigin).to.equal(src);
 			});
 		});
 
 		it(`should resolve protocol-relative origin`, () => {
 			var host = new Host(() => element, '//foo.com');
-			expect(host.targetOrigin).to.equal('https://foo.com');
+			expect(host._targetOrigin).to.equal('https://foo.com');
 		});
 
 		it('should throw if parent missing', () => {
@@ -97,7 +97,7 @@ describe('host', () => {
 					expect(h).to.equal(host);
 					done();
 				});
-				host.receiveEvent('ready');
+				host._receiveEvent('ready');
 			});
 
 			it('should open the port', () => {
@@ -107,7 +107,7 @@ describe('host', () => {
 
 			it('should resolve promise when "ready" event is received', (done) => {
 				host.connect().then(() => done());
-				host.receiveEvent('ready');
+				host._receiveEvent('ready');
 			});
 
 			it(`should register for the "ready" event`, () => {
