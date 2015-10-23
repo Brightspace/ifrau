@@ -5,8 +5,8 @@ var inherits = require('inherits'),
 
 var Port = require('./base');
 
-var fromError = require('../transform-error').fromError,
-	toError = require('../transform-error').toError;
+var fromError = require('./transform-error').fromError,
+	toError = require('./transform-error').toError;
 
 function PortWithRequests() {
 	if (!(this instanceof PortWithRequests)) {

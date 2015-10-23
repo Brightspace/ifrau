@@ -4,7 +4,7 @@ import sinon from 'sinon';
 
 chai.use(things);
 
-import { fromError, toError, ERROR_OBJECT_SENTINEL } from '../src/transform-error';
+import { fromError, toError, ERROR_OBJECT_SENTINEL } from '../src/port/transform-error';
 
 describe('transform-error', () => {
 	describe('fromError', () => {

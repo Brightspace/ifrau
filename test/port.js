@@ -5,7 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { fromError, toError } from '../src/transform-error';
+import { fromError, toError } from '../src/port/transform-error';
 import Port from '../src/port';
 
 var targetOrigin = 'http://cdn.com/app/index.html';
