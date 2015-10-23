@@ -5,7 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { clientSyncLang, hostSyncLang } from '../../src/plugins/sync-lang';
+import { client as clientSyncLang, host as hostSyncLang } from '../../src/plugins/sync-lang';
 
 let MockClient = function() {};
 MockClient.prototype.request = function() {};

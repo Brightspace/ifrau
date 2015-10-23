@@ -1,9 +1,9 @@
 function installClientPolling(sync) {
 
-	let title = '';
+	var title = '';
 
-	setInterval(() => {
-		let newTitle = document.title;
+	setInterval(function() {
+		var newTitle = document.title;
 		if(newTitle !== title) {
 			title = newTitle;
 			sync(title);
@@ -14,14 +14,14 @@ function installClientPolling(sync) {
 
 function installClientMutation(sync) {
 
-	let elem = document.querySelector('title');
+	var elem = document.querySelector('title');
 	if(elem === null) {
 		elem = document.createElement('title');
 		document.getElementsByTagName('head')[0].appendChild(elem);
 	}
 	sync(document.title);
 
-	const observer = new window.MutationObserver(function(mutations) {
+	var observer = new window.MutationObserver(function(mutations) {
 		sync(mutations[0].target.textContent);
 	});
 	observer.observe(
@@ -31,7 +31,7 @@ function installClientMutation(sync) {
 
 }
 
-function clientSyncTitle(client) {
+module.exports.client = function clientSyncTitle(client) {
 
 	function sync(value) {
 		client.sendEvent('title', value);
@@ -42,9 +42,9 @@ function clientSyncTitle(client) {
 	} else {
 		installClientPolling(sync);
 	}
-}
+};
 
-function hostSyncTitle(options) {
+module.exports.host = function hostSyncTitle(options) {
 	options = options || {};
 	return function(host) {
 		host.onEvent('title', function(title) {
@@ -56,7 +56,4 @@ function hostSyncTitle(options) {
 			}
 		});
 	};
-}
-
-export {clientSyncTitle};
-export {hostSyncTitle};
+};

@@ -2,10 +2,10 @@
   "name": "ifrau",
   "version": "0.10.1",
   "description": "Free-range app utility for IFRAME-based FRAs",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "prebrowserify": "rimraf dist && mkdir dist && npm run transpile",
-    "browserify": "browserify -g uglifyify -s ifrau ./lib/index.js > ./dist/ifrau.js",
+    "prebrowserify": "rimraf dist && mkdir dist",
+    "browserify": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "jshint src",
     "lint:test": "jshint test",
@@ -13,8 +13,6 @@
     "publish:cdn": "gulp publish",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
     "test": "npm run lint -s && npm run test:unit -s",
-    "pretranspile": "rimraf lib",
-    "transpile": "babel src --optional runtime --out-dir lib",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
@@ -34,12 +32,13 @@
   },
   "homepage": "https://github.com/Brightspace/ifrau",
   "dependencies": {
-    "babel-runtime": "^5.5.8",
     "iframe-resizer": "^3.0.0",
+    "inherits": "^2.0.1",
+    "lie": "^3.0.1",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
-    "babel": "^5.6.4",
+    "babel": "^5.8.23",
     "browserify": "^10.2.3",
     "chai": "^3.0.0",
     "chai-things": "^0.2.0",

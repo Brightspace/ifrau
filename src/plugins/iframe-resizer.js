@@ -1,6 +1,8 @@
-import {default as iframeResizer} from 'iframe-resizer';
+'use strict';
 
-export default function resizer(host) {
+var iframeResizer = require('iframe-resizer');
+
+module.exports.host = function resizer(host) {
 	var initialized = false;
 	host.onEvent('ready', function() {
 		if(initialized) {
@@ -19,4 +21,4 @@ export default function resizer(host) {
 			host.iframe.iFrameResizer.close(host.iframe);
 		}
 	});
-}
+};

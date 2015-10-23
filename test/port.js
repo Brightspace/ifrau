@@ -37,13 +37,13 @@ describe('port', () => {
 			port.open();
 			port.close();
 			global.window.removeEventListener
-				.should.have.been.calledWith('message', port.receiveMessage );
+				.should.have.been.calledWith('message', port._receiveMessage );
 		});
 
 		it('should disconnect port', () => {
 			port.open();
 			port.close();
-			expect(port.isConnected).to.be.false;
+			expect(port._isConnected).to.be.false;
 		});
 
 		it('should call onClose callbacks', () => {
@@ -157,13 +157,13 @@ describe('port', () => {
 
 		it('should create array entry if it does not exist', () => {
 			var hash = {};
-			port.initHashArrAndPush(hash, 'foo', 'bar');
+			port._initHashArrAndPush(hash, 'foo', 'bar');
 			expect(hash.foo).to.eql(['bar']);
 		});
 
 		it('should append to existing entry', () => {
 			var hash = { foo: ['bar'] };
-			port.initHashArrAndPush(hash, 'foo', 'hello');
+			port._initHashArrAndPush(hash, 'foo', 'hello');
 			expect(hash.foo).to.eql([ 'bar', 'hello']);
 		});
 
@@ -171,23 +171,23 @@ describe('port', () => {
 
 	describe('onEvent', () => {
 
-		var initHashArrAndPush, debug;
+		var _initHashArrAndPush, debug;
 
 		beforeEach(() => {
-			initHashArrAndPush = sinon.stub(port, 'initHashArrAndPush');
+			_initHashArrAndPush = sinon.stub(port, '_initHashArrAndPush');
 			debug = sinon.stub(port, 'debug');
 		});
 
 		afterEach(() => {
-			initHashArrAndPush.restore();
+			_initHashArrAndPush.restore();
 			debug.restore();
 		});
 
 		it('should add to eventHandlers', () => {
 			var handler = () => {};
 			port.onEvent('foo', handler);
-			initHashArrAndPush.should.have.been.calledWith(
-				port.eventHandlers, 'foo', handler
+			_initHashArrAndPush.should.have.been.calledWith(
+				port._eventHandlers, 'foo', handler
 			);
 		});
 
@@ -206,25 +206,25 @@ describe('port', () => {
 
 	describe('onRequest', () => {
 
-		var sendRequestResponse;
+		var _sendRequestResponse;
 
 		beforeEach(() => {
-			sendRequestResponse = sinon.stub(port, 'sendRequestResponse');
+			_sendRequestResponse = sinon.stub(port, '_sendRequestResponse');
 		});
 
 		afterEach(() => {
-			sendRequestResponse.restore();
+			_sendRequestResponse.restore();
 		});
 
-		it('should add to requestHandlers', () => {
+		it('should add to _requestHandlers', () => {
 			var handler = () => {};
 			port.onRequest('foo', handler);
-			expect(port.requestHandlers).to.eql({ foo: handler });
+			expect(port._requestHandlers).to.eql({ foo: handler });
 		});
 
 		it('should attempt to send response immediately', () => {
 			port.onRequest('foo', () => {});
-			sendRequestResponse.should.have.been.calledWith('foo');
+			_sendRequestResponse.should.have.been.calledWith('foo');
 		});
 
 		it('should throw if duplicate handler is defined', () => {
@@ -270,19 +270,19 @@ describe('port', () => {
 
 	});
 
-	describe('receiveEvent', () => {
+	describe('_receiveEvent', () => {
 
 		it('should not call handlers for different events', () => {
 			var handler = sinon.spy();
 			port.onEvent('foo', handler);
-			port.receiveEvent('bar');
+			port._receiveEvent('bar');
 			handler.should.not.have.been.called;
 		});
 
 		it('should pass payload as arguments to handler', () => {
 			var handler = sinon.spy();
 			port.onEvent('foo', handler);
-			port.receiveEvent('foo', ['bar', true, -2]);
+			port._receiveEvent('foo', ['bar', true, -2]);
 			handler.should.have.been.calledWith('bar', true, -2);
 		});
 
@@ -291,7 +291,7 @@ describe('port', () => {
 			var handler2 = sinon.spy();
 			port.onEvent('foo', handler1)
 				.onEvent('foo', handler2);
-			port.receiveEvent('foo', ['bar']);
+			port._receiveEvent('foo', ['bar']);
 			handler1.should.have.been.calledWith('bar');
 			handler2.should.have.been.calledWith('bar');
 		});
@@ -300,107 +300,107 @@ describe('port', () => {
 
 	describe('receiveMessage', () => {
 
-		var receiveEvent, receiveRequest, receiveRequestResponse;
+		var _receiveEvent, _receiveRequest, _receiveRequestResponse;
 
 		beforeEach(() => {
-			receiveEvent = sinon.stub(port, 'receiveEvent');
-			receiveRequest = sinon.stub(port, 'receiveRequest');
-			receiveRequestResponse = sinon.stub(port, 'receiveRequestResponse');
+			_receiveEvent = sinon.stub(port, '_receiveEvent');
+			_receiveRequest = sinon.stub(port, '_receiveRequest');
+			_receiveRequestResponse = sinon.stub(port, '_receiveRequestResponse');
 		});
 
 		afterEach(() => {
-			receiveEvent.restore();
-			receiveRequest.restore();
-			receiveRequestResponse.restore();
+			_receiveEvent.restore();
+			_receiveRequest.restore();
+			_receiveRequestResponse.restore();
 		});
 
 		it('should not handle invalid events', () => {
-			port.receiveMessage({ source: 'evil' });
-			receiveEvent.should.not.have.been.called;
-			receiveRequest.should.not.have.been.called;
-			receiveRequestResponse.should.not.have.been.called;
+			port._receiveMessage({ source: 'evil' });
+			_receiveEvent.should.not.have.been.called;
+			_receiveRequest.should.not.have.been.called;
+			_receiveRequestResponse.should.not.have.been.called;
 		});
 
 		it('should not handle unrecognized message types', () => {
-			port.receiveMessage({
+			port._receiveMessage({
 				source: endpoint,
 				origin: targetOrigin,
 				data: { key: 'frau.foo.bar' }
 			});
-			receiveEvent.should.not.have.been.called;
-			receiveRequest.should.not.have.been.called;
-			receiveRequestResponse.should.not.have.been.called;
+			_receiveEvent.should.not.have.been.called;
+			_receiveRequest.should.not.have.been.called;
+			_receiveRequestResponse.should.not.have.been.called;
 		});
 
-		it('should pass "evt" messages to "receiveEvent"', () => {
-			port.receiveMessage({
+		it('should pass "evt" messages to "_receiveEvent"', () => {
+			port._receiveMessage({
 				source: endpoint,
 				origin: targetOrigin,
 				data: { key: 'frau.evt.myEvent', payload: ['bar', false] }
 			});
-			receiveEvent.should.have.been.calledWith('myEvent', ['bar', false]);
+			_receiveEvent.should.have.been.calledWith('myEvent', ['bar', false]);
 		});
 
-		it('should pass "req" messages to "receiveRequest"', () => {
-			port.receiveMessage({
+		it('should pass "req" messages to "_receiveRequest"', () => {
+			port._receiveMessage({
 				source: endpoint,
 				origin: targetOrigin,
 				data: { key: 'frau.req.myRequest', payload: 'foo' }
 			});
-			receiveRequest.should.have.been.calledWith('myRequest', 'foo');
+			_receiveRequest.should.have.been.calledWith('myRequest', 'foo');
 		});
 
-		it('should pass "res" messages to "receiveRequestResponse"', () => {
-			port.receiveMessage({
+		it('should pass "res" messages to "_receiveRequestResponse"', () => {
+			port._receiveMessage({
 				source: endpoint,
 				origin: targetOrigin,
 				data: { key: 'frau.res.myResponse', payload: 23 }
 			});
-			receiveRequestResponse
+			_receiveRequestResponse
 				.should.have.been.calledWith('myResponse', 23);
 		});
 
 	});
 
-	describe('receiveRequest', () => {
+	describe('_receiveRequest', () => {
 
-		var sendRequestResponse, initHashArrAndPush;
+		var _sendRequestResponse, _initHashArrAndPush;
 
 		beforeEach(() => {
-			sendRequestResponse = sinon.stub(port, 'sendRequestResponse');
-			initHashArrAndPush = sinon.stub(port, 'initHashArrAndPush');
+			_sendRequestResponse = sinon.stub(port, '_sendRequestResponse');
+			_initHashArrAndPush = sinon.stub(port, '_initHashArrAndPush');
 		});
 
 		afterEach(() => {
-			sendRequestResponse.restore();
-			initHashArrAndPush.restore();
+			_sendRequestResponse.restore();
+			_initHashArrAndPush.restore();
 		});
 
-		it('should queue request in "waitingRequests"', () => {
-			port.receiveRequest('foo', { id: 'rId', args: ['bar', false, -1] });
-			initHashArrAndPush.should.have.been.calledWith(
-				port.waitingRequests,
+		it('should queue request in "_waitingRequests"', () => {
+			port._receiveRequest('foo', { id: 'rId', args: ['bar', false, -1] });
+			_initHashArrAndPush.should.have.been.calledWith(
+				port._waitingRequests,
 				'foo',
 				{ id: 'rId', args: ['bar', false, -1] }
 			);
 		});
 
 		it('should attempt to send response', () => {
-			port.receiveRequest('foo', { id: 'rId', args: [] });
-			sendRequestResponse.should.have.been.calledWith('foo');
+			port._receiveRequest('foo', { id: 'rId', args: [] });
+			_sendRequestResponse.should.have.been.calledWith('foo');
 		});
 
 	});
 
-	describe('receiveRequestResponse', () => {
+	describe('_receiveRequestResponse', () => {
 
 		it('should ignore responses which aren\'t pending', (done) => {
 			var req = {
 				resolve: sinon.spy(),
 				reject: sinon.spy()
 			};
-			port.pendingRequests.foo = [req];
-			port.receiveRequestResponse('bar', {id: port.requestId});
+			port._pendingRequests.foo = [req];
+			port._receiveRequestResponse('bar', {id: port.requestId});
 			setTimeout(() => {
 				req.resolve.should.not.have.been.called;
 				req.reject.should.not.have.been.called;
@@ -419,8 +419,8 @@ describe('port', () => {
 				resolve: sinon.spy(),
 				reject: sinon.spy()
 			};
-			port.pendingRequests.foo = [req1, req2];
-			port.receiveRequestResponse('foo', {id: 2});
+			port._pendingRequests.foo = [req1, req2];
+			port._receiveRequestResponse('foo', {id: 2});
 			setTimeout(() => {
 				req1.resolve.should.not.have.been.called;
 				req1.reject.should.not.have.been.called;
@@ -443,12 +443,12 @@ describe('port', () => {
 					reject: sinon.spy()
 				};
 
-			port.pendingRequests.foo = [errored, succeeded];
+			port._pendingRequests.foo = [errored, succeeded];
 
 			const err = fromError(new Error('bad things'));
 
-			port.receiveRequestResponse('foo', { id: errored.id, err });
-			port.receiveRequestResponse('foo', { id: succeeded.id });
+			port._receiveRequestResponse('foo', { id: errored.id, err });
+			port._receiveRequestResponse('foo', { id: succeeded.id });
 
 			setTimeout(() => {
 				errored.resolve.should.not.have.been.called;
@@ -536,22 +536,22 @@ describe('port', () => {
 
 	describe('request', () => {
 
-		var sendMessage, initHashArrAndPush;
+		var sendMessage, _initHashArrAndPush;
 
 		beforeEach(() => {
 			sendMessage = sinon.stub(port, 'sendMessage');
-			initHashArrAndPush = sinon.stub(port, 'initHashArrAndPush');
+			_initHashArrAndPush = sinon.stub(port, '_initHashArrAndPush');
 		});
 
 		afterEach(() => {
 			sendMessage.restore();
-			initHashArrAndPush.restore();
+			_initHashArrAndPush.restore();
 		});
 
 		it('should queue if not connected', () => {
 			port.request('foo');
 			sendMessage.should.not.have.been.called;
-			expect(port.connectQueue.length).to.equal(1);
+			expect(port._connectQueue.length).to.equal(1);
 		});
 
 		it('should send queued messages after connect', () => {
@@ -566,10 +566,10 @@ describe('port', () => {
 			expect(promise.then).to.be.defined;
 		});
 
-		it('should add to "pendingRequests"', () => {
+		it('should add to "_pendingRequests"', () => {
 			port.connect().request('foo');
-			initHashArrAndPush.should.have.been.calledWith(
-				port.pendingRequests,
+			_initHashArrAndPush.should.have.been.calledWith(
+				port._pendingRequests,
 				'foo'
 			);
 		});
@@ -578,7 +578,7 @@ describe('port', () => {
 			port.connect().request('foo');
 			sendMessage.should.have.been.calledWith(
 				'req.foo',
-				{ id: `${port.id}_1`, args: [] }
+				{ id: `${port._id}_1`, args: [] }
 			);
 		});
 
@@ -586,7 +586,7 @@ describe('port', () => {
 			port.connect().request('foo', 'bar', true, -3);
 			sendMessage.should.have.been.calledWith(
 				'req.foo',
-				{ id: `${port.id}_1`, args: ['bar', true, -3] }
+				{ id: `${port._id}_1`, args: ['bar', true, -3] }
 			);
 		});
 
@@ -594,8 +594,8 @@ describe('port', () => {
 			port.connect();
 			port.request('foo');
 			port.request('bar');
-			sendMessage.should.have.been.calledWith('req.foo', { id: `${port.id}_1`, args: [] } );
-			sendMessage.should.have.been.calledWith('req.bar', { id: `${port.id}_2`, args: [] } );
+			sendMessage.should.have.been.calledWith('req.foo', { id: `${port._id}_1`, args: [] } );
+			sendMessage.should.have.been.calledWith('req.bar', { id: `${port._id}_2`, args: [] } );
 		});
 
 	});
@@ -632,7 +632,7 @@ describe('port', () => {
 		it('should queue if not connected', () => {
 			port.sendEvent('foo', 'bar');
 			sendMessage.should.not.have.been.called;
-			expect(port.connectQueue.length).to.equal(1);
+			expect(port._connectQueue.length).to.equal(1);
 		});
 
 		it('should send queued messages after connect', () => {
@@ -657,7 +657,7 @@ describe('port', () => {
 
 	});
 
-	describe('sendRequestResponse', () => {
+	describe('_sendRequestResponse', () => {
 
 		var sendMessage;
 
@@ -680,9 +680,9 @@ describe('port', () => {
 			}), expect: 49}
 		].forEach((test) => {
 			it(`should handle ${test.name}-based responses`, (done) => {
-				port.requestHandlers.bar = test.val;
-				port.waitingRequests.bar = [{id: 1, args:[]}];
-				port.sendRequestResponse('bar');
+				port._requestHandlers.bar = test.val;
+				port._waitingRequests.bar = [{id: 1, args:[]}];
+				port._sendRequestResponse('bar');
 				setTimeout(() => {
 					sendMessage.should.have.been.calledWith(
 						'res.bar',
@@ -695,9 +695,9 @@ describe('port', () => {
 
 		it('should pass arguments to handler', (done) => {
 			var handler = sinon.spy();
-			port.requestHandlers.bar = handler;
-			port.waitingRequests.bar = [{id: 1, args:['p1', 'p2', true]}];
-			port.sendRequestResponse('bar');
+			port._requestHandlers.bar = handler;
+			port._waitingRequests.bar = [{id: 1, args:['p1', 'p2', true]}];
+			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				handler.should.have.been.calledWith('p1', 'p2', true);
 				done();
@@ -706,12 +706,12 @@ describe('port', () => {
 
 		it('should pass different arguments to handler', (done) => {
 			var handler = sinon.spy();
-			port.requestHandlers.bar = handler;
-			port.waitingRequests.bar = [
+			port._requestHandlers.bar = handler;
+			port._waitingRequests.bar = [
 				{id: 1, args:['p1', 'p2', true]},
 				{id: 2, args:['p3', 'p4', false]}
 			];
-			port.sendRequestResponse('bar');
+			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				handler.should.have.been.calledWith('p1', 'p2', true);
 				handler.should.have.been.calledWith('p3', 'p4', false);
@@ -720,9 +720,9 @@ describe('port', () => {
 		});
 
 		it('should send handler value to each waiting request', (done) => {
-			port.requestHandlers.bar = 'hello';
-			port.waitingRequests.bar = [{id: 1, args:[]}, {id: 2, args:[]}];
-			port.sendRequestResponse('bar');
+			port._requestHandlers.bar = 'hello';
+			port._waitingRequests.bar = [{id: 1, args:[]}, {id: 2, args:[]}];
+			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				sendMessage.should.have.been.calledWith(
 					'res.bar',
@@ -737,8 +737,8 @@ describe('port', () => {
 		});
 
 		it('should not send a message if there is not handler', (done) => {
-			port.waitingRequests.bar = [{id: 1, args: []}];
-			port.sendRequestResponse('bar');
+			port._waitingRequests.bar = [{id: 1, args: []}];
+			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				sendMessage.should.not.have.been.called;
 				done();
@@ -747,8 +747,8 @@ describe('port', () => {
 
 		it('should not call handler or send a message if no waiting requests', (done) => {
 			var handler = sinon.spy();
-			port.requestHandlers.bar = handler;
-			port.sendRequestResponse('bar');
+			port._requestHandlers.bar = handler;
+			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				handler.should.not.have.been.called;
 				sendMessage.should.not.have.been.called;
@@ -763,10 +763,10 @@ describe('port', () => {
 			}
 
 			const reqType = 'bar';
-			port.requestHandlers[reqType] = handler;
-			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+			port._requestHandlers[reqType] = handler;
+			port._waitingRequests[reqType] = [{ id: 1, args: [] }];
 
-			port.sendRequestResponse(reqType);
+			port._sendRequestResponse(reqType);
 
 			setTimeout(() => {
 				sendMessage.should.have.been.calledWith('res.bar', {
@@ -784,10 +784,10 @@ describe('port', () => {
 			}
 
 			const reqType = 'bar';
-			port.requestHandlers[reqType] = handler;
-			port.waitingRequests[reqType] = [{ id: 1, args: [] }];
+			port._requestHandlers[reqType] = handler;
+			port._waitingRequests[reqType] = [{ id: 1, args: [] }];
 
-			port.sendRequestResponse(reqType);
+			port._sendRequestResponse(reqType);
 
 			setTimeout(() => {
 				sendMessage.should.have.been.calledWith('res.bar', {
@@ -831,7 +831,7 @@ describe('port', () => {
 			{endpoint: 'a', source: 'a', targetOrigin: '', origin: '', key: 'frau.valid', expect: false }
 		].forEach((item, index) => {
 			it(`should validate origin "${index}" to "${item.expect}"`, () => {
-				var isValid = Port.validateEvent(
+				var isValid = Port._validateEvent(
 					item.targetOrigin,
 					item.endpoint,
 					{ source: item.source, origin: item.origin, data: { key: item.key } }

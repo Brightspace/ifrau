@@ -5,7 +5,7 @@ var chai = require('chai'),
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { clientSyncTitle, hostSyncTitle } from '../../src/plugins/sync-title';
+import { client as clientSyncTitle, host as hostSyncTitle } from '../../src/plugins/sync-title';
 
 let mutationCallback = null;
 let MockMutationObserver = function(cb) {

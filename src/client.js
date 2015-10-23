@@ -1,40 +1,49 @@
-import Port from './port';
-import {clientSyncLang} from './plugins/sync-lang';
-import {clientSyncTitle} from './plugins/sync-title';
-import {clientSyncFont} from './plugins/sync-font';
+'use strict';
 
-export default class Client extends Port {
-	constructor(options) {
+var inherits = require('inherits'),
+	Promise = require('lie');
 
-		options = options || {};
+var Port = require('./port'),
+	syncLang = require('./plugins/sync-lang').client,
+	syncTitle = require('./plugins/sync-title').client,
+	syncFont = require('./plugins/sync-font').client;
 
-		super(window.parent, '*', options);
-
-		if(options.syncLang) {
-			this.use(clientSyncLang);
-		}
-		if(options.syncTitle !== false) {
-			this.use(clientSyncTitle);
-		}
-		if(options.syncFont) {
-			this.use(clientSyncFont);
-		}
-
+function Client (options) {
+	if (!(this instanceof Client)) {
+		return new Client(options);
 	}
-	connect() {
-		var me = this;
-		return new Promise((resolve, reject) => {
 
-			me.open();
-			me.sendMessage('evt.ready');
+	options = options || {};
 
-			super.connect();
+	Port.call(this, window.parent, '*', options);
 
-			resolve(me);
-
-		});
+	if(options.syncLang) {
+		this.use(syncLang);
 	}
-	navigate(url) {
-		this.sendEvent('navigate', url);
+	if(options.syncTitle !== false) {
+		this.use(syncTitle);
+	}
+	if(options.syncFont) {
+		this.use(syncFont);
 	}
 }
+inherits(Client, Port);
+
+Client.prototype.connect = function connect() {
+	var me = this;
+
+	return new Promise(function(resolve/*, reject*/) {
+		me.open();
+		me.sendMessage('evt.ready');
+
+		Port.prototype.connect.call(me);
+
+		resolve(me);
+	});
+};
+
+Client.prototype.navigate = function navigate(url) {
+	this.sendEvent('navigate', url);
+};
+
+module.exports = Client;

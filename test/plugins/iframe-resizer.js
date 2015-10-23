@@ -2,7 +2,7 @@ var chai = require('chai'),
 	expect = chai.expect,
 	sinon = require('sinon');
 
-import { default as resizer } from '../../src/plugins/iframe-resizer';
+import { host as resizer } from '../../src/plugins/iframe-resizer';
 
 chai.should();
 chai.use(require('sinon-chai'));
