@@ -72,16 +72,4 @@ describe('client', () => {
 
 	});
 
-	describe('navigate', () => {
-
-		it('should fire "navigate" event', (done) => {
-			client.connect().then(() => {
-				client.navigate('some-url');
-				sendEvent.should.have.been.calledWith('navigate', 'some-url');
-				done();
-			});
-		});
-
-	});
-
 });
