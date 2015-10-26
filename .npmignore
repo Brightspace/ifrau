@@ -5,4 +5,3 @@ test
 .editorconfig
 .jshintrc
 .travis.yml
-gulpfile.js
