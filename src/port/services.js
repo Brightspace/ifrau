@@ -1,7 +1,6 @@
 'use strict';
 
-var inherits = require('inherits'),
-	Promise = require('lie');
+var inherits = require('inherits');
 
 var PortWithRequests = require('./requests');
 
@@ -17,7 +16,7 @@ function PortWithServices() {
 inherits(PortWithServices, PortWithRequests);
 
 PortWithServices.prototype.getService = function getService(sericeType, version) {
-	if(!this._isConnected) {
+	if (!this._isConnected) {
 		throw new Error('Cannot getService() before connect() has completed');
 	}
 
@@ -29,8 +28,8 @@ PortWithServices.prototype.getService = function getService(sericeType, version)
 			return function() {
 				var args = new Array(arguments.length + 1);
 				args[0] = serviceVersionPrefix + ':' + name;
-				for(var i = 0; i < arguments.length; ++i) {
-					args[i+1] = arguments[i];
+				for (var i = 0; i < arguments.length; ++i) {
+					args[i + 1] = arguments[i];
 				}
 
 				return me.request.apply(me, args);
@@ -50,11 +49,11 @@ PortWithServices.prototype.getService = function getService(sericeType, version)
 };
 
 PortWithServices.prototype.registerService = function registerService(serviceType, version, service) {
-	if(this._isConnected) {
+	if (this._isConnected) {
 		throw new Error('Register services before connecting');
 	}
 
-	if(!typeNameValidator.test(serviceType)) {
+	if (!typeNameValidator.test(serviceType)) {
 		throw new Error('Invalid service type "' + serviceType + '"');
 	}
 
@@ -62,14 +61,14 @@ PortWithServices.prototype.registerService = function registerService(serviceTyp
 
 	var methodNames = Object
 		.keys(service)
-		.filter(function (k) {
+		.filter(function(k) {
 			return typeof service[k] === 'function';
 		});
 
 	this.onRequest(serviceVersionPrefix, methodNames);
 
 	var me = this;
-	methodNames.forEach(function (name) {
+	methodNames.forEach(function(name) {
 		me.onRequest(serviceVersionPrefix + ':' + name, service[name]);
 	});
 

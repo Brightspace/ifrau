@@ -1,10 +1,12 @@
+'use strict';
+
 function installClientPolling(sync) {
 
 	var title = '';
 
 	setInterval(function() {
 		var newTitle = document.title;
-		if(newTitle !== title) {
+		if (newTitle !== title) {
 			title = newTitle;
 			sync(title);
 		}
@@ -15,7 +17,7 @@ function installClientPolling(sync) {
 function installClientMutation(sync) {
 
 	var elem = document.querySelector('title');
-	if(elem === null) {
+	if (elem === null) {
 		elem = document.createElement('title');
 		document.getElementsByTagName('head')[0].appendChild(elem);
 	}
@@ -37,7 +39,7 @@ module.exports.client = function clientSyncTitle(client) {
 		client.sendEvent('title', value);
 	}
 
-	if('MutationObserver' in window) {
+	if ('MutationObserver' in window) {
 		installClientMutation(sync);
 	} else {
 		installClientPolling(sync);
@@ -48,10 +50,10 @@ module.exports.host = function hostSyncTitle(options) {
 	options = options || {};
 	return function(host) {
 		host.onEvent('title', function(title) {
-			if(options.page) {
+			if (options.page) {
 				document.title = title;
 			}
-			if(host.iframe) {
+			if (host.iframe) {
 				host.iframe.title = title;
 			}
 		});

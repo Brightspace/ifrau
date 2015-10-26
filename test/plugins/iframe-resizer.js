@@ -8,9 +8,9 @@ require('chai')
 
 const resizer = require('../../src/plugins/iframe-resizer').host;
 
-let MockHost = function() {
+function MockHost() {
 	this.iframe = {};
-};
+}
 MockHost.prototype.onEvent = function() {};
 MockHost.prototype.onClose = function() {};
 

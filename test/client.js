@@ -12,7 +12,7 @@ const Client = require('../client');
 
 describe('client', () => {
 
-	var client, callback, sendEvent, sendMessage, clock;
+	var client, sendEvent, sendMessage, clock;
 
 	beforeEach(() => {
 		global.window = {

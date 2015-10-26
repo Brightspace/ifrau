@@ -8,7 +8,7 @@ var Port = require('./port'),
 	syncTitle = require('./plugins/sync-title').client,
 	syncFont = require('./plugins/sync-font').client;
 
-function Client (options) {
+function Client(options) {
 	if (!(this instanceof Client)) {
 		return new Client(options);
 	}
@@ -17,13 +17,13 @@ function Client (options) {
 
 	Port.call(this, window.parent, '*', options);
 
-	if(options.syncLang) {
+	if (options.syncLang) {
 		this.use(syncLang);
 	}
-	if(options.syncTitle !== false) {
+	if (options.syncTitle !== false) {
 		this.use(syncTitle);
 	}
-	if(options.syncFont) {
+	if (options.syncFont) {
 		this.use(syncFont);
 	}
 }
