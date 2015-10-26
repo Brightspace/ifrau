@@ -34,6 +34,11 @@ To create a Host:
 ```javascript
 var Host = require('ifrau').Host;
 
+/*
+ * We reccomend you use the following import if not pulling from the CDN
+ * var Host = require('ifrau/host');
+ */
+
 function parentProvider() {
     return document.getElementById('myParentId');
 }
@@ -61,6 +66,11 @@ Creating a Client is even simpler:
 
 ```javascript
 var Client = require('ifrau').Client;
+
+/*
+ * We reccomend you use the following import if not pulling from the CDN
+ * var Client = require('ifrau/client');
+ */
 
 var client = new Client(options);
 client
