@@ -42,8 +42,4 @@ Client.prototype.connect = function connect() {
 	});
 };
 
-Client.prototype.navigate = function navigate(url) {
-	this.sendEvent('navigate', url);
-};
-
 module.exports = Client;
