@@ -10,10 +10,22 @@
     "lint:src": "jshint src",
     "lint:test": "jshint test",
     "prepublish:cdn": "npm run browserify",
-    "publish:cdn": "gulp publish",
+    "publish:cdn": "frau-publisher | peanut-gallery",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
     "test": "npm run lint -s && npm run test:unit -s",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "config": {
+    "frauPublisher": {
+      "files": "./dist/ifrau.js",
+      "moduleType": "lib",
+      "targetDirectory": "ifrau",
+      "creds": {
+        "key": "AKIAIFWDFE37W7LZ52XQ",
+        "secretVar": "CDN_SECRET"
+      },
+      "versionVar": "TRAVIS_TAG"
+    }
   },
   "repository": {
     "type": "git",
@@ -43,13 +55,11 @@
     "chai": "^3.0.0",
     "chai-things": "^0.2.0",
     "coveralls": "^2.11.2",
-    "gulp": "^3.9.0",
-    "gulp-frau-publisher": "^2.2.0",
-    "iframe-resizer": "^3.1.1",
-    "istanbul-harmony": "^0.3.15",
+    "frau-publisher": "^2.5.2",
+    "istanbul": "^0.4.0",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
-    "peanut-gallery": "^1.0.0",
+    "peanut-gallery": "^1.1.1",
     "rimraf": "^2.3.4",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
