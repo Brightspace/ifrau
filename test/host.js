@@ -1,12 +1,16 @@
-import './mock-dom';
-import Host from '../src/host';
+'use strict';
 
-var chai = require('chai'),
-	expect = chai.expect,
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
+
+require('./mock-dom');
+
+const Host = require('../host');
 
 describe('host', () => {
 

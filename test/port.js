@@ -1,12 +1,16 @@
-var chai = require('chai'),
+'use strict';
+
+const
+	chai = require('chai'),
 	expect = chai.expect,
 	sinon = require('sinon');
 
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { fromError, toError } from '../src/port/transform-error';
-import Port from '../src/port';
+const
+	fromError = require('../src/port/transform-error').fromError,
+	Port = require('../src/port');
 
 var targetOrigin = 'http://cdn.com/app/index.html';
 

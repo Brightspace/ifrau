@@ -11,7 +11,7 @@
     "lint:test": "jshint test",
     "prepublish:cdn": "npm run browserify",
     "publish:cdn": "frau-publisher | peanut-gallery",
-    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
+    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "test": "npm run lint -s && npm run test:unit -s",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -50,7 +50,6 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
     "browserify": "^10.2.3",
     "chai": "^3.0.0",
     "chai-things": "^0.2.0",
