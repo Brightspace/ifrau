@@ -6,12 +6,10 @@
   "scripts": {
     "prebrowserify": "rimraf dist && mkdir dist",
     "browserify": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
-    "lint": "npm run lint:src && npm run lint:test",
-    "lint:src": "jshint src",
-    "lint:test": "jshint test",
+    "lint": "eslint .",
     "prepublish:cdn": "npm run browserify",
     "publish:cdn": "frau-publisher | peanut-gallery",
-    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
+    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "test": "npm run lint -s && npm run test:unit -s",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -50,14 +48,14 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
     "browserify": "^10.2.3",
     "chai": "^3.0.0",
     "chai-things": "^0.2.0",
     "coveralls": "^2.11.2",
+    "eslint": "^1.7.3",
+    "eslint-config-brightspace": "0.0.2",
     "frau-publisher": "^2.5.2",
     "istanbul": "^0.4.0",
-    "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "peanut-gallery": "^1.1.1",
     "rimraf": "^2.3.4",

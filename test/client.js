@@ -1,15 +1,18 @@
-var chai = require('chai'),
-	expect = chai.expect,
+'use strict';
+
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
 
-import Client from '../src/client';
+const Client = require('../client');
 
 describe('client', () => {
 
-	var client, callback, sendEvent, sendMessage, clock;
+	var client, sendEvent, sendMessage, clock;
 
 	beforeEach(() => {
 		global.window = {

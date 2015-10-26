@@ -1,11 +1,16 @@
-var chai = require('chai'),
-	expect = chai.expect,
+'use strict';
+
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
 
-import { client as clientSyncFont, host as hostSyncFont } from '../../src/plugins/sync-font';
+const
+	clientSyncFont = require('../../src/plugins/sync-font').client,
+	hostSyncFont = require('../../src/plugins/sync-font').host;
 
 let MockClient = function() {};
 MockClient.prototype.request = function() {};

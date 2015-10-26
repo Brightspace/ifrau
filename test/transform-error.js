@@ -1,10 +1,13 @@
-import { default as chai, expect } from 'chai';
-import things from 'chai-things';
-import sinon from 'sinon';
+'use strict';
 
-chai.use(things);
+const expect = require('chai').expect;
 
-import { fromError, toError, ERROR_OBJECT_SENTINEL } from '../src/port/transform-error';
+require('chai').use(require('chai-things'));
+
+const
+	fromError = require('../src/port/transform-error').fromError,
+	toError = require('../src/port/transform-error').toError,
+	ERROR_OBJECT_SENTINEL = require('../src/port/transform-error').ERROR_OBJECT_SENTINEL;
 
 describe('transform-error', () => {
 	describe('fromError', () => {

@@ -1,11 +1,12 @@
-var chai = require('chai'),
-	expect = chai.expect,
+'use strict';
+
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
-
-import {Host, Client} from '../src/index';
+const
+	Client = require('../').Client,
+	Host = require('../').Host;
 
 describe('ifrau', () => {
 

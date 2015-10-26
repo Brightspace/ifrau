@@ -5,7 +5,7 @@ var iframeResizer = require('iframe-resizer');
 module.exports.host = function resizer(host) {
 	var initialized = false;
 	host.onEvent('ready', function() {
-		if(initialized) {
+		if (initialized) {
 			return;
 		}
 		initialized = true;
@@ -17,7 +17,7 @@ module.exports.host = function resizer(host) {
 		);
 	});
 	host.onClose(function() {
-		if(host.iframe && host.iframe.iFrameResizer) {
+		if (host.iframe && host.iframe.iFrameResizer) {
 			host.iframe.iFrameResizer.close(host.iframe);
 		}
 	});

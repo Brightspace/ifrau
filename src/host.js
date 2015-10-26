@@ -11,7 +11,6 @@ var Port = require('./port'),
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
-
 function Host(elementProvider, src, options) {
 	if (!(this instanceof Host)) {
 		return new Host(elementProvider, src, options);
@@ -20,7 +19,7 @@ function Host(elementProvider, src, options) {
 	options = options || {};
 
 	var origin = Host._tryGetOrigin(src);
-	if(origin === null) {
+	if (origin === null) {
 		throw new Error('Unable to extract origin from "' + src + '"');
 	}
 
@@ -36,16 +35,16 @@ function Host(elementProvider, src, options) {
 
 	this.iframe = iframe;
 
-	if(options.syncLang) {
+	if (options.syncLang) {
 		this.use(syncLang);
 	}
 	this.use(syncTitle({page: options.syncPageTitle ? true : false}));
 
-	if(!(options.height || options.height === 0) && options.resizeFrame !== false) {
+	if (!(options.height || options.height === 0) && options.resizeFrame !== false) {
 		this.use(resizer);
 	}
 
-	if(options.syncFont) {
+	if (options.syncFont) {
 		this.use(syncFont);
 	}
 
@@ -66,21 +65,21 @@ Host.prototype.connect = function connect() {
 Host._createIFrame = function createIFrame(src, frameId, height) {
 	var iframe = document.createElement('iframe');
 	iframe.width = '100%';
-	if(height || height === 0) {
+	if (height || height === 0) {
 		iframe.height = height;
 	}
 	iframe.style.border = 'none';
 	iframe.style.overflow = 'hidden';
 	iframe.scrolling = 'no';
 	iframe.src = src;
-	if(frameId) {
+	if (frameId) {
 		iframe.id = frameId;
 	}
 	return iframe;
 };
 
 Host._tryGetOrigin = function tryGetOrigin(url) {
-	if(url && url.indexOf('//') === 0) {
+	if (url && url.indexOf('//') === 0) {
 		url = window.location.protocol + url;
 	}
 	var match = originRe.exec(url);

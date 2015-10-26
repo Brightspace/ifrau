@@ -1,15 +1,16 @@
-var chai = require('chai'),
-	expect = chai.expect,
-	sinon = require('sinon');
+'use strict';
 
-import { host as resizer } from '../../src/plugins/iframe-resizer';
+const sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
 
-let MockHost = function() {
+const resizer = require('../../src/plugins/iframe-resizer').host;
+
+function MockHost() {
 	this.iframe = {};
-};
+}
 MockHost.prototype.onEvent = function() {};
 MockHost.prototype.onClose = function() {};
 

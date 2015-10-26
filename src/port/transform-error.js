@@ -1,16 +1,18 @@
+'use strict';
+
 var ERROR_OBJECT_SENTINEL = '_ifrau-error-object';
 
-function deErrorifyArray (input) {
+function deErrorifyArray(input) {
 	var result = input.map(deErrorify);
 	return result;
 }
 
-function errorifyArray (input) {
+function errorifyArray(input) {
 	var result = input.map(errorify);
 	return result;
 }
 
-function deErrorifyObject (input) {
+function deErrorifyObject(input) {
 	var isError = input instanceof Error;
 	var result = isError ? { props: {} } : {};
 
@@ -32,7 +34,7 @@ function deErrorifyObject (input) {
 	return result;
 }
 
-function errorifyObject (input) {
+function errorifyObject(input) {
 	var isError = input[ERROR_OBJECT_SENTINEL] === true;
 
 	var result = isError ? new Error(input.message) : {};
@@ -51,7 +53,7 @@ function errorifyObject (input) {
 	return result;
 }
 
-function deErrorify (input) {
+function deErrorify(input) {
 	if (input !== null && typeof input === 'object') {
 		if (Array.isArray(input)) {
 			return deErrorifyArray(input);
@@ -68,7 +70,7 @@ function deErrorify (input) {
 	return input;
 }
 
-function errorify (input) {
+function errorify(input) {
 	if (input !== null && typeof input === 'object') {
 		if (Array.isArray(input)) {
 			return errorifyArray(input);

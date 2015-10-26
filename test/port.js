@@ -1,12 +1,16 @@
-var chai = require('chai'),
+'use strict';
+
+const
+	chai = require('chai'),
 	expect = chai.expect,
 	sinon = require('sinon');
 
 chai.should();
 chai.use(require('sinon-chai'));
 
-import { fromError, toError } from '../src/port/transform-error';
-import Port from '../src/port';
+const
+	fromError = require('../src/port/transform-error').fromError,
+	Port = require('../src/port');
 
 var targetOrigin = 'http://cdn.com/app/index.html';
 
@@ -85,13 +89,13 @@ describe('port', () => {
 		});
 
 		it('should not write to console when disabled', () => {
-			var p = new Port(endpoint, targetOrigin,{ debug: false});
+			var p = new Port(endpoint, targetOrigin, { debug: false });
 			p.debug('hello');
 			consoleSpy.should.not.have.been.called;
 		});
 
 		it('should write to console when enabled', () => {
-			var p = new Port(endpoint, targetOrigin,{ debug: true});
+			var p = new Port(endpoint, targetOrigin, { debug: true });
 			p.debug('hello');
 			consoleSpy.should.have.been.calledWith('hello');
 		});
@@ -105,7 +109,7 @@ describe('port', () => {
 		beforeEach(() => {
 			request = sinon.stub(port, 'request');
 			request.withArgs('service:foo:1.0').returns(
-				new Promise((resolve, reject) => {
+				new Promise((resolve/*, reject*/) => {
 					setTimeout(() => {
 						resolve(['a', 'b']);
 					});
@@ -763,7 +767,7 @@ describe('port', () => {
 
 		it('should propogate error to the client if handler throws', (done) => {
 			const e = new TypeError('bad things');
-			function handler () {
+			function handler() {
 				throw e;
 			}
 
@@ -784,7 +788,7 @@ describe('port', () => {
 
 		it('should propogate error to the client if handler returns rejected Promise', (done) => {
 			const e = new TypeError('bad things');
-			function handler () {
+			function handler() {
 				return Promise.reject(e);
 			}
 

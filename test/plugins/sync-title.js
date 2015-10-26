@@ -1,11 +1,16 @@
-var chai = require('chai'),
-	expect = chai.expect,
+'use strict';
+
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
 
-import { client as clientSyncTitle, host as hostSyncTitle } from '../../src/plugins/sync-title';
+const
+	clientSyncTitle = require('../../src/plugins/sync-title').client,
+	hostSyncTitle = require('../../src/plugins/sync-title').host;
 
 let mutationCallback = null;
 let MockMutationObserver = function(cb) {

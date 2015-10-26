@@ -1,12 +1,16 @@
-import './mock-dom';
-import Host from '../src/host';
+'use strict';
 
-var chai = require('chai'),
-	expect = chai.expect,
+const
+	expect = require('chai').expect,
 	sinon = require('sinon');
 
-chai.should();
-chai.use(require('sinon-chai'));
+require('chai')
+	.use(require('sinon-chai'))
+	.should();
+
+require('./mock-dom');
+
+const Host = require('../host');
 
 describe('host', () => {
 
@@ -17,7 +21,7 @@ describe('host', () => {
 			location: { protocol: 'https:' }
 		};
 		global.document = {
-			createElement: sinon.stub().returns({style: {}, tagName: 'iframe', contentWindow: {postMessage: function() {}}}),
+			createElement: sinon.stub().returns({style: {}, tagName: 'iframe', contentWindow: {postMessage: function() {}}})
 		};
 		element = { appendChild: sinon.spy() };
 	});
@@ -34,7 +38,7 @@ describe('host', () => {
 		].forEach((src) => {
 			it(`should throw invalid origin "${src}"`, () => {
 				expect(() => {
-					var host = new Host(() => null, src);
+					new Host(() => null, src);
 				}).to.throw(Error, /Unable to extract origin/);
 			});
 		});
@@ -57,7 +61,7 @@ describe('host', () => {
 
 		it('should throw if parent missing', () => {
 			expect(() => {
-				var host = new Host(() => null, 'http://cdn.com/foo.html');
+				new Host(() => null, 'http://cdn.com/foo.html');
 			}).to.throw(Error, /Could not find parent/);
 		});
 

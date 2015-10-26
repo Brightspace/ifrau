@@ -1,7 +1,6 @@
 'use strict';
 
-var Promise = require('lie'),
-	uuid = require('uuid');
+var uuid = require('uuid');
 
 var validateEvent = require('./validate-event');
 
@@ -30,32 +29,33 @@ function Port(endpoint, targetOrigin, options) {
 }
 
 Port.prototype.close = function close() {
-	if(!this._isOpen) {
+	if (!this._isOpen) {
 		throw new Error('Port cannot be closed, call open() first');
 	}
 	this._isOpen = false;
 	this._isConnected = false;
 	window.removeEventListener('message', this._receiveMessage);
-	this._onCloseCallbacks.forEach(function (cb) { cb(); });
+	this._onCloseCallbacks.forEach(function(cb) { cb(); });
 	this.debug('closed');
 };
 
 Port.prototype.connect = function connect() {
 	this._isConnected = true;
 	this.debug('connected');
-	this._connectQueue.forEach(function (func) { func(); });
+	this._connectQueue.forEach(function(func) { func(); });
 	this._connectQueue = [];
 	return this;
 };
 
 Port.prototype.debug = function debug(msg) {
-	if(this._debugEnabled) {
+	if (this._debugEnabled) {
+		/* eslint-disable no-console */
 		console.log(msg);
 	}
 };
 
 Port.prototype._initHashArrAndPush = function initHashArrAndPush(dic, key, obj) {
-	if(dic[key] === undefined ) {
+	if (dic[key] === undefined ) {
 		dic[key] = [];
 	}
 	dic[key].push(obj);
@@ -67,7 +67,7 @@ Port.prototype.onClose = function onClose(cb) {
 
 Port.prototype.onEvent = function onEvent(eventType, handler) {
 	this.debug('onEvent handler added for "' + eventType + '"');
-	if(this._isConnected) {
+	if (this._isConnected) {
 		this.debug('You\'ve attached event handlers after connecting, you may have missed some events');
 	}
 	this._initHashArrAndPush(this._eventHandlers, eventType, handler);
@@ -75,7 +75,7 @@ Port.prototype.onEvent = function onEvent(eventType, handler) {
 };
 
 Port.prototype.open = function open() {
-	if(this._isOpen) {
+	if (this._isOpen) {
 		throw new Error('Port is already open.');
 	}
 	this._isOpen = true;
@@ -85,11 +85,11 @@ Port.prototype.open = function open() {
 };
 
 Port.prototype._receiveMessage = function receiveMessage(e) {
-	if(!validateEvent(this._targetOrigin, this._endpoint, e)) {
+	if (!validateEvent(this._targetOrigin, this._endpoint, e)) {
 		return;
 	}
 
-	var clazz = e.data.key.substr(5,3);
+	var clazz = e.data.key.substr(5, 3);
 	var key = e.data.key.substr(9);
 
 	this.debug('received ' + clazz + '.' + key);
@@ -109,7 +109,7 @@ Port.prototype._onMessage = function onMessage(clazz, handler) {
 };
 
 Port.prototype._receiveEvent = function receiveEvent(eventType, payload) {
-	if(this._eventHandlers[eventType] === undefined) {
+	if (this._eventHandlers[eventType] === undefined) {
 		return;
 	}
 	this._eventHandlers[eventType].forEach(function(handler) {
@@ -129,10 +129,10 @@ Port.prototype._sendMessage = function sendMessage(clazz, key, data) {
 
 Port.prototype.sendEvent = function sendEvent(eventType) {
 	var args = [];
-	for(var i=1; i<arguments.length; i++) {
+	for (var i = 1; i < arguments.length; i++) {
 		args.push(arguments[i]);
 	}
-	if(!this._isConnected) {
+	if (!this._isConnected) {
 		var me = this;
 		this._connectQueue.push(function() {
 			me._sendMessage('evt', eventType, args);

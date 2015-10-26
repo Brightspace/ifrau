@@ -32,8 +32,8 @@ inherits(PortWithRequests, Port);
 
 PortWithRequests.prototype.request = function request(requestType) {
 	var args = new Array(arguments.length - 1);
-	for(var i = 1; i < arguments.length; ++i) {
-		args[i-1] = arguments[i];
+	for (var i = 1; i < arguments.length; ++i) {
+		args[i - 1] = arguments[i];
 	}
 
 	var me = this;
@@ -63,11 +63,11 @@ PortWithRequests.prototype.request = function request(requestType) {
 };
 
 PortWithRequests.prototype.onRequest = function onRequest(requestType, handler) {
-	if(this._isConnected) {
+	if (this._isConnected) {
 		throw new Error('Add request handlers before connecting');
 	}
 
-	if(this._requestHandlers[requestType] !== undefined) {
+	if (this._requestHandlers[requestType] !== undefined) {
 		throw new Error('Duplicate onRequest handler for type "' + requestType + '"');
 	}
 
@@ -91,13 +91,13 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 	var waiting = this._waitingRequests[requestType];
 	delete this._waitingRequests[requestType];
 
-	if(handler === undefined || waiting === undefined || waiting.length === 0) {
+	if (handler === undefined || waiting === undefined || waiting.length === 0) {
 		return;
 	}
 
 	var me = this;
 
-	waiting.forEach(function (w) {
+	waiting.forEach(function(w) {
 		Promise
 			.resolve()
 			.then(function() {
@@ -111,7 +111,7 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 			.then(function(val) {
 				me._sendMessage('res', requestType, { id: w.id, val: val });
 			})
-			.catch(function (e) {
+			.catch(function(e) {
 				var err = fromError(e);
 
 				me._sendMessage('res', requestType, { id: w.id, err: err });
@@ -121,14 +121,14 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 
 PortWithRequests.prototype._receiveRequestResponse = function receiveRequestResponse(requestType, payload) {
 	var requests = this._pendingRequests[requestType];
-	if(requests === undefined) {
+	if (requests === undefined) {
 		return;
 	}
 
 	// search for the request this response is for
-	for(var i = 0; i < requests.length; ++i) {
+	for (var i = 0; i < requests.length; ++i) {
 		var req = requests[i];
-		if(req.id !== payload.id) {
+		if (req.id !== payload.id) {
 			continue;
 		}
 

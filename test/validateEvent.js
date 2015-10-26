@@ -1,6 +1,8 @@
-import { expect } from 'chai';
+'use strict';
 
-import validateEvent from '../src/port/validate-event';
+const expect = require('chai').expect;
+
+const validateEvent = require('../src/port/validate-event');
 
 describe('validateEvent', () => {
 	[
