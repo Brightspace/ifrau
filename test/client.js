@@ -25,7 +25,7 @@ describe('client', () => {
 		};
 		client = new Client({syncTitle: false});
 		sendEvent = sinon.stub(client, 'sendEvent');
-		sendMessage = sinon.stub(client, 'sendMessage');
+		sendMessage = sinon.stub(client, '_sendMessage');
 		clock = sinon.useFakeTimers();
 	});
 
@@ -67,7 +67,7 @@ describe('client', () => {
 
 		it('should send the "ready" event', () => {
 			client.connect();
-			sendMessage.should.have.been.calledWith('evt.ready');
+			sendMessage.should.have.been.calledWith('evt', 'ready');
 		});
 
 	});

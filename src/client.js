@@ -34,7 +34,7 @@ Client.prototype.connect = function connect() {
 
 	return new Promise(function(resolve/*, reject*/) {
 		me.open();
-		me.sendMessage('evt.ready');
+		me._sendMessage('evt', 'ready');
 
 		Port.prototype.connect.call(me);
 
