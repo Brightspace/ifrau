@@ -3,5 +3,6 @@ dist
 node_modules
 test
 .editorconfig
-.jshintrc
+.eslintrc
+.eslintignore
 .travis.yml
