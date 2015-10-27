@@ -43,7 +43,7 @@ PortWithRequests.prototype.request = function request(requestType) {
 
 		me._initHashArrAndPush(me._pendingRequests, requestType, {
 			id: id,
-			resovle: resolve,
+			resolve: resolve,
 			reject: reject
 		});
 
