@@ -574,7 +574,12 @@ describe('port', () => {
 			port.connect().request('foo');
 			_initHashArrAndPush.should.have.been.calledWith(
 				port._pendingRequests,
-				'foo'
+				'foo',
+				{
+					id: sinon.match.string,
+					resolve: sinon.match.func,
+					reject: sinon.match.func
+				}
 			);
 		});
 
