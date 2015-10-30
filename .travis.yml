@@ -2,6 +2,9 @@ language: node_js
 node_js:
 - 4
 sudo: false
+script:
+- npm test
+- npm run browserify
 after_success:
 - npm run report-coverage
 - npm install https://github.com/Brightspace/travis-weigh-in.git && find dist -type f -exec ./node_modules/travis-weight-in/weigh_in.py {} \;
