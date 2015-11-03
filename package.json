@@ -4,8 +4,11 @@
   "description": "Free-range app utility for IFRAME-based FRAs",
   "main": "src/index.js",
   "scripts": {
-    "prebrowserify": "rimraf dist && mkdir dist",
-    "browserify": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
+    "prebrowserify": "rimraf dist && mkdir -p dist/ifrau",
+    "browserify": "npm run browserify:full && npm run browserify:client && npm run browserify:host",
+    "browserify:client": "browserify -g uglifyify -s ifrau/client ./client.js > ./dist/ifrau/client.js",
+    "browserify:host": "browserify -g uglifyify -s ifrau/host ./host.js > ./dist/ifrau/host.js",
+    "browserify:full": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
     "lint": "eslint .",
     "prepublish:cdn": "npm run browserify",
     "publish:cdn": "frau-publisher | peanut-gallery",
@@ -15,7 +18,7 @@
   },
   "config": {
     "frauPublisher": {
-      "files": "./dist/ifrau.js",
+      "files": "./dist/**/*.js",
       "moduleType": "lib",
       "targetDirectory": "ifrau",
       "creds": {

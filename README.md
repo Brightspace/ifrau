@@ -18,6 +18,13 @@ npm install ifrau
 Or include it in your application as UMD/CommonJs from the Brightspace CDN:
 
 ```html
+<!-- probably what you're looking for -->
+<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/client.js"></script>
+
+<!-- actually hosting a FRA on your page? grab the host -->
+<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/host.js"></script>
+
+<!-- the old bundle is still available too -->
 <script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau.js"></script>
 ```
 
@@ -32,12 +39,7 @@ It will build an `IFRAME` element, point it at the FRA endpoint, and wait for th
 To create a Host:
 
 ```javascript
-var Host = require('ifrau').Host;
-
-/*
- * We reccomend you use the following import if not pulling from the CDN
- * var Host = require('ifrau/host');
- */
+var Host = require('ifrau/host');
 
 function parentProvider() {
     return document.getElementById('myParentId');
@@ -65,12 +67,7 @@ Parameters:
 Creating a Client is even simpler:
 
 ```javascript
-var Client = require('ifrau').Client;
-
-/*
- * We reccomend you use the following import if not pulling from the CDN
- * var Client = require('ifrau/client');
- */
+var Client = require('ifrau/client');
 
 var client = new Client(options);
 client
