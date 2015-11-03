@@ -4,7 +4,7 @@ var inherits = require('inherits'),
 	Promise = require('lie');
 
 var Port = require('./port'),
-	resizer = require('./plugins/iframe-resizer').host,
+	resizer = require('./plugins/iframe-resizer/host'),
 	syncFont = require('./plugins/sync-font').host,
 	syncLang = require('./plugins/sync-lang').host,
 	syncTitle = require('./plugins/sync-title').host;

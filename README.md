@@ -81,6 +81,7 @@ Parameters:
 
 * `options`
  * `debug`: whether to enable console debugging, `false` by default
+ * `resizeFrame`: whether this `Client` should participate in automatic resizing. `true` by default
  * `syncFont`: whether the font family and size should be automatically set to match the host page, `false` by default
  * `syncLang`: whether the page's language tag should be automatically set to match the host page, `false` by default
  * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
