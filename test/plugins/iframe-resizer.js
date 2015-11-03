@@ -6,7 +6,7 @@ require('chai')
 	.use(require('sinon-chai'))
 	.should();
 
-const resizer = require('../../src/plugins/iframe-resizer').host;
+const resizer = require('../../src/plugins/iframe-resizer/host');
 
 function MockHost() {
 	this.iframe = {};

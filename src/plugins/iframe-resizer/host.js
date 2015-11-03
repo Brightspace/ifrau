@@ -1,15 +1,15 @@
 'use strict';
 
-var iframeResizer = require('iframe-resizer');
+var iframeResizer = require('iframe-resizer/js/iframeResizer');
 
-module.exports.host = function resizer(host) {
+module.exports = function resizer(host) {
 	var initialized = false;
 	host.onEvent('ready', function() {
 		if (initialized) {
 			return;
 		}
 		initialized = true;
-		iframeResizer.iframeResizer(
+		iframeResizer(
 			{
 				log: host.debugEnabled
 			},
