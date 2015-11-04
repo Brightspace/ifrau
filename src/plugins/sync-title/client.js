@@ -33,7 +33,7 @@ function installClientMutation(sync) {
 
 }
 
-module.exports.client = function clientSyncTitle(client) {
+module.exports = function clientSyncTitle(client) {
 
 	function sync(value) {
 		client.sendEvent('title', value);
@@ -44,18 +44,4 @@ module.exports.client = function clientSyncTitle(client) {
 	} else {
 		installClientPolling(sync);
 	}
-};
-
-module.exports.host = function hostSyncTitle(options) {
-	options = options || {};
-	return function(host) {
-		host.onEvent('title', function(title) {
-			if (options.page) {
-				document.title = title;
-			}
-			if (host.iframe) {
-				host.iframe.title = title;
-			}
-		});
-	};
 };

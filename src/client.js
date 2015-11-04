@@ -5,9 +5,9 @@ var inherits = require('inherits'),
 
 var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/client'),
-	syncLang = require('./plugins/sync-lang').client,
-	syncTitle = require('./plugins/sync-title').client,
-	syncFont = require('./plugins/sync-font').client;
+	syncLang = require('./plugins/sync-lang/client'),
+	syncTitle = require('./plugins/sync-title/client'),
+	syncFont = require('./plugins/sync-font/client');
 
 function Client(options) {
 	if (!(this instanceof Client)) {

@@ -5,9 +5,9 @@ var inherits = require('inherits'),
 
 var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/host'),
-	syncFont = require('./plugins/sync-font').host,
-	syncLang = require('./plugins/sync-lang').host,
-	syncTitle = require('./plugins/sync-title').host;
+	syncFont = require('./plugins/sync-font/host'),
+	syncLang = require('./plugins/sync-lang/host'),
+	syncTitle = require('./plugins/sync-title/host');
 
 var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
 
