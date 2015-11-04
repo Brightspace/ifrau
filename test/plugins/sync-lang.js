@@ -9,8 +9,8 @@ require('chai')
 	.should();
 
 const
-	clientSyncLang = require('../../src/plugins/sync-lang').client,
-	hostSyncLang = require('../../src/plugins/sync-lang').host;
+	clientSyncLang = require('../../src/plugins/sync-lang/client'),
+	hostSyncLang = require('../../src/plugins/sync-lang/host');
 
 let MockClient = function() {};
 MockClient.prototype.request = function() {};

@@ -9,8 +9,8 @@ require('chai')
 	.should();
 
 const
-	clientSyncFont = require('../../src/plugins/sync-font').client,
-	hostSyncFont = require('../../src/plugins/sync-font').host;
+	clientSyncFont = require('../../src/plugins/sync-font/client'),
+	hostSyncFont = require('../../src/plugins/sync-font/host');
 
 let MockClient = function() {};
 MockClient.prototype.request = function() {};

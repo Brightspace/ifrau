@@ -9,8 +9,8 @@ require('chai')
 	.should();
 
 const
-	clientSyncTitle = require('../../src/plugins/sync-title').client,
-	hostSyncTitle = require('../../src/plugins/sync-title').host;
+	clientSyncTitle = require('../../src/plugins/sync-title/client'),
+	hostSyncTitle = require('../../src/plugins/sync-title/host');
 
 let mutationCallback = null;
 let MockMutationObserver = function(cb) {
