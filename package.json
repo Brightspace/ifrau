@@ -10,9 +10,9 @@
     "browserify:host": "browserify -g uglifyify -s ifrau/host ./host.js > ./dist/ifrau/host.js",
     "browserify:full": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
     "lint": "eslint .",
-    "prepublish:cdn": "npm run browserify",
     "publish:cdn": "frau-publisher | peanut-gallery",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
+    "pretest": "npm run browserify",
     "test": "npm run lint -s && npm run test:unit -s",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
