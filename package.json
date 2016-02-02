@@ -1,6 +1,6 @@
 {
   "name": "ifrau",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "main": "src/index.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "browserify:host": "browserify -g uglifyify -s ifrau/host ./host.js > ./dist/ifrau/host.js",
     "browserify:full": "browserify -g uglifyify -s ifrau ./src/index.js > ./dist/ifrau.js",
     "lint": "eslint .",
-    "prepublish:cdn": "npm run browserify",
     "publish:cdn": "frau-publisher | peanut-gallery",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
+    "pretest": "npm run browserify",
     "test": "npm run lint -s && npm run test:unit -s",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -45,24 +45,24 @@
   },
   "homepage": "https://github.com/Brightspace/ifrau",
   "dependencies": {
-    "iframe-resizer": "^3.0.0",
+    "iframe-resizer": "^3.5.0",
     "inherits": "^2.0.1",
-    "lie": "^3.0.1",
+    "lie": "^3.0.2",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
-    "browserify": "^10.2.3",
-    "chai": "^3.0.0",
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
     "chai-things": "^0.2.0",
-    "coveralls": "^2.11.2",
-    "eslint": "^1.7.3",
+    "coveralls": "^2.11.6",
+    "eslint": "^1.10.3",
     "eslint-config-brightspace": "0.0.2",
     "frau-publisher": "^2.5.2",
-    "istanbul": "^0.4.0",
-    "mocha": "^2.2.5",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
     "peanut-gallery": "^1.1.1",
-    "rimraf": "^2.3.4",
-    "sinon": "^1.15.1",
+    "rimraf": "^2.5.1",
+    "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "uglifyify": "^3.0.1"
   }
