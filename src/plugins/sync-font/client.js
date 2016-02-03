@@ -2,14 +2,26 @@
 
 module.exports = function clientSyncFont(client) {
 	return client.request('font').then(function(font) {
-		if (font.visualRedesign) {
-			document.documentElement.style.fontSize = font.size;
-			if (font.dyslexic) {
-				document.body.classList.add('vui-dyslexic');
+		var size = font.size;
+		if (!font.visualRedesign) {
+			switch (font.size) {
+				case '11px':
+					size = '18px';
+					break;
+				case '17px':
+					size = '22px';
+					break;
+				case '26px':
+					size = '24px';
+					break;
+				default:
+					size = '20px';
+					break;
 			}
-		} else {
-			document.body.style.fontFamily = font.family;
-			document.body.style.fontSize = font.size;
+		}
+		document.documentElement.style.fontSize = size;
+		if (font.dyslexic) {
+			document.body.classList.add('vui-dyslexic');
 		}
 	});
 };
