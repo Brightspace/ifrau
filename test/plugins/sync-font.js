@@ -37,11 +37,7 @@ describe('sync-font', () => {
 						return global.document.body.className.indexOf(className) > -1;
 					}
 				},
-				className: '',
-				style: {
-					fontFamily: 'verdana',
-					fontSize: '12px'
-				}
+				className: ''
 			}
 		};
 		global.window = {
@@ -62,7 +58,7 @@ describe('sync-font', () => {
 			response = {
 				dyslexic: false,
 				family: 'foo',
-				size: 'bar',
+				size: '20px',
 				visualRedesign: false
 			};
 			client = new MockClient();
@@ -82,35 +78,47 @@ describe('sync-font', () => {
 			request.should.have.been.calledWith('font');
 		});
 
-		it('should apply result to body when redesign flag is off', (done) => {
+		it('should apply font size to HTML element', (done) => {
 			clientSyncFont(client).then(() => {
-				expect(document.body.style.fontFamily).to.equal('foo');
-				expect(document.body.style.fontSize).to.equal('bar');
-				expect(document.documentElement.style.fontSize).to.equal('1pt');
+				expect(document.documentElement.style.fontSize).to.equal('20px');
 				done();
 			});
 		});
 
-		it('should apply only font size to HTML element when redesign flag is on', (done) => {
+		[
+			{source: '11px', expected: '18px'},
+			{source: '13px', expected: '20px'},
+			{source: '17px', expected: '22px'},
+			{source: '26px', expected: '24px'},
+			{source: '1px', expected: '20px'},
+			{source: 'foo', expected: '20px'}
+		].forEach((val) => {
+			it(`should convert ${val.source} to ${val.expected}`, (done) => {
+				response.size = val.source;
+				clientSyncFont(client).then(() => {
+					expect(document.documentElement.style.fontSize).to.equal(val.expected);
+					done();
+				});
+			});
+		});
+
+		it('should not convert font sizes if flag is on', (done) => {
 			response.visualRedesign = true;
+			response.size = '13px';
 			clientSyncFont(client).then(() => {
-				expect(document.body.style.fontFamily).to.equal('verdana');
-				expect(document.body.style.fontSize).to.equal('12px');
-				expect(document.documentElement.style.fontSize).to.equal('bar');
+				expect(document.documentElement.style.fontSize).to.equal('13px');
 				done();
 			});
 		});
 
-		it('should ignore dyslexic when flag is off', (done) => {
-			response.dyslexic = true;
+		it('should not add dyslexic class', (done) => {
 			clientSyncFont(client).then(() => {
 				classListAdd.should.have.not.been.called;
 				done();
 			});
 		});
 
-		it('should add dyslexic class when flag is on', (done) => {
-			response.visualRedesign = true;
+		it('should add dyslexic class', (done) => {
 			response.dyslexic = true;
 			clientSyncFont(client).then(() => {
 				classListAdd.should.have.been.calledWith('vui-dyslexic');
