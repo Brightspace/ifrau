@@ -91,7 +91,7 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 	var waiting = this._waitingRequests[requestType];
 	delete this._waitingRequests[requestType];
 
-	if (handler === undefined || waiting === undefined || waiting.length === 0) {
+	if (waiting === undefined || waiting.length === 0) {
 		return;
 	}
 
@@ -101,6 +101,10 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 		Promise
 			.resolve()
 			.then(function() {
+				if (handler === undefined) {
+					throw new Error('No onRequest handler for type "' + requestType + '"');
+				}
+
 				if (typeof handler === 'function') {
 					return handler.apply(handler, w.args);
 				}
