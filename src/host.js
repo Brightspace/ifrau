@@ -28,7 +28,7 @@ function Host(elementProvider, src, options) {
 		throw new Error('Could not find parent node');
 	}
 
-	var iframe = Host._createIFrame(src, options.id, options.height);
+	var iframe = Host._createIFrame(src, options.id, options.height, options.allowFullScreen);
 	parent.appendChild(iframe);
 
 	Port.call(this, iframe.contentWindow, origin, options);
@@ -62,7 +62,7 @@ Host.prototype.connect = function connect() {
 	});
 };
 
-Host._createIFrame = function createIFrame(src, frameId, height) {
+Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen) {
 	var iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
@@ -75,6 +75,10 @@ Host._createIFrame = function createIFrame(src, frameId, height) {
 	if (frameId) {
 		iframe.id = frameId;
 	}
+	if (allowFullScreen) {
+		iframe.setAttribute('allowFullScreen', allowFullScreen);
+	}
+
 	return iframe;
 };
 
