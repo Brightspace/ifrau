@@ -76,7 +76,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 		iframe.id = frameId;
 	}
 	if (allowFullScreen) {
-		iframe.setAttribute('allowFullScreen', allowFullScreen);
+		iframe.setAttribute('allowfullscreen', 'allowfullscreen');
 	}
 
 	return iframe;
