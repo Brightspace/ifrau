@@ -63,7 +63,7 @@ Parameters:
  * `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
  * `height`: sets the iframe to a certain height, also disables automatic resizing
  * `id`: sets the id of the iframe
- * `allowFullScreen`: whether to allow client to use fullscreen, `false` by default
+ * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
 
 Creating a Client is even simpler:
 
