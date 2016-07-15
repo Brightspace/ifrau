@@ -11,7 +11,8 @@ module.exports = function resizer(host) {
 		initialized = true;
 		iframeResizer(
 			{
-				log: host.debugEnabled
+				log: host.debugEnabled,
+				heightCalculationMethod: 'max'
 			},
 			host.iframe
 		);
