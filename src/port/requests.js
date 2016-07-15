@@ -3,7 +3,8 @@
 var inherits = require('inherits'),
 	Promise = require('lie');
 
-var Port = require('./base');
+var Port = require('./base'),
+	RequestTypeError = require('./request-type-error');
 
 var fromError = require('./transform-error').fromError,
 	toError = require('./transform-error').toError;
@@ -91,11 +92,19 @@ PortWithRequests.prototype._sendRequestResponse = function sendRequestResponse(r
 	var waiting = this._waitingRequests[requestType];
 	delete this._waitingRequests[requestType];
 
-	if (handler === undefined || waiting === undefined || waiting.length === 0) {
+	if (waiting === undefined || waiting.length === 0) {
 		return;
 	}
 
 	var me = this;
+
+	if (handler === undefined) {
+		var noHandler = fromError(new RequestTypeError(requestType));
+		waiting.forEach(function(w) {
+			me._sendMessage('res', requestType, { id: w.id, err: noHandler });
+		});
+		return;
+	}
 
 	waiting.forEach(function(w) {
 		Promise

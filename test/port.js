@@ -10,7 +10,8 @@ chai.use(require('sinon-chai'));
 
 const
 	fromError = require('../src/port/transform-error').fromError,
-	Port = require('../src/port');
+	Port = require('../src/port'),
+	RequestTypeError = require('../src/port/request-type-error');
 
 var targetOrigin = 'http://cdn.com/app/index.html';
 
@@ -750,11 +751,17 @@ describe('port', () => {
 			});
 		});
 
-		it('should not send a message if there is not handler', (done) => {
+		it('should propogate error to the client if there is no handler', (done) => {
+			const e = new RequestTypeError('bar');
+
 			port._waitingRequests.bar = [{id: 1, args: []}];
 			port._sendRequestResponse('bar');
+
 			setTimeout(() => {
-				_sendMessage.should.not.have.been.called;
+				_sendMessage.should.have.been.calledWith('res', 'bar', {
+					id: 1,
+					err: fromError(e)
+				});
 				done();
 			});
 		});
