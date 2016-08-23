@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 'use strict';
 
 const
@@ -86,7 +87,7 @@ describe('user-activity-events', () => {
 				addEventListener.getCall(0).args[1].apply();
 				addEventListener.getCall(0).args[1].apply();
 				sendEvent.should.have.callCount(1);
-				setTimeout(function(){
+				setTimeout(function() {
 					// complete the async beforeEach
 					done();
 				}, 10000);
