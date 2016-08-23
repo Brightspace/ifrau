@@ -1,7 +1,6 @@
 'use strict';
 
 const
-	expect = require('chai').expect,
 	sinon = require('sinon');
 
 require('chai')
@@ -11,40 +10,25 @@ require('chai')
 const
 	clientUserActivityEvents = require('../../src/plugins/user-activity-events/client');
 
-let mutationCallback = null;
-let MockMutationObserver = function(cb) {
-	mutationCallback = cb;
-};
-MockMutationObserver.prototype.observe = function() {};
-
 let MockClient = function() {};
-MockClient.prototype.sendEvent = function() {};
-
-let onEventCallback = null;
-let MockHost = function() {};
-MockHost.prototype.onEvent = function(evt, cb) {
-	onEventCallback = cb;
-};
 
 describe('user-activity-events', () => {
 
 	beforeEach(() => {
-		global.document = { 
+		global.document = {
 		};
 	});
 
 	describe('client', () => {
 
-		var client, sendEvent;
+		var client;
 
 		beforeEach(() => {
 			global.window = {};
 			client = new MockClient();
-			sendEvent = sinon.stub(client, 'sendEvent');
 		});
 
 		afterEach(() => {
-			sendEvent.restore();
 		});
 
 		describe('mutation-observer', () => {
@@ -53,7 +37,6 @@ describe('user-activity-events', () => {
 
 			beforeEach(() => {
 				addEventListener = sinon.spy();
-				global.window.MutationObserver = MockMutationObserver;
 				global.document.addEventListener = addEventListener;
 			});
 
