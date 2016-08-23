@@ -23,7 +23,9 @@ function throttle(fn) {
 }
 
 module.exports = function recordUserEvents(client) {
-	document.addEventListener('click', throttle(function() {
-		client.sendEvent('userIsActive');
-	}));
+	if (document.addEventListener) {
+		document.addEventListener('click', throttle(function() {
+			client.sendEvent('userIsActive');
+		}));
+	}
 };
