@@ -7,7 +7,7 @@ var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/client'),
 	syncLang = require('./plugins/sync-lang/client'),
 	syncTitle = require('./plugins/sync-title/client'),
-	syncFont = require('./plugins/sync-font/client');
+	syncFont = require('./plugins/sync-font/client'),
 	userActivityEvents = require('./plugins/user-activity-events/client');
 
 function Client(options) {
