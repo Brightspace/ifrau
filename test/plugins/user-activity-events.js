@@ -72,29 +72,29 @@ describe('user-activity-events', () => {
 
 		});
 
-		describe('user activity events with waiting for throttle buffer period', () => {
+		describe('user activity events with fake-waiting for throttle buffer period', () => {
+			var clock;
 			var addEventListener;
 			var sendEvent;
-			beforeEach(function(done) {
-				this.timeout(12000);
+			beforeEach(function() {
+				var now = Date.now();
+				clock = sinon.useFakeTimers(now);
 				addEventListener = sinon.spy();
 				sendEvent = sinon.spy();
 				global.document.addEventListener = addEventListener;
 				client.sendEvent = sendEvent;
+			});
+			afterEach(() => {
+				clock.restore();
+			});
+			it('should add an click event listener which throttles clicks to only send periodically', () => {
 				clientUserActivityEvents(client);
 				//call the actual event handler function three times and then wait for 10 seconds, for the throttle buffer
 				addEventListener.getCall(0).args[1].apply();
 				addEventListener.getCall(0).args[1].apply();
 				addEventListener.getCall(0).args[1].apply();
 				sendEvent.should.have.callCount(1);
-				setTimeout(function() {
-					// complete the async beforeEach
-					done();
-				}, 10000);
-
-			});
-
-			it('should add an click event listener which throttles clicks to only send periodically', () => {
+				clock.tick(10001);
 				sendEvent.should.have.callCount(2);
 			});
 
