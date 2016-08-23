@@ -7,7 +7,7 @@ function throttle(fn) {
 		var context = this;
 		//only fire the event if it has been at least 10 seconds since previous fire
 		var threshhold = 10000;
-		var now = +new Date();
+		var now = (new Date()).getTime();
 		if (last && now < last + threshhold) {
 			// hold on to it
 			clearTimeout(deferTimer);
