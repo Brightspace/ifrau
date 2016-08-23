@@ -27,5 +27,8 @@ module.exports = function recordUserEvents(client) {
 		document.addEventListener('click', throttle(function() {
 			client.sendEvent('userIsActive');
 		}));
+		document.addEventListener('keydown', throttle(function() {
+			client.sendEvent('userIsActive');
+		}));
 	}
 };
