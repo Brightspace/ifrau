@@ -55,6 +55,19 @@ describe('user-activity-events', () => {
 			it('should add an keydown event listener', () => {
 				clientUserActivityEvents(client);
 				addEventListener.should.have.been.calledWith('keydown');
+				//call the actual event handler function and test if it is actually triggering the userIsActive event when it is called
+				addEventListener.getCall(0).args[1].apply();
+				sendEvent.should.have.been.calledWith('userIsActive');
+			});
+
+			it('should add an click event listener which throttles clicks to only send periodically', () => {
+				clientUserActivityEvents(client);
+				addEventListener.should.have.been.calledWith('click');
+				//call the actual event handler function and test if it is actually triggering the userIsActive event when it is called
+				addEventListener.getCall(0).args[1].apply();
+				addEventListener.getCall(0).args[1].apply();
+				addEventListener.getCall(0).args[1].apply();
+				sendEvent.should.have.callCount(1);
 			});
 
 		});
