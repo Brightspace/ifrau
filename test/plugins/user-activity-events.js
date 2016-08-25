@@ -35,13 +35,19 @@ describe('user-activity-events', () => {
 		});
 
 		describe('user activity events client', () => {
+			var onClose;
 			var addEventListener;
+			var removeEventListener;
 			var sendEvent;
 			beforeEach(() => {
 				addEventListener = sinon.spy();
+				removeEventListener = sinon.spy();
+				onClose = sinon.spy();
 				sendEvent = sinon.spy();
 				global.document.addEventListener = addEventListener;
+				global.document.removeEventListener = removeEventListener;
 				client.sendEvent = sendEvent;
+				client.onClose = onClose;
 			});
 
 			it('should add an click event listener which triggers a userIsActiveEvent when called', () => {
@@ -70,19 +76,33 @@ describe('user-activity-events', () => {
 				sendEvent.should.have.callCount(1);
 			});
 
+			it('should add on-close handler', () => {
+				clientUserActivityEvents(client);
+				onClose.should.have.been.called;
+			});
+
+			it('should remove event listeners when client is closed ', () => {
+				clientUserActivityEvents(client);
+				onClose.args[0][0]();
+				removeEventListener.should.have.been.calledWith('click');
+				removeEventListener.should.have.been.calledWith('keydown');
+			});
 		});
 
 		describe('user activity events with fake-waiting for throttle buffer period', () => {
 			var clock;
 			var addEventListener;
 			var sendEvent;
+			var onClose;
 			beforeEach(function() {
 				var now = Date.now();
 				clock = sinon.useFakeTimers(now);
 				addEventListener = sinon.spy();
 				sendEvent = sinon.spy();
+				onClose = sinon.spy();
 				global.document.addEventListener = addEventListener;
 				client.sendEvent = sendEvent;
+				client.onClose = onClose;
 			});
 			afterEach(() => {
 				clock.restore();
@@ -97,7 +117,6 @@ describe('user-activity-events', () => {
 				clock.tick(10001);
 				sendEvent.should.have.callCount(2);
 			});
-
 		});
 	});
 

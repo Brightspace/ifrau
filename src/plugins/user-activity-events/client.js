@@ -23,12 +23,17 @@ function throttle(fn) {
 }
 
 module.exports = function recordUserEvents(client) {
+
 	if (document.addEventListener) {
-		document.addEventListener('click', throttle(function() {
+		var listener = throttle(function userActivityListener() {
 			client.sendEvent('userIsActive');
-		}));
-		document.addEventListener('keydown', throttle(function() {
-			client.sendEvent('userIsActive');
-		}));
+		});
+		document.addEventListener('click', listener);
+		document.addEventListener('keydown', listener);
+
+		client.onClose(function removeUserActivityListeners() {
+			document.removeEventListener('click', listener);
+			document.removeEventListener('keydown', listener);
+		});
 	}
 };
