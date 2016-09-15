@@ -66,7 +66,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 	var iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
-		iframe.height = height;
+		iframe.style.height = height;
 	}
 	iframe.style.border = 'none';
 	iframe.style.overflow = 'hidden';
