@@ -65,8 +65,8 @@ describe('port', () => {
 
 		it('should return a  promise', () => {
 			var p = port.connect();
-			expect(p).to.be.defined;
-			expect(p.then).to.be.defined;
+			expect(p).to.not.be.undefined;
+			expect(p.then).to.not.be.undefined;
 		});
 
 		it('should wait for plugin startup before resolving', (done) => {
@@ -194,8 +194,8 @@ describe('port', () => {
 		it('should return a promise', () => {
 			port.connect();
 			var promise = port.getService('foo', '1.0');
-			expect(promise).to.be.defined;
-			expect(promise.then).to.be.defined;
+			expect(promise).to.not.be.undefined;
+			expect(promise.then).to.not.be.undefined;
 		});
 
 		it('should create a proxy with each method exposed', (done) => {
@@ -203,9 +203,9 @@ describe('port', () => {
 			port.getService('foo', '1.0')
 				.then((foo) => {
 					request.should.have.been.calledWith('service:foo:1.0');
-					expect(foo).to.be.defined;
-					expect(foo.a).to.be.defined;
-					expect(foo.b).to.be.defined;
+					expect(foo).to.not.be.undefined;
+					expect(foo.a).to.not.be.undefined;
+					expect(foo.b).to.not.be.undefined;
 					done();
 				});
 		});
@@ -634,8 +634,8 @@ describe('port', () => {
 		it('should return a promise', () => {
 			var promise = port.connect();
 			port.request('foo');
-			expect(promise).to.be.defined;
-			expect(promise.then).to.be.defined;
+			expect(promise).to.not.be.undefined;
+			expect(promise.then).to.not.be.undefined;
 		});
 
 		it('should add to "_pendingRequests"', () => {
