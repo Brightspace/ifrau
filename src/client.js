@@ -42,9 +42,7 @@ Client.prototype.connect = function connect() {
 		me.open();
 		me._sendMessage('evt', 'ready');
 
-		Port.prototype.connect.call(me);
-
-		resolve(me);
+		resolve(Port.prototype.connect.call(me));
 	});
 };
 

@@ -11,6 +11,7 @@ function Port(endpoint, targetOrigin, options) {
 
 	options = options || {};
 	this._connectQueue = [];
+	this._pluginStartupValues = [];
 	this._debugEnabled = options.debug || false;
 	this._endpoint = endpoint;
 	this._eventHandlers = {};
@@ -40,11 +41,19 @@ Port.prototype.close = function close() {
 };
 
 Port.prototype.connect = function connect() {
+	var self = this;
+
 	this._isConnected = true;
 	this.debug('connected');
 	this._connectQueue.forEach(function(func) { func(); });
 	this._connectQueue = [];
-	return this;
+	return Promise
+		.all(this._pluginStartupValues)
+		.then(function() {
+			self._pluginStartupValues = null;
+
+			return self;
+		});
 };
 
 Port.prototype.debug = function debug(msg) {
@@ -143,7 +152,7 @@ Port.prototype.sendEvent = function sendEvent(eventType) {
 };
 
 Port.prototype.use = function use(fn) {
-	fn(this);
+	this._pluginStartupValues.push(fn(this));
 	return this;
 };
 

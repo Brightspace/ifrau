@@ -69,6 +69,68 @@ describe('port', () => {
 			expect(p.then).to.be.defined;
 		});
 
+		it('should wait for plugin startup before resolving', (done) => {
+			var resolvePluginStartup;
+			port.use(function(/*port*/) {
+				return new Promise(function(resolve) {
+					resolvePluginStartup = resolve;
+				});
+			});
+
+			var connectHasResolved = false;
+			port.connect().then(() =>  connectHasResolved = true);
+
+			setTimeout(() => {
+				expect(connectHasResolved).to.be.false;
+
+				resolvePluginStartup();
+
+				setTimeout(() => {
+					expect(connectHasResolved).to.be.true;
+					done();
+				});
+			});
+		});
+
+		it('should reject if plugin startup rejects', () => {
+			var expectedError;
+			port.use(function(/*port*/) {
+				expectedError = new Error();
+				return Promise.reject(expectedError);
+			});
+
+			return port.connect().then(
+				function resolveHandler() {
+					throw new Error('should have rejected');
+				},
+				function rejectHandler(e) {
+					expect(e).to.equal(expectedError);
+				}
+			);
+		});
+
+		it('should fire off connect queue before waiting', (done) => {
+			var resolvePluginStartup;
+			port.use(function(/*port*/) {
+				return new Promise(function(resolve) {
+					resolvePluginStartup = resolve;
+				});
+			});
+
+			var connectQueueFlushed = false;
+			port._connectQueue.push(() => connectQueueFlushed = true);
+
+			var p = port.connect();
+
+			expect(connectQueueFlushed).to.be.true;
+
+			resolvePluginStartup();
+
+			p.then(() => {
+				done();
+			});
+		});
+
 	});
 
 	describe('debug', () => {
@@ -130,13 +192,15 @@ describe('port', () => {
 		});
 
 		it('should return a promise', () => {
-			var promise = port.connect().getService('foo', '1.0');
+			port.connect();
+			var promise = port.getService('foo', '1.0');
 			expect(promise).to.be.defined;
 			expect(promise.then).to.be.defined;
 		});
 
 		it('should create a proxy with each method exposed', (done) => {
-			port.connect().getService('foo', '1.0')
+			port.connect();
+			port.getService('foo', '1.0')
 				.then((foo) => {
 					request.should.have.been.calledWith('service:foo:1.0');
 					expect(foo).to.be.defined;
@@ -147,7 +211,8 @@ describe('port', () => {
 		});
 
 		it('should send requests for method calls, passing arguments', (done) => {
-			port.connect().getService('foo', '1.0')
+			port.connect();
+			port.getService('foo', '1.0')
 				.then((foo) => {
 					var result = foo.a('1', true);
 					request.should.have.been.calledWith('service:foo:1.0:a', '1', true);
@@ -482,7 +547,8 @@ describe('port', () => {
 
 		it('should throw if register happens after connect', () => {
 			expect(() => {
-				port.connect().registerService('foo', '1.0', {});
+				port.connect();
+				port.registerService('foo', '1.0', {});
 			}).to.throw(Error, 'Register services before connecting');
 		});
 
@@ -566,13 +632,15 @@ describe('port', () => {
 		});
 
 		it('should return a promise', () => {
-			var promise = port.connect().request('foo');
+			var promise = port.connect();
+			port.request('foo');
 			expect(promise).to.be.defined;
 			expect(promise.then).to.be.defined;
 		});
 
 		it('should add to "_pendingRequests"', () => {
-			port.connect().request('foo');
+			port.connect();
+			port.request('foo');
 			_initHashArrAndPush.should.have.been.calledWith(
 				port._pendingRequests,
 				'foo',
@@ -585,7 +653,8 @@ describe('port', () => {
 		});
 
 		it('should send message', () => {
-			port.connect().request('foo');
+			port.connect();
+			port.request('foo');
 			_sendMessage.should.have.been.calledWith(
 				'req',
 				'foo',
@@ -594,7 +663,8 @@ describe('port', () => {
 		});
 
 		it('should pass arguments', () => {
-			port.connect().request('foo', 'bar', true, -3);
+			port.connect();
+			port.request('foo', 'bar', true, -3);
 			_sendMessage.should.have.been.calledWith(
 				'req',
 				'foo',
@@ -653,17 +723,20 @@ describe('port', () => {
 		});
 
 		it('should "_sendMessage" prepended with "evt"', () => {
-			port.connect().sendEvent('foo');
+			port.connect();
+			port.sendEvent('foo');
 			_sendMessage.should.have.been.calledWith('evt', 'foo', []);
 		});
 
 		it('should pass arguments to "_sendMessage"', () => {
-			port.connect().sendEvent('foo', 'bar', true, -3);
+			port.connect();
+			port.sendEvent('foo', 'bar', true, -3);
 			_sendMessage.should.have.been.calledWith('evt', 'foo', ['bar', true, -3]);
 		});
 
 		it('should return result of "_sendMessage"', () => {
-			var val = port.connect().sendEvent('foo', 'bar');
+			port.connect();
+			var val = port.sendEvent('foo', 'bar');
 			expect(val).to.equal(14);
 		});
 

@@ -55,8 +55,7 @@ Host.prototype.connect = function connect() {
 	var me = this;
 	return new Promise(function(resolve/*, reject*/) {
 		me.onEvent('ready', function() {
-			Port.prototype.connect.call(me);
-			resolve(me);
+			resolve(Port.prototype.connect.call(me));
 		});
 		me.open();
 	});
