@@ -1,6 +1,7 @@
 'use strict';
 
-var uuid = require('uuid');
+var uuid = require('uuid'),
+	Promise = require('lie');
 
 var validateEvent = require('./validate-event');
 
