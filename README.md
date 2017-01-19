@@ -86,6 +86,7 @@ Parameters:
  * `syncFont`: whether the font size should be automatically set to match the host page, `false` by default
  * `syncLang`: whether the page's language tag should be automatically set to match the host page, `false` by default
  * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
+ * `resizerOptions`: pass iframe-resizer client options through to the iframe resizer client
 
 ## Events
 
