@@ -29,7 +29,7 @@ function Client(options) {
 		this.use(syncFont);
 	}
 	if (options.resizeFrame !== false) {
-		this.use(resizer);
+		this.use(resizer(options.resizerOptions));
 	}
 	this.use(userActivityEvents);
 }
