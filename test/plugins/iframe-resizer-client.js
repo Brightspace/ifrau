@@ -1,16 +1,9 @@
 'use strict';
 
 require('chai')
-	.use(require('sinon-chai'))
 	.should();
 
 const resizer = require('../../src/plugins/iframe-resizer/client');
-
-function MockHost() {
-	this.iframe = {};
-}
-MockHost.prototype.onEvent = function() {};
-MockHost.prototype.onClose = function() {};
 
 describe('iframe-resizer/client', () => {
 
