@@ -121,7 +121,7 @@ describe('sync-font', () => {
 		it('should add dyslexic class', (done) => {
 			response.dyslexic = true;
 			clientSyncFont(client).then(() => {
-				classListAdd.should.have.been.calledWith('vui-dyslexic');
+				classListAdd.should.have.been.calledWith('d2l-dyslexic');
 				done();
 			});
 		});
@@ -170,7 +170,7 @@ describe('sync-font', () => {
 		});
 
 		it('should return dyslexic if class is present', () => {
-			global.document.body.className = 'vui-dyslexic';
+			global.document.body.className = 'd2l-dyslexic';
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
