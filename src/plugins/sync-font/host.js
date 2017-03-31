@@ -3,7 +3,7 @@
 module.exports = function hostSyncFont(host) {
 	host.onRequest('font', function() {
 		var computedStyle = window.getComputedStyle(document.body);
-		var dyslexic = document.body.classList.contains('vui-dyslexic')
+		var dyslexic = document.body.classList.contains('d2l-dyslexic')
 			|| computedStyle.fontFamily.toLowerCase().indexOf('dyslexic') > -1;
 		var visualRedesign = document.body.classList.contains('visual-redesign');
 		return {

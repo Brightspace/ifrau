@@ -21,7 +21,7 @@ module.exports = function clientSyncFont(client) {
 		}
 		document.documentElement.style.fontSize = size;
 		if (font.dyslexic) {
-			document.body.classList.add('vui-dyslexic');
+			document.body.classList.add('d2l-dyslexic');
 		}
 	});
 };
