@@ -21,7 +21,14 @@ describe('host', () => {
 			location: { protocol: 'https:' }
 		};
 		global.document = {
-			createElement: sinon.stub().returns({style: {}, tagName: 'iframe', contentWindow: {postMessage: function() {}}})
+			createElement: sinon.stub().returns({
+				style: {},
+				tagName: 'iframe',
+				contentWindow: {
+					postMessage: function() {}
+				},
+				addEventListener: function() {}
+			})
 		};
 		element = { appendChild: sinon.spy() };
 	});
