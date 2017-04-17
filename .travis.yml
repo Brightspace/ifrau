@@ -1,8 +1,12 @@
 language: node_js
 node_js: stable
 sudo: false
+script:
+- npm test
+- npm run browserify
 after_success:
 - npm run report-coverage
+- npm install https://github.com/Brightspace/travis-weigh-in.git && find dist -type f -exec ./node_modules/travis-weigh-in/weigh_in.py {} \;
 - '[ "$TRAVIS_SECURE_ENV_VARS" = "true" ] && [ "x$TRAVIS_TAG" != "x" ] && npm run publish:cdn'
 deploy:
   provider: npm
