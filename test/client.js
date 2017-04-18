@@ -26,7 +26,7 @@ describe('client', () => {
 				scrollHeight: 100
 			}
 		};
-		client = new Client({syncTitle: false});
+		client = new Client({syncLang: false, syncTitle: false});
 		sendEvent = sinon.stub(client, 'sendEvent');
 		sendMessage = sinon.stub(client, '_sendMessage');
 		clock = sinon.useFakeTimers();

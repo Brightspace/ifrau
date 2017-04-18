@@ -19,7 +19,7 @@ function Client(options) {
 
 	Port.call(this, window.parent, '*', options);
 
-	if (options.syncLang) {
+	if (options.syncLang !== false) {
 		this.use(syncLang);
 	}
 	if (options.syncTitle !== false) {
