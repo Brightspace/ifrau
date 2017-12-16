@@ -1,24 +1,30 @@
-/* eslint-disable no-invalid-this */
 'use strict';
 
+// Call fn immediately, and then don't call again until after timeout has passed
+// If it is called one or more times within the timeout, fn is called at the
+// trailing edge of the timeout as well, and then re-throttled
 function throttle(fn) {
-	var last, deferTimer;
-	return function() {
-		var context = this;
-		//only fire the event if it has been at least 10 seconds since previous fire
-		var threshhold = 10000;
-		var now = Date.now();
-		if (last && now < last + threshhold) {
-			// hold on to it
-			clearTimeout(deferTimer);
-			deferTimer = setTimeout(function() {
-				last = now;
-				fn.apply(context);
-			}, threshhold + last - now);
-		} else {
-			last = now;
-			fn.apply(context);
+	var called = false;
+	var throttled = false;
+	var timeout = 10000;
+
+	function unthrottled() {
+		throttled = false;
+		maybeCall();
+	}
+
+	function maybeCall() {
+		if (called && !throttled) {
+			called = false;
+			throttled = true;
+			setTimeout(unthrottled, timeout);
+			fn();
 		}
+	}
+
+	return function() {
+		called = true;
+		maybeCall();
 	};
 }
 
