@@ -23,7 +23,6 @@ function throttle(fn) {
 }
 
 module.exports = function recordUserEvents(client) {
-
 	if (document.addEventListener) {
 		var listener = throttle(function userActivityListener() {
 			client.sendEvent('userIsActive');
