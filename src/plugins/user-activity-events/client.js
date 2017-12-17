@@ -29,16 +29,14 @@ function throttle(fn) {
 }
 
 module.exports = function recordUserEvents(client) {
-	if (document.addEventListener) {
-		var listener = throttle(function userActivityListener() {
-			client.sendEvent('userIsActive');
-		});
-		document.addEventListener('click', listener);
-		document.addEventListener('keydown', listener);
+	var listener = throttle(function userActivityListener() {
+		client.sendEvent('userIsActive');
+	});
+	document.addEventListener('click', listener);
+	document.addEventListener('keydown', listener);
 
-		client.onClose(function removeUserActivityListeners() {
-			document.removeEventListener('click', listener);
-			document.removeEventListener('keydown', listener);
-		});
-	}
+	client.onClose(function removeUserActivityListeners() {
+		document.removeEventListener('click', listener);
+		document.removeEventListener('keydown', listener);
+	});
 };
