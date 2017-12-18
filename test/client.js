@@ -22,6 +22,7 @@ describe('client', () => {
 			}
 		};
 		global.document = {
+			addEventListener: sinon.stub(),
 			body: {
 				scrollHeight: 100
 			}

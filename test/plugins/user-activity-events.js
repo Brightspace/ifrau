@@ -109,13 +109,45 @@ describe('user-activity-events', () => {
 			});
 			it('should add an click event listener which throttles clicks to only send periodically', () => {
 				clientUserActivityEvents(client);
-				//call the actual event handler function three times and then wait for 10 seconds, for the throttle buffer
-				addEventListener.getCall(0).args[1].apply();
-				addEventListener.getCall(0).args[1].apply();
-				addEventListener.getCall(0).args[1].apply();
+				var throttledSendEvent = addEventListener.getCall(0).args[1];
+
+				// should call immediately
+				throttledSendEvent();
 				sendEvent.should.have.callCount(1);
-				clock.tick(10001);
+
+				// shouldn't call after the timeout, because we haven't called again
+				clock.tick(10000);
+				sendEvent.should.have.callCount(1);
+
+				// should call immediately, now that timeout has passed
+				throttledSendEvent();
 				sendEvent.should.have.callCount(2);
+
+				// shouldn't call during the timeout, even though we called
+				throttledSendEvent();
+				throttledSendEvent();
+				throttledSendEvent();
+				sendEvent.should.have.callCount(2);
+				clock.tick(1000);
+				sendEvent.should.have.callCount(2);
+				clock.tick(1000);
+				sendEvent.should.have.callCount(2);
+
+				// should call after the timeout, because we called during it
+				clock.tick(8000);
+				sendEvent.should.have.callCount(3);
+
+				// shouldn't call until the timeout is over again
+				throttledSendEvent();
+				throttledSendEvent();
+				throttledSendEvent();
+				sendEvent.should.have.callCount(3);
+				clock.tick(1000);
+				sendEvent.should.have.callCount(3);
+				clock.tick(1000);
+				sendEvent.should.have.callCount(3);
+				clock.tick(8000);
+				sendEvent.should.have.callCount(4);
 			});
 		});
 	});
