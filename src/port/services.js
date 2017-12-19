@@ -4,7 +4,7 @@ var inherits = require('inherits');
 
 var PortWithRequests = require('./requests');
 
-var typeNameValidator = /^[a-zA-Z]+[a-zA-Z\-]*$/;
+var typeNameValidator = /^[a-zA-Z]+[a-zA-Z-]*$/;
 
 function PortWithServices() {
 	if (!(this instanceof PortWithServices)) {

@@ -68,16 +68,16 @@ describe('transform-error', () => {
 					.that.has.a.property(ERROR_OBJECT_SENTINEL);
 				expect(obj)
 					.to.have.a.property('props')
-						.that.is.an('object')
-						.that.has.a.property('err')
-							.that.is.an('object')
-							.that.has.a.property(ERROR_OBJECT_SENTINEL);
+					.that.is.an('object')
+					.that.has.a.property('err')
+					.that.is.an('object')
+					.that.has.a.property(ERROR_OBJECT_SENTINEL);
 				expect(obj.props.err)
 					.to.have.a.property('props')
-						.that.is.an('object')
-						.that.has.a.property('err')
-							.that.is.an('object')
-							.that.has.a.property(ERROR_OBJECT_SENTINEL);
+					.that.is.an('object')
+					.that.has.a.property('err')
+					.that.is.an('object')
+					.that.has.a.property(ERROR_OBJECT_SENTINEL);
 			});
 		});
 	});
@@ -104,9 +104,9 @@ describe('transform-error', () => {
 			expect(err).to.have.a.property('obj').that.deep.equals(input.obj);
 			expect(err)
 				.to.have.a.property('err')
-					.that.is.an.instanceof(Error)
-					.and.has.a.property('message')
-						.that.equals('bar');
+				.that.is.an.instanceof(Error)
+				.and.has.a.property('message')
+				.that.equals('bar');
 		});
 	});
 });

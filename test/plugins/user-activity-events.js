@@ -11,8 +11,8 @@ require('chai')
 const
 	clientUserActivityEvents = require('../../src/plugins/user-activity-events/client');
 
-let sendEvent = function() {};
-let MockClient = function() {
+const sendEvent = function() {};
+const MockClient = function() {
 	return { sendEvent: sendEvent };
 };
 
