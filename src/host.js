@@ -8,6 +8,7 @@ var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/host'),
 	syncFont = require('./plugins/sync-font/host'),
 	syncLang = require('./plugins/sync-lang/host'),
+	syncIntl = require('./plugins/sync-intl/host'),
 	syncTitle = require('./plugins/sync-title/host');
 
 var originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
@@ -38,6 +39,7 @@ function Host(elementProvider, src, options) {
 
 	if (options.syncLang) {
 		this.use(syncLang);
+		this.use(syncIntl);
 	}
 	this.use(syncTitle({page: options.syncPageTitle ? true : false}));
 
