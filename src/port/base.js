@@ -66,7 +66,7 @@ Port.prototype.debug = function debug(msg) {
 };
 
 Port.prototype._initHashArrAndPush = function initHashArrAndPush(dic, key, obj) {
-	if (dic[key] === undefined ) {
+	if (dic[key] === undefined) {
 		dic[key] = [];
 	}
 	dic[key].push(obj);

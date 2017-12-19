@@ -12,10 +12,10 @@ const
 	clientSyncFont = require('../../src/plugins/sync-font/client'),
 	hostSyncFont = require('../../src/plugins/sync-font/host');
 
-let MockClient = function() {};
+const MockClient = function() {};
 MockClient.prototype.request = function() {};
 
-let MockHost = function() {};
+const MockHost = function() {};
 MockHost.prototype.onRequest = function() {};
 
 describe('sync-font', () => {

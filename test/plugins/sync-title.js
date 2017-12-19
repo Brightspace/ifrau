@@ -13,16 +13,16 @@ const
 	hostSyncTitle = require('../../src/plugins/sync-title/host');
 
 let mutationCallback = null;
-let MockMutationObserver = function(cb) {
+const MockMutationObserver = function(cb) {
 	mutationCallback = cb;
 };
 MockMutationObserver.prototype.observe = function() {};
 
-let MockClient = function() {};
+const MockClient = function() {};
 MockClient.prototype.sendEvent = function() {};
 
 let onEventCallback = null;
-let MockHost = function() {};
+const MockHost = function() {};
 MockHost.prototype.onEvent = function(evt, cb) {
 	onEventCallback = cb;
 };

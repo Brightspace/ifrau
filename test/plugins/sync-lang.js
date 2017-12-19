@@ -12,10 +12,10 @@ const
 	clientSyncLang = require('../../src/plugins/sync-lang/client'),
 	hostSyncLang = require('../../src/plugins/sync-lang/host');
 
-let MockClient = function() {};
+const MockClient = function() {};
 MockClient.prototype.request = function() {};
 
-let MockHost = function() {};
+const MockHost = function() {};
 MockHost.prototype.onRequest = function() {};
 
 describe('sync-lang', () => {

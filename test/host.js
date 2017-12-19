@@ -61,7 +61,7 @@ describe('host', () => {
 			});
 		});
 
-		it(`should resolve protocol-relative origin`, () => {
+		it('should resolve protocol-relative origin', () => {
 			var host = new Host(() => element, '//foo.com');
 			expect(host._targetOrigin).to.equal('https://foo.com');
 		});
@@ -121,7 +121,7 @@ describe('host', () => {
 				host._receiveEvent('ready');
 			});
 
-			it(`should register for the "ready" event`, () => {
+			it('should register for the "ready" event', () => {
 				host.connect();
 				onEvent.should.have.been.calledWith('ready');
 			});

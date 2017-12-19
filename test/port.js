@@ -42,7 +42,7 @@ describe('port', () => {
 			port.open();
 			port.close();
 			global.window.removeEventListener
-				.should.have.been.calledWith('message', port._receiveMessage );
+				.should.have.been.calledWith('message', port._receiveMessage);
 		});
 
 		it('should disconnect port', () => {
@@ -52,7 +52,7 @@ describe('port', () => {
 		});
 
 		it('should call onClose callbacks', () => {
-			let cb = sinon.spy();
+			const cb = sinon.spy();
 			port.onClose(cb);
 			port.open();
 			port.close();
@@ -676,8 +676,8 @@ describe('port', () => {
 			port.connect();
 			port.request('foo');
 			port.request('bar');
-			_sendMessage.should.have.been.calledWith('req', 'foo', { id: `${port._id}_1`, args: [] } );
-			_sendMessage.should.have.been.calledWith('req', 'bar', { id: `${port._id}_2`, args: [] } );
+			_sendMessage.should.have.been.calledWith('req', 'foo', { id: `${port._id}_1`, args: [] });
+			_sendMessage.should.have.been.calledWith('req', 'bar', { id: `${port._id}_2`, args: [] });
 		});
 
 	});

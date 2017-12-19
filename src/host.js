@@ -10,7 +10,7 @@ var Port = require('./port'),
 	syncLang = require('./plugins/sync-lang/host'),
 	syncTitle = require('./plugins/sync-title/host');
 
-var originRe = /^(http:\/\/|https:\/\/)[^\/]+/i;
+var originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
 
 function Host(elementProvider, src, options) {
 	if (!(this instanceof Host)) {
