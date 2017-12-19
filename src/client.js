@@ -8,6 +8,7 @@ var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/client'),
 	syncLang = require('./plugins/sync-lang/client'),
 	syncIntl = require('./plugins/sync-intl/client'),
+	syncTimezone = require('./plugins/sync-timezone/client'),
 	syncTitle = require('./plugins/sync-title/client'),
 	syncFont = require('./plugins/sync-font/client'),
 	userActivityEvents = require('./plugins/user-activity-events/client');
@@ -24,6 +25,7 @@ function Client(options) {
 	if (options.syncLang !== false) {
 		this.use(syncLang);
 		this.use(syncIntl);
+		this.use(syncTimezone);
 	}
 	if (options.syncTitle !== false) {
 		this.use(syncTitle);
