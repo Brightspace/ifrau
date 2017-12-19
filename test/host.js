@@ -126,8 +126,16 @@ describe('host', () => {
 				onEvent.should.have.been.calledWith('ready');
 			});
 
+			it('should not error when client connects after initial client', (done) => {
+				host
+					.connect()
+					.then(() => {
+						host._receiveEvent('ready');
+					})
+					.then(done, done);
+				host._receiveEvent('ready');
+			});
 		});
 
 	});
-
 });
