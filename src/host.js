@@ -9,6 +9,7 @@ var Port = require('./port'),
 	syncFont = require('./plugins/sync-font/host'),
 	syncLang = require('./plugins/sync-lang/host'),
 	syncIntl = require('./plugins/sync-intl/host'),
+	syncTimezone = require('./plugins/sync-timezone/host'),
 	syncTitle = require('./plugins/sync-title/host');
 
 var originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
@@ -40,6 +41,7 @@ function Host(elementProvider, src, options) {
 	if (options.syncLang) {
 		this.use(syncLang);
 		this.use(syncIntl);
+		this.use(syncTimezone);
 	}
 	this.use(syncTitle({page: options.syncPageTitle ? true : false}));
 
