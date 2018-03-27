@@ -11,6 +11,7 @@ var Port = require('./port'),
 	syncTimezone = require('./plugins/sync-timezone/client'),
 	syncTitle = require('./plugins/sync-title/client'),
 	syncFont = require('./plugins/sync-font/client'),
+	syncCssVariable = require('./plugins/sync-css-variable/client'),
 	userActivityEvents = require('./plugins/user-activity-events/client');
 
 function Client(options) {
@@ -36,6 +37,7 @@ function Client(options) {
 	if (options.resizeFrame !== false) {
 		this.use(resizer(options.resizerOptions));
 	}
+	this.use(syncCssVariable);
 	this.use(userActivityEvents);
 }
 inherits(Client, Port);
