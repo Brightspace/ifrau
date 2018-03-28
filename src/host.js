@@ -10,7 +10,8 @@ var Port = require('./port'),
 	syncLang = require('./plugins/sync-lang/host'),
 	syncIntl = require('./plugins/sync-intl/host'),
 	syncTimezone = require('./plugins/sync-timezone/host'),
-	syncTitle = require('./plugins/sync-title/host');
+	syncTitle = require('./plugins/sync-title/host'),
+	syncCssVariable = require('./plugins/sync-css-variable/host');
 
 var originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
 
@@ -52,7 +53,9 @@ function Host(elementProvider, src, options) {
 	if (options.syncFont) {
 		this.use(syncFont);
 	}
-
+	if (options.syncCssVariable) {
+		this.use(syncCssVariable);
+	}
 }
 inherits(Host, Port);
 
