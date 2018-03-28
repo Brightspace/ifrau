@@ -37,7 +37,9 @@ function Client(options) {
 	if (options.resizeFrame !== false) {
 		this.use(resizer(options.resizerOptions));
 	}
-	this.use(syncCssVariable);
+	if (options.syncCssVariable) {
+		this.use(syncCssVariable);
+	}
 	this.use(userActivityEvents);
 }
 inherits(Client, Port);

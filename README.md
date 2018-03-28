@@ -61,6 +61,7 @@ Parameters:
  * `syncFont`: whether to allow client to automatically sync its font size with the host, `false` by default
  * `syncLang`: whether to allow client to automatically sync its language, timezone and internationalization settings with the host, `false` by default
  * `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
+ * `syncCssVariable`: whether css variables (in the `<head>` element) should be kept in sync automatically with the css variables of the FRA, `false` by default
  * `height`: sets the iframe to a certain height, also disables automatic resizing
  * `id`: sets the id of the iframe
  * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default

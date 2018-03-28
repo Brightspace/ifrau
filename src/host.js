@@ -53,7 +53,9 @@ function Host(elementProvider, src, options) {
 	if (options.syncFont) {
 		this.use(syncFont);
 	}
-	this.use(syncCssVariable);
+	if (options.syncCssVariable) {
+		this.use(syncCssVariable);
+	}
 }
 inherits(Host, Port);
 
