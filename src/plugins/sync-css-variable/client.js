@@ -2,9 +2,11 @@
 
 module.exports = function clientSyncCssVariable(client) {
 	return client.request('css-variable').then(function(cssVariables) {
-		var htmlElem = document.getElementsByTagName('html')[0];
-		Object.keys(cssVariables).forEach(function(key) {
-			htmlElem.style.setProperty(key, cssVariables[key]);
-		});
+		var htmlElems = document.getElementsByTagName('html');
+		if (htmlElems && htmlElems.length === 1) {
+			Object.keys(cssVariables).forEach(function(key) {
+				htmlElems[0].style.setProperty(key, cssVariables[key]);
+			});
+		}
 	});
 };
