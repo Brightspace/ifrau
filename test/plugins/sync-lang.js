@@ -26,7 +26,7 @@ describe('sync-lang', () => {
 		setAttribute = sinon.stub();
 		getAttribute = sinon.stub();
 		global.document = {
-			body: { dir: '' },
+			dir: '',
 			getElementsByTagName: function() {
 				return [{
 					getAttribute: getAttribute,
