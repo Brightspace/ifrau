@@ -75,12 +75,12 @@ describe('sync-lang', () => {
 			});
 		});
 
-		it('should set RTL direction on body', (done) => {
+		it('should set RTL direction on html', (done) => {
 			request.returns(new Promise((resolve) => {
 				resolve({isRtl: true});
 			}));
 			clientSyncLang(client).then(() => {
-				expect(document.body.dir).to.equal('rtl');
+				expect(document.dir).to.equal('rtl');
 				done();
 			});
 		});
@@ -119,15 +119,15 @@ describe('sync-lang', () => {
 			expect(value.fallback).to.equal('ef-GH');
 		});
 
-		it('should be RTL body direction is RTL', () => {
-			global.document.body.dir = 'RtL';
+		it('should be RTL html direction is RTL', () => {
+			global.document.dir = 'RtL';
 			hostSyncLang(host);
 			const value = onRequest.args[0][1]();
 			expect(value.isRtl).to.be.true;
 		});
 
-		it('should not be RTL body direction is not RTL', () => {
-			global.document.body.dir = 'abc';
+		it('should not be RTL html direction is not RTL', () => {
+			global.document.dir = 'abc';
 			hostSyncLang(host);
 			const value = onRequest.args[0][1]();
 			expect(value.isRtl).to.be.false;
