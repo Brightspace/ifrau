@@ -20,14 +20,11 @@ MockHost.prototype.onRequest = function() {};
 
 describe('css-variable', () => {
 	let getElementsByTagName;
-	let getElementById;
 
 	beforeEach(() => {
 		getElementsByTagName = sinon.stub();
-		getElementById = sinon.stub();
 		global.document = {
-			getElementsByTagName: getElementsByTagName,
-			getElementById: getElementById
+			getElementsByTagName: getElementsByTagName
 		};
 	});
 
@@ -109,17 +106,6 @@ describe('css-variable', () => {
 			onRequest.should.have.been.calledWith('css-variable');
 		});
 
-		it('should return empty object if "d2l-branding-vars" id not present', () => {
-			getElementById
-				.withArgs('d2l-branding-vars')
-				.returns(null);
-
-			hostSyncCssVariable(host);
-
-			const value = onRequest.args[0][1]();
-			expect(value).to.eql({});
-		});
-
 		it('should return parsed value of "data-css-vars" attribute from HTML element', () => {
 			const cssVariables = {
 				'branding-color': 'green'
@@ -135,12 +121,12 @@ describe('css-variable', () => {
 				.withArgs('data-css-vars')
 				.returns(JSON.stringify(cssVariables));
 
-			getElementById
-				.withArgs('d2l-branding-vars')
-				.returns({
+			getElementsByTagName
+				.withArgs('html')
+				.returns([{
 					hasAttribute: hasAttribute,
 					getAttribute: getAttribute
-				});
+				}]);
 
 			hostSyncCssVariable(host);
 
@@ -154,14 +140,23 @@ describe('css-variable', () => {
 				.withArgs('data-css-vars')
 				.returns(false);
 
-			getElementById
-				.withArgs('d2l-branding-vars')
-				.returns({
+			getElementsByTagName
+				.withArgs('html')
+				.returns([{
 					hasAttribute: hasAttribute
-				});
+				}]);
 
 			hostSyncCssVariable(host);
 
+			const value = onRequest.args[0][1]();
+			expect(value).to.eql({});
+		});
+
+		it('should return empty object if HTML element is not present', () => {
+			getElementsByTagName
+				.withArgs('html')
+				.returns([]);
+			hostSyncCssVariable(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({});
 		});
