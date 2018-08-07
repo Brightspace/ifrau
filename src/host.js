@@ -94,7 +94,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 };
 
 Host._tryGetOrigin = function tryGetOrigin(url) {
-	if (url && url.indexOf('//') === 0) {
+	if (url && url.indexOf('//') === -1) {
 		url = window.location.protocol + url;
 	}
 	var match = originRe.exec(url);
