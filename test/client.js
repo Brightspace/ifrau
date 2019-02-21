@@ -25,6 +25,10 @@ describe('client', () => {
 			addEventListener: sinon.stub(),
 			body: {
 				scrollHeight: 100
+			},
+			createElement: sinon.stub().returns({src:''}),
+			head: {
+				appendChild: sinon.stub()
 			}
 		};
 		client = new Client({syncLang: false, syncTitle: false});
