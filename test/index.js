@@ -19,7 +19,10 @@ describe('ifrau', () => {
 			createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
 			getElementById: sinon.stub().returns({
 				appendChild: sinon.spy()
-			})
+			}),
+			head: {
+				appendChild: sinon.stub()
+			}
 		};
 	});
 
