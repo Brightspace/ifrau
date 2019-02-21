@@ -15,7 +15,9 @@ module.exports = function(resizerOptions) {
 			}
 		}
 
-		require('iframe-resizer/js/iframeResizer.contentWindow');
+		var resizerContentWindow = document.createElement('script');
+		resizerContentWindow.src = 'https://s.brightspace.com/lib/iframe-resizer/3.6.5/iframeResizer.contentWindow.js';
+		document.head.appendChild(resizerContentWindow);
 	}
 	return resizer;
 };
