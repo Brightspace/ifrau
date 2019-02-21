@@ -26,7 +26,7 @@ describe('client', () => {
 			body: {
 				scrollHeight: 100
 			},
-			createElement: sinon.stub().returns({src:""}),
+			createElement: sinon.stub().returns({src:''}),
 			head: {
 				appendChild: sinon.stub()
 			}
