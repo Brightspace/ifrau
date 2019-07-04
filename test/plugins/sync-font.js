@@ -56,7 +56,6 @@ describe('sync-font', () => {
 
 		beforeEach(() => {
 			response = {
-				dyslexic: false,
 				family: 'foo',
 				size: '20px',
 				visualRedesign: false
@@ -111,21 +110,6 @@ describe('sync-font', () => {
 			});
 		});
 
-		it('should not add dyslexic class', (done) => {
-			clientSyncFont(client).then(() => {
-				classListAdd.should.have.not.been.called;
-				done();
-			});
-		});
-
-		it('should add dyslexic class', (done) => {
-			response.dyslexic = true;
-			clientSyncFont(client).then(() => {
-				classListAdd.should.have.been.calledWith('d2l-dyslexic');
-				done();
-			});
-		});
-
 	});
 
 	describe('host', () => {
@@ -150,7 +134,6 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				dyslexic: false,
 				family: 'comic sans',
 				size: '20pt',
 				visualRedesign: false
@@ -162,34 +145,9 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				dyslexic: false,
 				family: 'comic sans',
 				size: '20pt',
 				visualRedesign: true
-			});
-		});
-
-		it('should return dyslexic if class is present', () => {
-			global.document.body.className = 'd2l-dyslexic';
-			hostSyncFont(host);
-			const value = onRequest.args[0][1]();
-			expect(value).to.eql({
-				dyslexic: true,
-				family: 'comic sans',
-				size: '20pt',
-				visualRedesign: false
-			});
-		});
-
-		it('should return dyslexic if font matches', () => {
-			fontFamily = 'Open Dyslexic';
-			hostSyncFont(host);
-			const value = onRequest.args[0][1]();
-			expect(value).to.eql({
-				dyslexic: true,
-				family: 'Open Dyslexic',
-				size: '20pt',
-				visualRedesign: false
 			});
 		});
 
