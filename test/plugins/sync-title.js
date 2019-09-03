@@ -68,20 +68,32 @@ describe('sync-title', () => {
 
 			it('should create a title element if it is missing', () => {
 				global.document.querySelector.returns(null);
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				createElement.should.have.been.calledWith('title');
 			});
 
 			it('should initially sync page title', () => {
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				sendEvent.should.have.been.calledWith('title', 'init title');
+			});
+
+			it('should initially sync page title to iframe title only', () => {
+				clientSyncTitle(false)(client);
+				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'init title');
 			});
 
 			it('should sync with first mutation textContent', () => {
 				var mutations = [{target: { textContent: 'new title' } }];
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				mutationCallback(mutations);
 				sendEvent.should.have.been.calledWith('title', 'new title');
+			});
+
+			it('should only synciframe title with first mutation textContent to iframe title only', () => {
+				var mutations = [{target: { textContent: 'new title' } }];
+				clientSyncTitle(false)(client);
+				mutationCallback(mutations);
+				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'new title');
 			});
 
 		});
@@ -99,23 +111,37 @@ describe('sync-title', () => {
 			});
 
 			it('should sync after 100ms', () => {
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				clock.tick(100);
 				sendEvent.should.have.been.calledWith('title', 'init title');
 			});
 
+			it('should only sync after 100ms iframe title', () => {
+				clientSyncTitle(false)(client);
+				clock.tick(100);
+				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'init title');
+			});
+
 			it('should not sync if title remains the same', () => {
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				clock.tick(200);
 				sendEvent.should.have.been.calledOnce;
 			});
 
 			it('should sync if title changes', () => {
-				clientSyncTitle(client);
+				clientSyncTitle(true)(client);
 				clock.tick(100);
 				global.document.title = 'new title';
 				clock.tick(100);
 				sendEvent.should.have.been.calledWith('title', 'new title');
+			});
+
+			it('should only sync iframe title page if title changes', () => {
+				clientSyncTitle(false)(client);
+				clock.tick(100);
+				global.document.title = 'new title';
+				clock.tick(100);
+				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'new title');
 			});
 
 		});
@@ -136,9 +162,10 @@ describe('sync-title', () => {
 			onEvent.restore();
 		});
 
-		it('should add handler for "title" event', () => {
+		it('should add handler for "title" event and for "iframeTitleOnly" event', () => {
 			hostSyncTitle()(host);
 			onEvent.should.have.been.calledWith('title');
+			onEvent.should.have.been.calledWith('iframeTitleOnly');
 		});
 
 		it('should set page title when event fires', () => {

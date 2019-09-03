@@ -33,10 +33,15 @@ function installClientMutation(sync) {
 
 }
 
-module.exports = function clientSyncTitle(client) {
+module.exports = function (syncPage) {
+function clientSyncTitle(client) {
 
 	function sync(value) {
-		client.sendEvent('title', value);
+		if (syncPage) {
+			client.sendEvent('title', value);
+		} else {
+			client.sendEvent('iframeTitleOnly', value);
+		}
 	}
 
 	if ('MutationObserver' in window) {
@@ -44,4 +49,6 @@ module.exports = function clientSyncTitle(client) {
 	} else {
 		installClientPolling(sync);
 	}
+}
+return clientSyncTitle;
 };
