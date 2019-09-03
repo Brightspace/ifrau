@@ -33,22 +33,22 @@ function installClientMutation(sync) {
 
 }
 
-module.exports = function (syncPage) {
-function clientSyncTitle(client) {
+module.exports = function(syncPage) {
+	function clientSyncTitle(client) {
 
-	function sync(value) {
-		if (syncPage) {
-			client.sendEvent('title', value);
+		function sync(value) {
+			if (syncPage) {
+				client.sendEvent('title', value);
+			} else {
+				client.sendEvent('iframeTitleOnly', value);
+			}
+		}
+
+		if ('MutationObserver' in window) {
+			installClientMutation(sync);
 		} else {
-			client.sendEvent('iframeTitleOnly', value);
+			installClientPolling(sync);
 		}
 	}
-
-	if ('MutationObserver' in window) {
-		installClientMutation(sync);
-	} else {
-		installClientPolling(sync);
-	}
-}
-return clientSyncTitle;
+	return clientSyncTitle;
 };
