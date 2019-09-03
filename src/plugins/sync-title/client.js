@@ -38,9 +38,9 @@ module.exports = function(syncPage) {
 
 		function sync(value) {
 			var title = {
-				"syncPage" : syncPage,
-				"value" : value
-			}
+				'syncPage' : syncPage,
+				'value' : value
+			};
 			client.sendEvent('title', title);
 		}
 
