@@ -74,26 +74,26 @@ describe('sync-title', () => {
 
 			it('should initially sync page title', () => {
 				clientSyncTitle(true)(client);
-				sendEvent.should.have.been.calledWith('title', 'init title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': true, 'value':'init title'});
 			});
 
 			it('should initially sync page title to iframe title only', () => {
 				clientSyncTitle(false)(client);
-				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'init title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': false, 'value':'init title'});
 			});
 
 			it('should sync with first mutation textContent', () => {
 				var mutations = [{target: { textContent: 'new title' } }];
 				clientSyncTitle(true)(client);
 				mutationCallback(mutations);
-				sendEvent.should.have.been.calledWith('title', 'new title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': true, 'value':'new title'});
 			});
 
 			it('should only synciframe title with first mutation textContent to iframe title only', () => {
 				var mutations = [{target: { textContent: 'new title' } }];
 				clientSyncTitle(false)(client);
 				mutationCallback(mutations);
-				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'new title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': false, 'value':'new title'});
 			});
 
 		});
@@ -113,13 +113,13 @@ describe('sync-title', () => {
 			it('should sync after 100ms', () => {
 				clientSyncTitle(true)(client);
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('title', 'init title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': true, 'value':'init title'});
 			});
 
 			it('should only sync after 100ms iframe title', () => {
 				clientSyncTitle(false)(client);
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'init title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': false, 'value':'init title'});
 			});
 
 			it('should not sync if title remains the same', () => {
@@ -133,7 +133,7 @@ describe('sync-title', () => {
 				clock.tick(100);
 				global.document.title = 'new title';
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('title', 'new title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': true, 'value':'new title'});
 			});
 
 			it('should only sync iframe title page if title changes', () => {
@@ -141,7 +141,7 @@ describe('sync-title', () => {
 				clock.tick(100);
 				global.document.title = 'new title';
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('iframeTitleOnly', 'new title');
+				sendEvent.should.have.been.calledWith('title', {'syncPage': false, 'value':'new title'});
 			});
 
 		});
@@ -162,15 +162,14 @@ describe('sync-title', () => {
 			onEvent.restore();
 		});
 
-		it('should add handler for "title" event and for "iframeTitleOnly" event', () => {
+		it('should add handler for "title" event', () => {
 			hostSyncTitle()(host);
 			onEvent.should.have.been.calledWith('title');
-			onEvent.should.have.been.calledWith('iframeTitleOnly');
 		});
 
 		it('should set page title when event fires', () => {
 			hostSyncTitle({page: true})(host);
-			onEventCallback('new title');
+			onEventCallback({'syncPage': true, 'value':'new title'});
 			expect(global.document.title).to.equal('new title');
 		});
 
@@ -189,8 +188,16 @@ describe('sync-title', () => {
 		it('should set iframe title if defined', () => {
 			host.iframe = {};
 			hostSyncTitle()(host);
-			onEventCallback('new title');
+			onEventCallback({'syncPage': true, 'value':'new title'});
 			expect(host.iframe.title).to.equal('new title');
+		});
+
+		it('should only set iframe title if SyncPage is false', () => {
+			host.iframe = {};
+			hostSyncTitle()(host);
+			onEventCallback({'syncPage': false, 'value':'title'});
+			expect(global.document.title).to.not.equal('title');
+			expect(host.iframe.title).to.equal('title');
 		});
 
 	});

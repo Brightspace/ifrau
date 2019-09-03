@@ -37,11 +37,11 @@ module.exports = function(syncPage) {
 	function clientSyncTitle(client) {
 
 		function sync(value) {
-			if (syncPage) {
-				client.sendEvent('title', value);
-			} else {
-				client.sendEvent('iframeTitleOnly', value);
+			var title = {
+				"syncPage" : syncPage,
+				"value" : value
 			}
+			client.sendEvent('title', title);
 		}
 
 		if ('MutationObserver' in window) {
