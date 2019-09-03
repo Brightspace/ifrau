@@ -35,13 +35,12 @@ function installClientMutation(sync) {
 
 module.exports = function(syncPage) {
 	function clientSyncTitle(client) {
-
 		function sync(value) {
-			var title = {
-				'syncPage' : syncPage,
-				'value' : value
-			};
-			client.sendEvent('title', title);
+			if (syncPage) {
+				client.sendEvent('title', value);
+			} else {
+				client.sendEvent('title', value, true);
+			}
 		}
 
 		if ('MutationObserver' in window) {
