@@ -33,15 +33,21 @@ function installClientMutation(sync) {
 
 }
 
-module.exports = function clientSyncTitle(client) {
+module.exports = function(syncPage) {
+	function clientSyncTitle(client) {
+		function sync(value) {
+			if (syncPage) {
+				client.sendEvent('title', value);
+			} else {
+				client.sendEvent('title', value, true);
+			}
+		}
 
-	function sync(value) {
-		client.sendEvent('title', value);
+		if ('MutationObserver' in window) {
+			installClientMutation(sync);
+		} else {
+			installClientPolling(sync);
+		}
 	}
-
-	if ('MutationObserver' in window) {
-		installClientMutation(sync);
-	} else {
-		installClientPolling(sync);
-	}
+	return clientSyncTitle;
 };

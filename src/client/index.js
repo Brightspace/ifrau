@@ -26,9 +26,6 @@ function Client(options) {
 		this.use(syncIntl);
 		this.use(syncTimezone);
 	}
-	if (options.syncTitle !== false) {
-		this.use(syncTitle);
-	}
 	if (options.syncFont) {
 		this.use(syncFont);
 	}
@@ -39,6 +36,7 @@ function Client(options) {
 		this.use(syncCssVariable);
 	}
 	this.use(userActivityEvents);
+	this.use(syncTitle(options.syncTitle));
 }
 inherits(Client, SlimClient);
 
