@@ -5,13 +5,13 @@ module.exports = function clientSyncFont(client) {
 		var size = font.size;
 		if (!font.visualRedesign) {
 			switch (font.size) {
-				case '11px':
+				case '17.1px':
 					size = '18px';
 					break;
-				case '17px':
+				case '19px':
 					size = '22px';
 					break;
-				case '26px':
+				case '22.8px':
 					size = '24px';
 					break;
 				default:
