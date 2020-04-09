@@ -32,7 +32,7 @@ function Host(elementProvider, src, options) {
 		throw new Error('Could not find parent node');
 	}
 
-	var iframe = Host._createIFrame(src, options.id, options.height, options.allowFullScreen);
+	var iframe = Host._createIFrame(src, options.id, options.height, options.allowFullScreen, options.allowMicrophone, options.allowCamera);
 	parent.appendChild(iframe);
 
 	Port.call(this, iframe.contentWindow, origin, options);
@@ -73,7 +73,7 @@ Host.prototype.connect = function connect() {
 	});
 };
 
-Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen) {
+Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen, allowMicrophone, allowCamera) {
 	var iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
@@ -85,6 +85,16 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 	iframe.src = src;
 	if (frameId) {
 		iframe.id = frameId;
+	}
+	if (allowMicrophone || allowCamera) {
+		var allow = [];
+		if (allowCamera) {
+			allow.push('camera *;');
+		}
+		if (allowMicrophone) {
+			allow.push('microphone *;');
+		}
+		iframe.setAttribute('allow', allow.join(' '));
 	}
 	if (allowFullScreen) {
 		iframe.setAttribute('allowfullscreen', 'allowfullscreen');
