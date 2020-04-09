@@ -87,7 +87,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 		iframe.id = frameId;
 	}
 	if (allowMicrophone || allowCamera) {
-		let allow = [];
+		var allow = [];
 		if (allowCamera) {
 			allow.push('camera *;');
 		}
