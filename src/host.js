@@ -95,7 +95,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 			allow.push('microphone *;');
 		}
 		if (allowScreenCapture) {
-			allow.push('display-capture *;')
+			allow.push('display-capture *;');
 		}
 		iframe.setAttribute('allow', allow.join(' '));
 	}
