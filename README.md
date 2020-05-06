@@ -67,6 +67,7 @@ Parameters:
  * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
  * `allowMicrophone`: whether the frrame will allow access to the microphone, `false` by default
  * `allowCamera`: whether the frrame will allow access to the camera, `false` by default
+ * `allowScreenCapture`: whether the frrame will allow access to the camera, `false` by default
 
 Creating a Client is even simpler:
 
