@@ -65,8 +65,9 @@ Parameters:
  * `height`: sets the iframe to a certain height, also disables automatic resizing
  * `id`: sets the id of the iframe
  * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
- * `allowMicrophone`: whether the frrame will allow access to the microphone, `false` by default
- * `allowCamera`: whether the frrame will allow access to the camera, `false` by default
+ * `allowMicrophone`: whether the frame will allow access to the microphone, `false` by default
+ * `allowCamera`: whether the frame will allow access to the camera, `false` by default
+ * `allowScreenCapture`: whether the frame will allow access to the camera, `false` by default
 
 Creating a Client is even simpler:
 
