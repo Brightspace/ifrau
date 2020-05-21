@@ -67,7 +67,7 @@ Parameters:
  * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
  * `allowMicrophone`: whether the frame will allow access to the microphone, `false` by default
  * `allowCamera`: whether the frame will allow access to the camera, `false` by default
- * `allowScreenCapture`: whether the frame will allow access to the record the screen, `false` by default
+ * `allowScreenCapture`: whether the frame will allow access to record the screen, `false` by default
  * `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
 
 Creating a Client is even simpler:
