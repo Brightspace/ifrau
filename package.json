@@ -57,7 +57,7 @@
     "coveralls": "^2.11.6",
     "eslint": "^4.13.1",
     "eslint-config-brightspace": "0.4.0",
-    "frau-publisher": "^2.5.2",
+    "frau-publisher": "^2.8.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "peanut-gallery": "^1.1.1",
