@@ -21,10 +21,6 @@
       "files": "./dist/**/*.js",
       "moduleType": "lib",
       "targetDirectory": "ifrau",
-      "creds": {
-        "key": "AKIAIFWDFE37W7LZ52XQ",
-        "secretVar": "CDN_SECRET"
-      },
       "versionVar": "TRAVIS_TAG"
     }
   },
