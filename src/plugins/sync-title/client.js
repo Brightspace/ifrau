@@ -1,5 +1,3 @@
-'use strict';
-
 function installClientPolling(sync) {
 
 	var title = '';
@@ -28,7 +26,7 @@ function installClientMutation(sync) {
 	});
 	observer.observe(
 		elem,
-		{ subtree: true, characterData: true, childList: true}
+		{ subtree: true, characterData: true, childList: true }
 	);
 
 }

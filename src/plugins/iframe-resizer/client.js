@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function(resizerOptions) {
 	function resizer(client) {
 		window.iFrameResizer = {

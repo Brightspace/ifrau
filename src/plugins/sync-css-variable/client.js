@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function clientSyncCssVariable(client) {
 	return client.request('css-variable').then(function(cssVariables) {
 		var htmlElems = document.getElementsByTagName('html');

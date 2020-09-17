@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function hostSyncTimezone(host) {
 	host.onRequest('timezone', function() {
 		var htmlElems = document.getElementsByTagName('html');

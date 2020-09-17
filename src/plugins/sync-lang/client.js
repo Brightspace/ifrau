@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function clientSyncLang(client) {
 	return client.request('lang').then(function(lang) {
 		var htmlElem = document.getElementsByTagName('html')[0];

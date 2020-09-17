@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -26,12 +24,12 @@ describe('client', () => {
 			body: {
 				scrollHeight: 100
 			},
-			createElement: sinon.stub().returns({src:''}),
+			createElement: sinon.stub().returns({ src:'' }),
 			head: {
 				appendChild: sinon.stub()
 			}
 		};
-		client = new Client({syncLang: false, syncTitle: false});
+		client = new Client({ syncLang: false, syncTitle: false });
 		sendEvent = sinon.stub(client, 'sendEvent');
 		sendMessage = sinon.stub(client, '_sendMessage');
 		clock = sinon.useFakeTimers();

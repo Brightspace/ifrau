@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -16,7 +14,7 @@ describe('ifrau', () => {
 		};
 		global.document = {
 			addEventListener: sinon.stub(),
-			createElement: sinon.stub().returns({style: {}, tagName: 'iframe'}),
+			createElement: sinon.stub().returns({ style: {}, tagName: 'iframe' }),
 			getElementById: sinon.stub().returns({
 				appendChild: sinon.spy()
 			}),
@@ -32,7 +30,7 @@ describe('ifrau', () => {
 	});
 
 	it('should export Client', () => {
-		var client = new Client({syncTitle: false});
+		var client = new Client({ syncTitle: false });
 		expect(client).to.be.defined;
 	});
 

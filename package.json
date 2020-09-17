@@ -44,17 +44,19 @@
   "dependencies": {
     "iframe-resizer": "^3.5.0",
     "inherits": "^2.0.1",
-    "lie": "^3.0.2",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "chai-things": "^0.2.0",
     "coveralls": "^2.11.6",
     "deumdify": "^1",
-    "eslint": "^4.13.1",
-    "eslint-config-brightspace": "0.4.0",
+    "eslint": "^7",
+    "eslint-config-brightspace": "^0.10",
+    "eslint-plugin-html": "^6",
+    "eslint-plugin-sort-class-members": "^1",
     "frau-publisher": "^2.8.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",

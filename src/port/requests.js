@@ -1,8 +1,4 @@
-'use strict';
-
 var inherits = require('inherits');
-
-var Promise = require('../promise-or-lie');
 
 var Port = require('./base'),
 	RequestTypeError = require('./request-type-error');
@@ -142,6 +138,7 @@ PortWithRequests.prototype._receiveRequestResponse = function receiveRequestResp
 			continue;
 		}
 
+		// eslint-disable-next-line no-prototype-builtins
 		if (payload.hasOwnProperty('err')) {
 			var error = toError(payload.err);
 			req.reject(error);

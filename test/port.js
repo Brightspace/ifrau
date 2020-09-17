@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	chai = require('chai'),
 	expect = chai.expect,
@@ -470,7 +468,7 @@ describe('port', () => {
 				reject: sinon.spy()
 			};
 			port._pendingRequests.foo = [req];
-			port._receiveRequestResponse('bar', {id: port.requestId});
+			port._receiveRequestResponse('bar', { id: port.requestId });
 			setTimeout(() => {
 				req.resolve.should.not.have.been.called;
 				req.reject.should.not.have.been.called;
@@ -490,7 +488,7 @@ describe('port', () => {
 				reject: sinon.spy()
 			};
 			port._pendingRequests.foo = [req1, req2];
-			port._receiveRequestResponse('foo', {id: 2});
+			port._receiveRequestResponse('foo', { id: 2 });
 			setTimeout(() => {
 				req1.resolve.should.not.have.been.called;
 				req1.reject.should.not.have.been.called;
@@ -755,24 +753,24 @@ describe('port', () => {
 		});
 
 		[
-			{name: 'value', val: 'foo', expect: 'foo'},
-			{name: 'function', val: () => 'hello', expect: 'hello'},
-			{name: 'promise', val: new Promise((resolve) => {
+			{ name: 'value', val: 'foo', expect: 'foo' },
+			{ name: 'function', val: () => 'hello', expect: 'hello' },
+			{ name: 'promise', val: new Promise((resolve) => {
 				resolve(true);
-			}), expect: true},
-			{name: 'function-promise', val: () => new Promise((resolve) => {
+			}), expect: true },
+			{ name: 'function-promise', val: () => new Promise((resolve) => {
 				resolve(49);
-			}), expect: 49}
+			}), expect: 49 }
 		].forEach((test) => {
 			it(`should handle ${test.name}-based responses`, (done) => {
 				port._requestHandlers.bar = test.val;
-				port._waitingRequests.bar = [{id: 1, args:[]}];
+				port._waitingRequests.bar = [{ id: 1, args:[] }];
 				port._sendRequestResponse('bar');
 				setTimeout(() => {
 					_sendMessage.should.have.been.calledWith(
 						'res',
 						'bar',
-						{id: 1, val: test.expect}
+						{ id: 1, val: test.expect }
 					);
 					done();
 				});
@@ -782,7 +780,7 @@ describe('port', () => {
 		it('should pass arguments to handler', (done) => {
 			var handler = sinon.spy();
 			port._requestHandlers.bar = handler;
-			port._waitingRequests.bar = [{id: 1, args:['p1', 'p2', true]}];
+			port._waitingRequests.bar = [{ id: 1, args:['p1', 'p2', true] }];
 			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				handler.should.have.been.calledWith('p1', 'p2', true);
@@ -794,8 +792,8 @@ describe('port', () => {
 			var handler = sinon.spy();
 			port._requestHandlers.bar = handler;
 			port._waitingRequests.bar = [
-				{id: 1, args:['p1', 'p2', true]},
-				{id: 2, args:['p3', 'p4', false]}
+				{ id: 1, args:['p1', 'p2', true] },
+				{ id: 2, args:['p3', 'p4', false] }
 			];
 			port._sendRequestResponse('bar');
 			setTimeout(() => {
@@ -807,18 +805,18 @@ describe('port', () => {
 
 		it('should send handler value to each waiting request', (done) => {
 			port._requestHandlers.bar = 'hello';
-			port._waitingRequests.bar = [{id: 1, args:[]}, {id: 2, args:[]}];
+			port._waitingRequests.bar = [{ id: 1, args:[] }, { id: 2, args:[] }];
 			port._sendRequestResponse('bar');
 			setTimeout(() => {
 				_sendMessage.should.have.been.calledWith(
 					'res',
 					'bar',
-					{id: 1, val: 'hello'}
+					{ id: 1, val: 'hello' }
 				);
 				_sendMessage.should.have.been.calledWith(
 					'res',
 					'bar',
-					{id: 2, val: 'hello'}
+					{ id: 2, val: 'hello' }
 				);
 				done();
 			});
@@ -827,7 +825,7 @@ describe('port', () => {
 		it('should propogate error to the client if there is no handler', (done) => {
 			const e = new RequestTypeError('bar');
 
-			port._waitingRequests.bar = [{id: 1, args: []}];
+			port._waitingRequests.bar = [{ id: 1, args: [] }];
 			port._sendRequestResponse('bar');
 
 			setTimeout(() => {

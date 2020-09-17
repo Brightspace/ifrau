@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -57,7 +55,7 @@ describe('sync-lang', () => {
 
 		it('should apply langTag to HTML element', (done) => {
 			request.returns(new Promise((resolve) => {
-				resolve({lang: 'ab-CD'});
+				resolve({ lang: 'ab-CD' });
 			}));
 			clientSyncLang(client).then(() => {
 				setAttribute.should.have.been.calledWith('lang', 'ab-CD');
@@ -67,7 +65,7 @@ describe('sync-lang', () => {
 
 		it('should apply fallback to HTML element', (done) => {
 			request.returns(new Promise((resolve) => {
-				resolve({fallback: 'ef-GH'});
+				resolve({ fallback: 'ef-GH' });
 			}));
 			clientSyncLang(client).then(() => {
 				setAttribute.should.have.been.calledWith('data-lang-default', 'ef-GH');
@@ -77,7 +75,7 @@ describe('sync-lang', () => {
 
 		it('should set RTL direction on html', (done) => {
 			request.returns(new Promise((resolve) => {
-				resolve({isRtl: true});
+				resolve({ isRtl: true });
 			}));
 			clientSyncLang(client).then(() => {
 				expect(document.dir).to.equal('rtl');

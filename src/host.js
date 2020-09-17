@@ -1,8 +1,4 @@
-'use strict';
-
 var inherits = require('inherits');
-
-var Promise = require('./promise-or-lie');
 
 var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/host'),
@@ -44,7 +40,7 @@ function Host(elementProvider, src, options) {
 		this.use(syncIntl);
 		this.use(syncTimezone);
 	}
-	this.use(syncTitle({page: options.syncPageTitle ? true : false}));
+	this.use(syncTitle({ page: options.syncPageTitle ? true : false }));
 
 	if (!(options.height || options.height === 0) && options.resizeFrame !== false) {
 		this.use(resizer);

@@ -1,4 +1,3 @@
-'use strict';
 var inherits = require('inherits');
 
 function RequestTypeError(requestType) {

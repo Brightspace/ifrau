@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('chai').expect;
 
 require('chai').use(require('chai-things'));

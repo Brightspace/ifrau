@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function hostSyncCssVariable(host) {
 	host.onRequest('css-variable', function() {
 		var htmlElems = document.getElementsByTagName('html');

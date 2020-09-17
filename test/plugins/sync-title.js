@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -83,14 +81,14 @@ describe('sync-title', () => {
 			});
 
 			it('should sync with first mutation textContent', () => {
-				var mutations = [{target: { textContent: 'new title' } }];
+				var mutations = [{ target: { textContent: 'new title' } }];
 				clientSyncTitle(true)(client);
 				mutationCallback(mutations);
 				sendEvent.should.have.been.calledWith('title', 'new title');
 			});
 
 			it('should sync with first mutation textContent only for iframe title', () => {
-				var mutations = [{target: { textContent: 'new title' } }];
+				var mutations = [{ target: { textContent: 'new title' } }];
 				clientSyncTitle(false)(client);
 				mutationCallback(mutations);
 				sendEvent.should.have.been.calledWith('title', 'new title', true);
@@ -168,13 +166,13 @@ describe('sync-title', () => {
 		});
 
 		it('should set page title when event fires', () => {
-			hostSyncTitle({page: true})(host);
+			hostSyncTitle({ page: true })(host);
 			onEventCallback('new title');
 			expect(global.document.title).to.equal('new title');
 		});
 
 		it('should not set page title when option is off', () => {
-			hostSyncTitle({page: false})(host);
+			hostSyncTitle({ page: false })(host);
 			onEventCallback('new title');
 			expect(global.document.title).to.equal('init title');
 		});
