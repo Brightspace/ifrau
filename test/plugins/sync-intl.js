@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -51,7 +49,7 @@ describe('sync-intl', () => {
 
 		it('should apply intl JSON to HTML element', (done) => {
 
-			const intlData = {foo: 'bar', bar: 5};
+			const intlData = { foo: 'bar', bar: 5 };
 
 			const setAttribute = sinon.stub();
 			getElementsByTagName
@@ -108,7 +106,7 @@ describe('sync-intl', () => {
 
 		it('should return parsed value of "data-intl-overrides" attribute from HTML element', () => {
 
-			const intlData = {foo: 'bar', bar: 5};
+			const intlData = { foo: 'bar', bar: 5 };
 
 			const hasAttribute = sinon.stub();
 			hasAttribute

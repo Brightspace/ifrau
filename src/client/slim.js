@@ -1,5 +1,3 @@
-'use strict';
-
 var inherits = require('inherits');
 
 var Port = require('../port');

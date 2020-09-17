@@ -1,6 +1,3 @@
-/* eslint-disable no-invalid-this */
-'use strict';
-
 const
 	sinon = require('sinon');
 

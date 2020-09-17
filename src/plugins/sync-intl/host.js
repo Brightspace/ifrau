@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function hostSyncIntl(host) {
 	host.onRequest('intl', function() {
 		var htmlElems = document.getElementsByTagName('html');

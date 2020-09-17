@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function hostSyncLang(host) {
 	host.onRequest('lang', function() {
 		var htmlElem = document.getElementsByTagName('html')[0];

@@ -1,5 +1,3 @@
-'use strict';
-
 var iframeResizer = require('iframe-resizer/js/iframeResizer');
 
 module.exports = function resizer(host) {

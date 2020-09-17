@@ -1,5 +1,3 @@
-'use strict';
-
 var uuid = require('uuid/v4');
 
 var validateEvent = require('./validate-event');

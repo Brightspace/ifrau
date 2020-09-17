@@ -1,8 +1,7 @@
-'use strict';
-
 var getPassive = function() {
 	var supported = false;
 	var options = Object.defineProperty({}, 'passive', {
+		// eslint-disable-next-line getter-return
 		get: function() { supported = true; }
 	});
 	try {

@@ -1,5 +1,3 @@
-'use strict';
-
 function isStringEmpty(str) {
 	return (!str || 0 === str.length);
 }

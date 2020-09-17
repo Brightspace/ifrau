@@ -1,5 +1,3 @@
-'use strict';
-
 var ERROR_OBJECT_SENTINEL = '_ifrau-error-object';
 
 function deErrorifyArray(input) {

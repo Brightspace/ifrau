@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function clientSyncIntl(client) {
 	return client.request('intl').then(function(intl) {
 		var htmlElems = document.getElementsByTagName('html');

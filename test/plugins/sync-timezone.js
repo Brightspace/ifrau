@@ -1,5 +1,3 @@
-'use strict';
-
 const
 	expect = require('chai').expect,
 	sinon = require('sinon');
@@ -156,7 +154,7 @@ describe('sync-timezone', () => {
 			hostSyncTimezone(host);
 
 			const value = onRequest.args[0][1]();
-			expect(value).to.eql({ identifier: '', name: ''});
+			expect(value).to.eql({ identifier: '', name: '' });
 
 		});
 
