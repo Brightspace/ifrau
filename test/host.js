@@ -16,7 +16,15 @@ describe('host', () => {
 
 	beforeEach(() => {
 		global.window = {
-			location: { protocol: 'https:' }
+			location: { protocol: 'https:', origin: 'https://dummy' },
+			URL: class {
+				constructor(path, base) {
+					this._href = `${base}/${path}`;
+				}
+				get href() {
+					return this._href;
+				}
+			}
 		};
 		global.document = {
 			createElement: sinon.stub().returns({
