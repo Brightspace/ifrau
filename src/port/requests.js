@@ -2,8 +2,6 @@
 
 var inherits = require('inherits');
 
-var Promise = require('../promise-or-lie');
-
 var Port = require('./base'),
 	RequestTypeError = require('./request-type-error');
 

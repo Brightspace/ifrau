@@ -2,8 +2,6 @@
 
 var inherits = require('inherits');
 
-var Promise = require('./promise-or-lie');
-
 var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/host'),
 	syncFont = require('./plugins/sync-font/host'),
