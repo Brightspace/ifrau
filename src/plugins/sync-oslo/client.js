@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function clientSyncOslo(client) {
 	return client.request('oslo').then(function(oslo) {
 		var htmlElems = document.getElementsByTagName('html');

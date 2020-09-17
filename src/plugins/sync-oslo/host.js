@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function hostSyncOslo(host) {
 	host.onRequest('oslo', function() {
 		var htmlElems = document.getElementsByTagName('html');
