@@ -8,7 +8,8 @@ var SlimClient = require('./slim'),
 	syncTitle = require('../plugins/sync-title/client'),
 	syncFont = require('../plugins/sync-font/client'),
 	syncCssVariable = require('../plugins/sync-css-variable/client'),
-	userActivityEvents = require('../plugins/user-activity-events/client');
+	userActivityEvents = require('../plugins/user-activity-events/client'),
+	syncOslo = require('../plugins/sync-oslo/client');
 
 function Client(options) {
 	if (!(this instanceof Client)) {
@@ -23,6 +24,7 @@ function Client(options) {
 		this.use(syncLang);
 		this.use(syncIntl);
 		this.use(syncTimezone);
+		this.use(syncOslo);
 	}
 	if (options.syncFont) {
 		this.use(syncFont);
