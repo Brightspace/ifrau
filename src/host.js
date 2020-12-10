@@ -29,7 +29,7 @@ function Host(elementProvider, src, options) {
 		throw new Error('Could not find parent node');
 	}
 
-	var iframe = Host._createIFrame(src, options.id, options.height, options.allowFullScreen, options.allowMicrophone, options.allowCamera, options.allowScreenCapture, options.allowEncryptedMedia);
+	var iframe = Host._createIFrame(src, options.id, options.height, options.allowFullScreen, options.allowMicrophone, options.allowCamera, options.allowScreenCapture, options.allowEncryptedMedia, options.allowAutoplay);
 	parent.appendChild(iframe);
 
 	Port.call(this, iframe.contentWindow, origin, options);
@@ -71,7 +71,7 @@ Host.prototype.connect = function connect() {
 	});
 };
 
-Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia) {
+Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay) {
 	var iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
@@ -84,7 +84,7 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 	if (frameId) {
 		iframe.id = frameId;
 	}
-	if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia) {
+	if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia || allowAutoplay) {
 		var allow = [];
 		if (allowCamera) {
 			allow.push('camera *;');
@@ -97,6 +97,9 @@ Host._createIFrame = function createIFrame(src, frameId, height, allowFullScreen
 		}
 		if (allowEncryptedMedia) {
 			allow.push('encrypted-media *;');
+		}
+		if (allowAutoplay) {
+			allow.push('autoplay *;');
 		}
 		iframe.setAttribute('allow', allow.join(' '));
 	}
