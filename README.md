@@ -69,6 +69,7 @@ Parameters:
  * `allowCamera`: whether the frame will allow access to the camera, `false` by default
  * `allowScreenCapture`: whether the frame will allow access to record the screen, `false` by default
  * `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
+ * `allowAutoplay`:  whether the frame will allow access to autoplay, `false` by default
 
 Creating a Client is even simpler:
 
