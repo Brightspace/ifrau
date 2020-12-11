@@ -11,7 +11,6 @@
     "browserify:host:global": "browserify -g uglifyify -p deumdify -s ifrau/host ./host > ./dist/ifrau/host-global.js",
     "browserify:full": "browserify -g uglifyify -s ifrau . > ./dist/ifrau.js",
     "lint": "eslint .",
-    "publish:cdn": "frau-publisher | peanut-gallery",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "pretest": "npm run browserify",
     "test": "npm run lint -s && npm run test:unit -s",
@@ -21,8 +20,7 @@
     "frauPublisher": {
       "files": "./dist/**/*.js",
       "moduleType": "lib",
-      "targetDirectory": "ifrau",
-      "versionVar": "TRAVIS_TAG"
+      "targetDirectory": "ifrau"
     }
   },
   "repository": {
@@ -60,7 +58,6 @@
     "frau-publisher": "^2.8.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
-    "peanut-gallery": "^1.1.1",
     "rimraf": "^2.5.1",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
