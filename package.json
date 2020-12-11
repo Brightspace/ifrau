@@ -13,8 +13,7 @@
     "lint": "eslint .",
     "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "pretest": "npm run browserify",
-    "test": "npm run lint -s && npm run test:unit -s",
-    "report-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test": "npm run lint -s && npm run test:unit -s"
   },
   "config": {
     "frauPublisher": {
@@ -49,7 +48,6 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "chai-things": "^0.2.0",
-    "coveralls": "^2.11.6",
     "deumdify": "^1",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.10",
