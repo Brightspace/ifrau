@@ -22,20 +22,14 @@ jobs:
         id: semantic-release
         uses: BrightspaceUI/actions/semantic-release@master
         with:
-          DRY_RUN: true
           GITHUB_TOKEN: ${{ secrets.D2L_GITHUB_TOKEN }}
           NPM: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to CDN
+        if: steps.semantic-release.outputs.RELEASE == true
         run: |
-            echo release: ${{ steps.semantic-release.outputs.RELEASE }}
-            echo version: ${{ steps.semantic-release.outputs.VERSION }}
-            if [ ${{ steps.semantic-release.outputs.RELEASE }} == true ]; then
-              echo "Publishing to the CDN version: ${{ steps.semantic-release.outputs.VERSION }}"
-              #npx frau-publisher --version ${{ steps.semantic-release.outputs.VERSION }}
-            else
-              echo "No release, skipping publish to CDN."
-            fi
+            echo "Publishing to the CDN as version: ${{ steps.semantic-release.outputs.VERSION }}"
+            npx frau-publisher --version ${{ steps.semantic-release.outputs.VERSION }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
