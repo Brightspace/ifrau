@@ -29,7 +29,7 @@ jobs:
         if: steps.semantic-release.outputs.VERSION != ''
         run: |
             echo "Publishing to the CDN as version: ${{ steps.semantic-release.outputs.VERSION }}"
-            npx frau-publisher --version=${{ steps.semantic-release.outputs.VERSION }}
+            npx frau-publisher --v="${{ steps.semantic-release.outputs.VERSION }}" --f="./dist/**/*.js" --m="lib" --t="ifrau"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

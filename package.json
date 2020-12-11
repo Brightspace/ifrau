@@ -15,13 +15,6 @@
     "pretest": "npm run browserify",
     "test": "npm run lint -s && npm run test:unit -s"
   },
-  "config": {
-    "frauPublisher": {
-      "files": "./dist/**/*.js",
-      "moduleType": "lib",
-      "targetDirectory": "ifrau"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Brightspace/ifrau.git"
@@ -53,7 +46,7 @@
     "eslint-config-brightspace": "^0.10",
     "eslint-plugin-html": "^6",
     "eslint-plugin-sort-class-members": "^1",
-    "frau-publisher": "^2.8.0",
+    "frau-publisher": "^2.8.2",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "rimraf": "^2.5.1",
