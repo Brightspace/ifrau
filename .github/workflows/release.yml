@@ -26,7 +26,7 @@ jobs:
           NPM: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to CDN
-        if: steps.semantic-release.outputs.RELEASE == true
+        if: steps.semantic-release.outputs.VERSION != ''
         run: |
             echo "Publishing to the CDN as version: ${{ steps.semantic-release.outputs.VERSION }}"
             npx frau-publisher --version ${{ steps.semantic-release.outputs.VERSION }}
