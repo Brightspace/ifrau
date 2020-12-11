@@ -1,0 +1,42 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+      - '[0-9]+.x'
+      - '[0-9]+.[0-9]+.x'
+jobs:
+  release:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Release
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: Brightspace/third-party-actions@actions/checkout
+        with:
+          persist-credentials: false
+      - name: Setup Node
+        uses: Brightspace/third-party-actions@actions/setup-node
+      - name: Semantic Release
+        id: semantic-release
+        uses: BrightspaceUI/actions/semantic-release@master
+        with:
+          DRY_RUN: true
+          GITHUB_TOKEN: ${{ secrets.D2L_GITHUB_TOKEN }}
+          NPM: true
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to CDN
+        run: |
+            echo release: ${{ steps.semantic-release.outputs.RELEASE }}
+            echo version: ${{ steps.semantic-release.outputs.VERSION }}
+            if [ ${{ steps.semantic-release.outputs.RELEASE }} == true ]; then
+              echo "Publishing to the CDN version: ${{ steps.semantic-release.outputs.VERSION }}"
+              #npx frau-publisher --version ${{ steps.semantic-release.outputs.VERSION }}
+            else
+              echo "No release, skipping publish to CDN."
+            fi
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
