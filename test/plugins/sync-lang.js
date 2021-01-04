@@ -78,6 +78,7 @@ describe('sync-lang', () => {
 				resolve({ isRtl: true });
 			}));
 			clientSyncLang(client).then(() => {
+				setAttribute.should.have.been.calledWith('dir', 'rtl');
 				expect(document.dir).to.equal('rtl');
 				done();
 			});

@@ -6,6 +6,7 @@ module.exports = function clientSyncLang(client) {
 			htmlElem.setAttribute('data-lang-default', lang.fallback);
 		}
 		if (lang.isRtl) {
+			htmlElem.setAttribute('dir', 'rtl');
 			document.dir = 'rtl';
 		}
 	});
