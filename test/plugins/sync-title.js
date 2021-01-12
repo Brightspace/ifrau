@@ -111,13 +111,19 @@ describe('sync-title', () => {
 			it('should sync after 100ms', () => {
 				clientSyncTitle(true)(client);
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('title', 'init title');
+				sendEvent.should.have.been.calledWith('title', 'init title', false);
 			});
 
 			it('should only sync iframe title after 100ms', () => {
 				clientSyncTitle(false)(client);
 				clock.tick(100);
 				sendEvent.should.have.been.calledWith('title', 'init title', true);
+			});
+
+			it('should sync page title if no value is provided', () => {
+				clientSyncTitle()(client);
+				clock.tick(100);
+				sendEvent.should.have.been.calledWith('title', 'init title', false);
 			});
 
 			it('should not sync if title remains the same', () => {
@@ -131,7 +137,7 @@ describe('sync-title', () => {
 				clock.tick(100);
 				global.document.title = 'new title';
 				clock.tick(100);
-				sendEvent.should.have.been.calledWith('title', 'new title');
+				sendEvent.should.have.been.calledWith('title', 'new title', false);
 			});
 
 			it('should only sync iframeTitle if title changes', () => {
