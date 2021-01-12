@@ -34,10 +34,10 @@ function installClientMutation(sync) {
 module.exports = function(syncPage) {
 	function clientSyncTitle(client) {
 		function sync(value) {
-			if (syncPage) {
-				client.sendEvent('title', value);
-			} else {
+			if (syncPage === false) {
 				client.sendEvent('title', value, true);
+			} else {
+				client.sendEvent('title', value, false);
 			}
 		}
 
