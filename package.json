@@ -43,7 +43,7 @@
     "chai-things": "^0.2.0",
     "deumdify": "^1",
     "eslint": "^7",
-    "eslint-config-brightspace": "^0.10",
+    "eslint-config-brightspace": "^0.12",
     "eslint-plugin-html": "^6",
     "eslint-plugin-sort-class-members": "^1",
     "frau-publisher": "^2.8.2",
