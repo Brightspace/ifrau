@@ -2,6 +2,7 @@ var inherits = require('inherits');
 
 var Port = require('./port'),
 	resizer = require('./plugins/iframe-resizer/host'),
+	syncDataAttrs = require('./plugins/sync-data-attrs/host'),
 	syncFont = require('./plugins/sync-font/host'),
 	syncLang = require('./plugins/sync-lang/host'),
 	syncIntl = require('./plugins/sync-intl/host'),
@@ -54,6 +55,7 @@ function Host(elementProvider, src, options) {
 	if (options.syncCssVariable) {
 		this.use(syncCssVariable);
 	}
+	this.use(syncDataAttrs);
 }
 inherits(Host, Port);
 
