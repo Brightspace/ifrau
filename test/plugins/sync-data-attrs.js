@@ -172,7 +172,7 @@ describe('sync-data-attrs', () => {
 			hostSyncDataAttrs(host);
 
 			const value = onRequest.args[0][1]();
-			expect(value).to.be.undefined;
+			expect(value).to.be.empty;
 		});
 	});
 });
