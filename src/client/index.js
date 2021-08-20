@@ -2,6 +2,7 @@ var inherits = require('inherits');
 
 var SlimClient = require('./slim'),
 	resizer = require('../plugins/iframe-resizer/client'),
+	syncDataAttrs = require('../plugins/sync-data-attrs/client'),
 	syncLang = require('../plugins/sync-lang/client'),
 	syncIntl = require('../plugins/sync-intl/client'),
 	syncTimezone = require('../plugins/sync-timezone/client'),
@@ -37,6 +38,7 @@ function Client(options) {
 	}
 	this.use(userActivityEvents);
 	this.use(syncTitle(options.syncTitle));
+	this.use(syncDataAttrs.default);
 }
 inherits(Client, SlimClient);
 
