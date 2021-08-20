@@ -38,7 +38,7 @@ function Client(options) {
 	}
 	this.use(userActivityEvents);
 	this.use(syncTitle(options.syncTitle));
-	this.use(syncDataAttrs);
+	this.use(syncDataAttrs.default);
 }
 inherits(Client, SlimClient);
 

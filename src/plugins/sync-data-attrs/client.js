@@ -5,7 +5,7 @@ var excludedAttrs = [
 	'timezone'
 ];
 
-module.exports = function clientSyncDataAttrs(client) {
+function clientSyncDataAttrs(client) {
 	return client.request('attrs').then(function(dataAttrs) {
 		var htmlElems = document.getElementsByTagName('html');
 		if (htmlElems.length === 1 && dataAttrs && Object.keys(dataAttrs).length > 0) {
@@ -15,4 +15,6 @@ module.exports = function clientSyncDataAttrs(client) {
 			}
 		}
 	});
-};
+}
+
+module.exports.default = clientSyncDataAttrs;

@@ -7,7 +7,7 @@ require('chai')
 	.should();
 
 const
-	clientSyncDataAttrs = require('../../src/plugins/sync-data-attrs/client'),
+	clientSyncDataAttrs = require('../../src/plugins/sync-data-attrs/client').default,
 	hostSyncDataAttrs = require('../../src/plugins/sync-data-attrs/host');
 
 const MockClient = function() {};
