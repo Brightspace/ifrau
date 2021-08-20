@@ -55,20 +55,21 @@ Parameters:
 * `parentProvider`: function which will return the parent HTML element into which to insert the `IFRAME`
 * `endpoint`: URL of the free-range app endpoint (the `src` of the `IFRAME`)
 * `options`
- * `debug`: whether to enable console debugging, `false` by default
- * `resizeFrame`: whether the `IFRAME` should automatically resize to fit its content, `true` by default
- * `syncFont`: whether to allow client to automatically sync its font size with the host, `false` by default
- * `syncLang`: whether to allow client to automatically sync its language, timezone, internationalization, and OSLO settings with the host, `false` by default
- * `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
- * `syncCssVariable`: whether css variables (in the `<head>` element) should be kept in sync automatically with the css variables of the FRA, `false` by default
- * `height`: sets the iframe to a certain height, also disables automatic resizing
- * `id`: sets the id of the iframe
- * `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
- * `allowMicrophone`: whether the frame will allow access to the microphone, `false` by default
- * `allowCamera`: whether the frame will allow access to the camera, `false` by default
- * `allowScreenCapture`: whether the frame will allow access to record the screen, `false` by default
- * `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
- * `allowAutoplay`:  whether the frame will allow access to autoplay, `false` by default
+* `debug`: whether to enable console debugging, `false` by default
+* `resizeFrame`: whether the `IFRAME` should automatically resize to fit its content, `true` by default
+* `syncFont`: whether to allow client to automatically sync its font size with the host, `false` by default
+* `syncLang`: whether to allow client to automatically sync its language, timezone, internationalization, and OSLO settings with the host, `false` by default
+* `syncPageTitle`: whether the page title (in the `<head>` element) should be kept in sync automatically with the title of the FRA, `false` by default
+* `syncCssVariable`: whether css variables (in the `<head>` element) should be kept in sync automatically with the css variables of the FRA, `false` by default
+* `syncFlags`: whether to allow client to automatically sync its client registered feature flags with the host, `false` by default
+* `height`: sets the iframe to a certain height, also disables automatic resizing
+* `id`: sets the id of the iframe
+* `allowFullScreen`: whether the frame can be placed into full screen mode, `false` by default
+* `allowMicrophone`: whether the frame will allow access to the microphone, `false` by default
+* `allowCamera`: whether the frame will allow access to the camera, `false` by default
+* `allowScreenCapture`: whether the frame will allow access to record the screen, `false` by default
+* `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
+* `allowAutoplay`:  whether the frame will allow access to autoplay, `false` by default
 
 Creating a Client is even simpler:
 
@@ -86,12 +87,13 @@ client
 Parameters:
 
 * `options`
- * `debug`: whether to enable console debugging, `false` by default
- * `resizeFrame`: whether this `Client` should participate in automatic resizing. `true` by default
- * `syncFont`: whether the font size should be automatically set to match the host page, `false` by default
- * `syncLang`: whether the page's language tag should be automatically set to match the host page, `true` by default
- * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
- * `resizerOptions`: pass iframe-resizer client options through to the iframe resizer client
+* `debug`: whether to enable console debugging, `false` by default
+* `resizeFrame`: whether this `Client` should participate in automatic resizing. `true` by default
+* `syncFont`: whether the font size should be automatically set to match the host page, `false` by default
+* `syncLang`: whether the page's language tag should be automatically set to match the host page, `true` by default
+* `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
+* `syncFlags`: whether the page's feature flags should be automatically set up to match the host page, `false` by default
+* `resizerOptions`: pass iframe-resizer client options through to the iframe resizer client
 
 ## Events
 

@@ -10,7 +10,8 @@ var SlimClient = require('./slim'),
 	syncFont = require('../plugins/sync-font/client'),
 	syncCssVariable = require('../plugins/sync-css-variable/client'),
 	userActivityEvents = require('../plugins/user-activity-events/client'),
-	syncOslo = require('../plugins/sync-oslo/client');
+	syncOslo = require('../plugins/sync-oslo/client'),
+	syncFlags = require('../plugins/sync-flags/client');
 
 function Client(options) {
 	if (!(this instanceof Client)) {
@@ -35,6 +36,9 @@ function Client(options) {
 	}
 	if (options.syncCssVariable) {
 		this.use(syncCssVariable);
+	}
+	if (options.syncFlags) {
+		this.use(syncFlags);
 	}
 	this.use(userActivityEvents);
 	this.use(syncTitle(options.syncTitle));
