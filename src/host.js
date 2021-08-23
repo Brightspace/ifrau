@@ -57,9 +57,7 @@ function Host(elementProvider, src, options) {
 		this.use(syncCssVariable);
 	}
 	this.use(syncDataAttrs);
-	if (options.syncFlags) {
-		this.use(syncFlags);
-	}
+	this.use(syncFlags);
 }
 inherits(Host, Port);
 
