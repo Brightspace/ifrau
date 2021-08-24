@@ -12,7 +12,7 @@ const clientSyncFlags = require('../src/plugins/sync-flags/client');
 
 describe('client', () => {
 
-	var client, sendEvent, sendMessage, syncDataAttrs, clock;
+	var client, sendEvent, sendMessage, syncDataAttrs, syncFlags, clock;
 
 	beforeEach(() => {
 		global.window = {

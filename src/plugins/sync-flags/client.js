@@ -13,6 +13,6 @@ function clientSyncFlags(client) {
 			}
 		};
 	});
-};
+}
 
 module.exports.default = clientSyncFlags;
