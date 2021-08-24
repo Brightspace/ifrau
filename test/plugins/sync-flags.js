@@ -7,7 +7,7 @@ require('chai')
 	.should();
 
 const
-	clientSyncFlags = require('../../src/plugins/sync-flags/client'),
+	clientSyncFlags = require('../../src/plugins/sync-flags/client').default,
 	hostSyncFlags = require('../../src/plugins/sync-flags/host');
 
 const MockClient = function() { };

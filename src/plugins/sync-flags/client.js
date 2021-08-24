@@ -1,4 +1,4 @@
-module.exports = function clientSyncFlags(client) {
+function clientSyncFlags(client) {
 	return client.request('flags').then(function(flags) {
 		window.D2L = window.D2L || {};
 		window.D2L.LP = window.D2L.LP || {};
@@ -14,3 +14,5 @@ module.exports = function clientSyncFlags(client) {
 		};
 	});
 };
+
+module.exports.default = clientSyncFlags;
