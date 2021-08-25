@@ -8,10 +8,11 @@ require('chai')
 
 const Client = require('../client');
 const clientSyncDataAttrs = require('../src/plugins/sync-data-attrs/client');
+const clientSyncFlags = require('../src/plugins/sync-flags/client');
 
 describe('client', () => {
 
-	var client, sendEvent, sendMessage, syncDataAttrs, clock;
+	var client, sendEvent, sendMessage, syncDataAttrs, syncFlags, clock;
 
 	beforeEach(() => {
 		global.window = {
@@ -32,6 +33,7 @@ describe('client', () => {
 		};
 
 		syncDataAttrs = sinon.stub(clientSyncDataAttrs, 'default').returns(Promise.resolve());
+		syncFlags = sinon.stub(clientSyncFlags, 'default').returns(Promise.resolve());
 		client = new Client({ syncLang: false, syncTitle: false });
 		sendEvent = sinon.stub(client, 'sendEvent');
 		sendMessage = sinon.stub(client, '_sendMessage');
@@ -42,6 +44,7 @@ describe('client', () => {
 		sendEvent.restore();
 		sendMessage.restore();
 		syncDataAttrs.restore();
+		syncFlags.restore();
 		clock.restore();
 	});
 

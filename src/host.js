@@ -9,7 +9,8 @@ var Port = require('./port'),
 	syncTimezone = require('./plugins/sync-timezone/host'),
 	syncTitle = require('./plugins/sync-title/host'),
 	syncCssVariable = require('./plugins/sync-css-variable/host'),
-	syncOslo = require('./plugins/sync-oslo/host');
+	syncOslo = require('./plugins/sync-oslo/host'),
+	syncFlags = require('./plugins/sync-flags/host');
 
 var originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
 
@@ -56,6 +57,7 @@ function Host(elementProvider, src, options) {
 		this.use(syncCssVariable);
 	}
 	this.use(syncDataAttrs);
+	this.use(syncFlags);
 }
 inherits(Host, Port);
 
