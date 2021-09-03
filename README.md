@@ -1,7 +1,6 @@
 # ifrau
 
 [![NPM version][npm-image]][npm-url]
-[![Coverage Status][coverage-image]][coverage-url]
 [![Dependency Status][dependencies-image]][dependencies-url]
 
 Short for iframe-free-range-app-utilities, `ifrau` makes it easy to communicate from within an `IFRAME` cross-domain to a parent host. It wraps [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) in an easy-to-use, promise-based API.
@@ -12,19 +11,6 @@ Install from NPM:
 
 ```shell
 npm install ifrau
-```
-
-Or include it in your application as UMD/CommonJs from the Brightspace CDN:
-
-```html
-<!-- probably what you're looking for -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/client.js"></script>
-
-<!-- actually hosting a FRA on your page? grab the host -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/host.js"></script>
-
-<!-- the old bundle is still available too -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau.js"></script>
 ```
 
 ## Host and Client
@@ -281,7 +267,5 @@ Regular expressions are complicated, but this essentially means branch names sho
 
 [npm-url]: https://www.npmjs.org/package/ifrau
 [npm-image]: https://img.shields.io/npm/v/ifrau.svg
-[coverage-url]: https://coveralls.io/r/Brightspace/ifrau?branch=master
-[coverage-image]: https://img.shields.io/coveralls/Brightspace/ifrau.svg
 [dependencies-url]: https://david-dm.org/Brightspace/ifrau
 [dependencies-image]: https://img.shields.io/david/Brightspace/ifrau.svg
