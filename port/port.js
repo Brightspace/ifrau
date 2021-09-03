@@ -52,10 +52,6 @@ export class Port {
 		}
 	}
 
-	set endPoint(endPoint) {
-		this._endPoint = endPoint;
-	}
-
 	onClose(cb) {
 		this._onCloseCallbacks.push(cb);
 	}
@@ -77,10 +73,6 @@ export class Port {
 		window.addEventListener('message', this._receiveMessage.bind(this), false);
 		this.debug('opened');
 		return this;
-	}
-
-	set origin(origin) {
-		this._targetOrigin = origin;
 	}
 
 	sendEvent(eventType) {

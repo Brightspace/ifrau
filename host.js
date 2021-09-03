@@ -10,23 +10,67 @@ import { hostSyncTimezone } from './plugins/sync-timezone/host.js';
 import { hostSyncTitle } from './plugins/sync-title/host.js';
 import { PortWithServices } from './port/services.js';
 
+const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay) => {
+	const iframe = document.createElement('iframe');
+	iframe.width = '100%';
+	if (height || height === 0) {
+		iframe.style.height = height;
+	}
+	iframe.style.border = 'none';
+	iframe.style.overflow = 'hidden';
+	iframe.scrolling = 'no';
+	iframe.src = src;
+	if (frameId) {
+		iframe.id = frameId;
+	}
+	if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia || allowAutoplay) {
+		const allow = [];
+		if (allowCamera) {
+			allow.push('camera *;');
+		}
+		if (allowMicrophone) {
+			allow.push('microphone *;');
+		}
+		if (allowScreenCapture) {
+			allow.push('display-capture *;');
+		}
+		if (allowEncryptedMedia) {
+			allow.push('encrypted-media *;');
+		}
+		if (allowAutoplay) {
+			allow.push('autoplay *;');
+		}
+		iframe.setAttribute('allow', allow.join(' '));
+	}
+	if (allowFullScreen) {
+		iframe.setAttribute('allowfullscreen', 'allowfullscreen');
+	}
+
+	return iframe;
+};
+
 const originRe = /^(http:\/\/|https:\/\/)[^/]+/i;
+
+const tryGetOrigin = (url) => {
+	if (url && url.indexOf('//') === 0) {
+		url = window.location.protocol + url;
+	}
+	const match = originRe.exec(url);
+	return (match !== null) ? match[0] : null;
+};
 
 export class Host extends PortWithServices {
 
 	constructor(elementProvider, src, options) {
-		super(undefined, undefined, options);
-
-		options = options || {};
-
-		const origin = this._tryGetOrigin(src);
+		const origin = tryGetOrigin(src);
 		if (origin === null) throw new Error(`Unable to extract origin from ${src}`);
-		super.origin = origin;
 
 		const parent = elementProvider();
 		if (parent === null) throw new Error('Could not find parent node');
 
-		const iframe = this._createIFrame(
+		options = options || {};
+
+		const iframe = createIFrame(
 			src,
 			options.id,
 			options.height,
@@ -39,8 +83,8 @@ export class Host extends PortWithServices {
 		);
 		parent.appendChild(iframe);
 
+		super(iframe.contentWindow, origin, options);
 		this.iframe = iframe;
-		super.endPoint = iframe.contentWindow;
 
 		if (options.syncLang) {
 			this.use(hostSyncLang);
@@ -115,14 +159,6 @@ export class Host extends PortWithServices {
 		}
 
 		return iframe;
-	}
-
-	_tryGetOrigin(url) {
-		if (url && url.indexOf('//') === 0) {
-			url = window.location.protocol + url;
-		}
-		const match = originRe.exec(url);
-		return (match !== null) ? match[0] : null;
 	}
 
 }
