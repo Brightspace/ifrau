@@ -122,43 +122,4 @@ export class Host extends PortWithServices {
 		});
 	}
 
-	_createIFrame(src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay) {
-		const iframe = document.createElement('iframe');
-		iframe.width = '100%';
-		if (height || height === 0) {
-			iframe.style.height = height;
-		}
-		iframe.style.border = 'none';
-		iframe.style.overflow = 'hidden';
-		iframe.scrolling = 'no';
-		iframe.src = src;
-		if (frameId) {
-			iframe.id = frameId;
-		}
-		if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia || allowAutoplay) {
-			const allow = [];
-			if (allowCamera) {
-				allow.push('camera *;');
-			}
-			if (allowMicrophone) {
-				allow.push('microphone *;');
-			}
-			if (allowScreenCapture) {
-				allow.push('display-capture *;');
-			}
-			if (allowEncryptedMedia) {
-				allow.push('encrypted-media *;');
-			}
-			if (allowAutoplay) {
-				allow.push('autoplay *;');
-			}
-			iframe.setAttribute('allow', allow.join(' '));
-		}
-		if (allowFullScreen) {
-			iframe.setAttribute('allowfullscreen', 'allowfullscreen');
-		}
-
-		return iframe;
-	}
-
 }
