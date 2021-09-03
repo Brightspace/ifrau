@@ -14,7 +14,3 @@ jobs:
         run: npm run lint
       - name: Unit Tests
         run: npm run test:unit
-      - name: Coveralls
-        uses: Brightspace/third-party-actions@coverallsapp/github-action
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
