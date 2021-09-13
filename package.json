@@ -3,6 +3,7 @@
   "version": "0.37.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "type": "module",
+  "exports": "./index.js",
   "files": [
     "host.js",
     "./client",
@@ -11,7 +12,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "test:unit": "mocha -R spec -r jsdom-global/register ./test/**/*.test.js",
+    "test:unit": "mocha ./test/**/*.test.js",
     "test": "npm run lint -s && npm run test:unit -s"
   },
   "repository": {
@@ -39,8 +40,6 @@
     "eslint-plugin-html": "^6",
     "eslint-plugin-import": "^2",
     "eslint-plugin-sort-class-members": "^1",
-    "jsdom": "^17.0.0",
-    "jsdom-global": "^3.0.2",
     "mocha": "~9.1.0",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0"

@@ -15,16 +15,17 @@ npm install ifrau
 
 ## Host and Client
 
-`ifrau` exposes two classes:
+`ifrau` exposes three classes:
 
 * **Host**: Created once for each FRA by the AppLoader within Brightspace.
 It will build an `IFRAME` element, point it at the FRA endpoint, and wait for the FRA to load and connect. It can then respond to events and requests from the FRA.
 * **Client**: Created by the free-range app, it will establish communication with the host and can then be used to send/receive requests and events.
+* **SlimClient**: A lighter-weight client created by components within free-range apps that may need to send/receive requests and events with the host. This assumes the parent app has already created a full client to manage syncing options. 
 
 To create a Host:
 
 ```javascript
-var Host = require('ifrau/host');
+import { Host } from 'ifrau';
 
 function parentProvider() {
     return document.getElementById('myParentId');
@@ -59,7 +60,7 @@ Parameters:
 Creating a Client is even simpler:
 
 ```javascript
-var Client = require('ifrau/client');
+import { Client } from 'ifrau';
 
 var client = new Client(options);
 client
@@ -78,6 +79,24 @@ Parameters:
  * `syncLang`: whether the page's language tag should be automatically set to match the host page, `true` by default
  * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
  * `resizerOptions`: pass iframe-resizer client options through to the iframe resizer client
+
+Creating a SlimClient can be done in the same way:
+
+```javascript
+import { SlimClient } from 'ifrau';
+
+var slimClient = new SlimClient(options);
+slimClient
+	.connect()
+	.then(function() {
+		console.log('connected to host!');
+	});
+```
+
+Parameters:
+
+* `options`
+ * `debug`: whether to enable console debugging, `false` by default
 
 ## Events
 

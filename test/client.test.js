@@ -11,9 +11,6 @@ describe('client', () => {
 
 	beforeEach(() => {
 		global.window = {
-			D2L: {
-				UniqueIFrameId: {}
-			},
 			addEventListener: sinon.stub(),
 			parent: {
 				postMessage: sinon.stub()

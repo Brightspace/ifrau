@@ -16,9 +16,6 @@ describe('requests', () => {
 
 	beforeEach(async() => {
 		global.window = {
-			D2L: {
-				UniqueIFrameId: {}
-			},
 			addEventListener: sinon.stub(),
 			removeEventListener: sinon.stub()
 		};
