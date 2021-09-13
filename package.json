@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "test:unit": "mocha test/**/*.test.js",
+    "test:unit": "mocha --recursive --extension test.js",
     "test": "npm run lint -s && npm run test:unit -s"
   },
   "repository": {
