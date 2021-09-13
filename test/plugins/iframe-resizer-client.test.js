@@ -6,6 +6,10 @@ chai.use(sinonChai).should();
 
 describe('iframe-resizer/client', () => {
 
+	beforeEach(() => {
+		global.window = {};
+	});
+
 	it('should set target origin from client', () => {
 		clientResizer()({
 			_targetOrigin: 'somewhere.com'
