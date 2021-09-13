@@ -11,9 +11,6 @@ describe('host', () => {
 
 	beforeEach(() => {
 		global.window = {
-			D2L: {
-				UniqueIFrameId: {}
-			},
 			location: { protocol: 'https:', origin: 'https://dummy' },
 			URL: class {
 				constructor(path, base) {
