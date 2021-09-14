@@ -1,7 +1,6 @@
 # ifrau
 
 [![NPM version][npm-image]][npm-url]
-[![Coverage Status][coverage-image]][coverage-url]
 [![Dependency Status][dependencies-image]][dependencies-url]
 
 Short for iframe-free-range-app-utilities, `ifrau` makes it easy to communicate from within an `IFRAME` cross-domain to a parent host. It wraps [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) in an easy-to-use, promise-based API.
@@ -14,31 +13,19 @@ Install from NPM:
 npm install ifrau
 ```
 
-Or include it in your application as UMD/CommonJs from the Brightspace CDN:
-
-```html
-<!-- probably what you're looking for -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/client.js"></script>
-
-<!-- actually hosting a FRA on your page? grab the host -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau/host.js"></script>
-
-<!-- the old bundle is still available too -->
-<script src="https://s.brightspace.com/lib/ifrau/{version}/ifrau.js"></script>
-```
-
 ## Host and Client
 
-`ifrau` exposes two classes:
+`ifrau` exposes three classes:
 
 * **Host**: Created once for each FRA by the AppLoader within Brightspace.
 It will build an `IFRAME` element, point it at the FRA endpoint, and wait for the FRA to load and connect. It can then respond to events and requests from the FRA.
 * **Client**: Created by the free-range app, it will establish communication with the host and can then be used to send/receive requests and events.
+* **SlimClient**: A lighter-weight client created by components within free-range apps that may need to send/receive requests and events with the host. This assumes the parent app has already created a full client to manage syncing options. 
 
 To create a Host:
 
 ```javascript
-var Host = require('ifrau/host');
+import { Host } from 'ifrau';
 
 function parentProvider() {
     return document.getElementById('myParentId');
@@ -73,7 +60,7 @@ Parameters:
 Creating a Client is even simpler:
 
 ```javascript
-var Client = require('ifrau/client');
+import { Client } from 'ifrau';
 
 var client = new Client(options);
 client
@@ -92,6 +79,24 @@ Parameters:
  * `syncLang`: whether the page's language tag should be automatically set to match the host page, `true` by default
  * `syncTitle`: whether the host page's title and `IFRAME` element title should be kept in sync with the FRA's title, `true` by default
  * `resizerOptions`: pass iframe-resizer client options through to the iframe resizer client
+
+Creating a SlimClient can be done in the same way:
+
+```javascript
+import { SlimClient } from 'ifrau';
+
+var slimClient = new SlimClient(options);
+slimClient
+	.connect()
+	.then(function() {
+		console.log('connected to host!');
+	});
+```
+
+Parameters:
+
+* `options`
+ * `debug`: whether to enable console debugging, `false` by default
 
 ## Events
 
@@ -281,7 +286,5 @@ Regular expressions are complicated, but this essentially means branch names sho
 
 [npm-url]: https://www.npmjs.org/package/ifrau
 [npm-image]: https://img.shields.io/npm/v/ifrau.svg
-[coverage-url]: https://coveralls.io/r/Brightspace/ifrau?branch=master
-[coverage-image]: https://img.shields.io/coveralls/Brightspace/ifrau.svg
 [dependencies-url]: https://david-dm.org/Brightspace/ifrau
 [dependencies-image]: https://img.shields.io/david/Brightspace/ifrau.svg

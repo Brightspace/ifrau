@@ -2,17 +2,17 @@
   "name": "ifrau",
   "version": "0.37.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
-  "main": "src/index.js",
+  "type": "module",
+  "exports": "./index.js",
+  "files": [
+    "host.js",
+    "./client",
+    "./plugins",
+    "./port"
+  ],
   "scripts": {
-    "prebrowserify": "rimraf dist && mkdir dist && cd dist && mkdir ifrau",
-    "browserify": "npm run browserify:full && npm run browserify:client && npm run browserify:host && npm run browserify:host:global",
-    "browserify:client": "browserify -g uglifyify -s ifrau/client ./client > ./dist/ifrau/client.js",
-    "browserify:host": "browserify -g uglifyify -s ifrau/host ./host > ./dist/ifrau/host.js",
-    "browserify:host:global": "browserify -g uglifyify -p deumdify -s ifrau/host ./host > ./dist/ifrau/host-global.js",
-    "browserify:full": "browserify -g uglifyify -s ifrau . > ./dist/ifrau.js",
     "lint": "eslint .",
-    "test:unit": "istanbul cover node_modules/mocha/bin/_mocha -- -R spec --recursive",
-    "pretest": "npm run browserify",
+    "test:unit": "mocha --recursive --extension test.js",
     "test": "npm run lint -s && npm run test:unit -s"
   },
   "repository": {
@@ -31,27 +31,17 @@
     "url": "https://github.com/Brightspace/ifrau/issues"
   },
   "homepage": "https://github.com/Brightspace/ifrau",
-  "dependencies": {
-    "iframe-resizer": "^3.5.0",
-    "inherits": "^2.0.1",
-    "uuid": "^3.1.0"
-  },
   "devDependencies": {
     "babel-eslint": "^10",
-    "browserify": "^13.0.0",
-    "chai": "^3.5.0",
-    "chai-things": "^0.2.0",
-    "deumdify": "^1",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^7",
     "eslint-config-brightspace": "^0.12",
     "eslint-plugin-html": "^6",
+    "eslint-plugin-import": "^2",
     "eslint-plugin-sort-class-members": "^1",
-    "frau-publisher": "^2.8.2",
-    "istanbul": "^0.4.2",
-    "mocha": "^2.4.5",
-    "rimraf": "^2.5.1",
-    "sinon": "^1.17.3",
-    "sinon-chai": "^2.8.0",
-    "uglifyify": "^3.0.1"
+    "mocha": "~9.1.0",
+    "sinon": "^11.1.2",
+    "sinon-chai": "^3.7.0"
   }
 }

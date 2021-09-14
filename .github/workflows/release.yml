@@ -18,10 +18,10 @@ jobs:
           persist-credentials: false
       - name: Setup Node
         uses: Brightspace/third-party-actions@actions/setup-node
+        with:
+          node-version: '14'
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run browserify
       - name: Semantic Release
         id: semantic-release
         uses: BrightspaceUI/actions/semantic-release@master
@@ -29,21 +29,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.D2L_GITHUB_TOKEN }}
           NPM: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Assume role
-        if: steps.semantic-release.outputs.VERSION != ''
-        uses: Brightspace/third-party-actions@aws-actions/configure-aws-credentials
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          role-to-assume: "arn:aws:iam::771734770799:role/cdn-infrastructure-ifrau"
-          role-duration-seconds: 3600
-          aws-region: us-east-1
-      - name: Publish to CDN
-        if: steps.semantic-release.outputs.VERSION != ''
-        run: |
-            echo "Publishing to the CDN as version: ${{ steps.semantic-release.outputs.VERSION }}"
-            npx frau-publisher --v="${{ steps.semantic-release.outputs.VERSION }}" --f="./dist/**/*.js" --m="lib" --t="ifrau"
-        env:
-          # cred variables set in the "Assume role" step
-          AWS_DEFAULT_REGION: us-east-1
