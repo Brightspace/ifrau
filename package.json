@@ -7,9 +7,9 @@
   "files": [
     "host.js",
     "index.js",
-    "./client",
-    "./plugins",
-    "./port"
+    "/client",
+    "/plugins",
+    "/port"
   ],
   "scripts": {
     "lint": "eslint .",
