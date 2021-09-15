@@ -6,6 +6,7 @@
   "exports": "./index.js",
   "files": [
     "host.js",
+    "index.js",
     "./client",
     "./plugins",
     "./port"
