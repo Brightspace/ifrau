@@ -9,7 +9,7 @@ import { clientSyncOslo } from '../plugins/sync-oslo/client.js';
 import { clientSyncTimezone } from '../plugins/sync-timezone/client.js';
 import { clientSyncTitle } from '../plugins/sync-title/client.js';
 import { recordUserEvents } from '../plugins/user-activity-events/client.js';
-import { SlimClient } from './slim-client.js';
+import { SlimClient } from './slim.js';
 
 export class Client extends SlimClient {
 

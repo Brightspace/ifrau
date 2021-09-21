@@ -25,7 +25,7 @@ It will build an `IFRAME` element, point it at the FRA endpoint, and wait for th
 To create a Host:
 
 ```javascript
-import { Host } from 'ifrau';
+import { Host } from 'ifrau/host.js';
 
 function parentProvider() {
     return document.getElementById('myParentId');
@@ -60,7 +60,7 @@ Parameters:
 Creating a Client is even simpler:
 
 ```javascript
-import { Client } from 'ifrau';
+import { Client } from 'ifrau/client.js';
 
 var client = new Client(options);
 client
@@ -83,7 +83,7 @@ Parameters:
 Creating a SlimClient can be done in the same way:
 
 ```javascript
-import { SlimClient } from 'ifrau';
+import { SlimClient } from 'ifrau/client/slim.js';
 
 var slimClient = new SlimClient(options);
 slimClient
