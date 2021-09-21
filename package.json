@@ -3,13 +3,16 @@
   "version": "0.38.2",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "type": "module",
-  "exports": "./index.js",
+  "exports": {
+    "./client/client.js": "./client/client.js",
+    "./client/slim-client.js": "./client/slim-client.js",
+    "./host.js": "./host.js"
+  },
   "files": [
     "host.js",
-    "index.js",
-    "/client",
-    "/plugins",
-    "/port"
+    "./client",
+    "./plugins",
+    "./port"
   ],
   "scripts": {
     "lint": "eslint .",
