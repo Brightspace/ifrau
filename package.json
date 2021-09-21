@@ -10,9 +10,9 @@
   },
   "files": [
     "host.js",
-    "./client",
-    "./plugins",
-    "./port"
+    "/client",
+    "/plugins",
+    "/port"
   ],
   "scripts": {
     "lint": "eslint .",
