@@ -4,7 +4,7 @@
   "description": "Free-range app utility for IFRAME-based FRAs",
   "type": "module",
   "exports": {
-    "./client": "./client/client.js",
+    "./client.js": "./client/client.js",
     "./client/slim.js": "./client/slim.js",
     "./host.js": "./host.js"
   },
