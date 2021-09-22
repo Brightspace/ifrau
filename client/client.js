@@ -11,6 +11,8 @@ import { clientSyncTitle } from '../plugins/sync-title/client.js';
 import { recordUserEvents } from '../plugins/user-activity-events/client.js';
 import { SlimClient } from './slim.js';
 
+window.ifrauClientLoaded = true;
+
 export class Client extends SlimClient {
 
 	constructor(options) {

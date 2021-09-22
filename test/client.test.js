@@ -10,23 +10,6 @@ describe('client', () => {
 	let client, sendEvent, sendMessage, use, clock;
 
 	beforeEach(() => {
-		global.window = {
-			addEventListener: sinon.stub(),
-			parent: {
-				postMessage: sinon.stub()
-			}
-		};
-		global.document = {
-			addEventListener: sinon.stub(),
-			body: {
-				scrollHeight: 100
-			},
-			createElement: sinon.stub().returns({ src:'' }),
-			head: {
-				appendChild: sinon.stub()
-			}
-		};
-
 		// sync-title runs sendEvent when it initializes before we can stub it out,.
 		// so prevent any plugins from being loaded at all.
 		use = sinon.stub(Client.prototype, 'use');
@@ -42,6 +25,12 @@ describe('client', () => {
 		sendMessage.restore();
 		use.restore();
 		clock.restore();
+	});
+
+	describe('import', () => {
+		it('should set window loaded flag', () => {
+			expect(window.ifrauClientLoaded).to.be.true;
+		});
 	});
 
 	describe('connect', () => {
