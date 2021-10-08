@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./client.js": "./client/client.js",
+    "./client/client.js": "./client/client.js",	  
     "./client/slim.js": "./client/slim.js",
     "./host.js": "./host.js"
   },
