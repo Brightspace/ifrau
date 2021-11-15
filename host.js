@@ -74,7 +74,7 @@ export class Host extends PortWithServices {
 			src,
 			options.id,
 			options.height,
-			options.allowFullscreen,
+			options.allowFullScreen,
 			options.allowMicrophone,
 			options.allowCamera,
 			options.allowScreenCapture,
