@@ -6,9 +6,8 @@ export function hostSyncFont(host) {
 
 		return {
 			family: bodyComputedStyle.fontFamily,
-			size: bodyComputedStyle.fontSize,
-			sizeRoot: rootComputedStyle.fontSize,
-			visualRedesign: visualRedesign
+			size: rootComputedStyle.fontSize,
+			visualRedesign
 		};
 	});
 }
