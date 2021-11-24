@@ -10,6 +10,7 @@ chai.use(sinonChai).should();
 describe('sync-font', () => {
 
 	const fontFamily = 'comic sans';
+	const fontSize = '20px';
 	let classListAdd;
 
 	beforeEach(() => {
@@ -17,10 +18,13 @@ describe('sync-font', () => {
 		global.document = {
 			documentElement: {
 				style: {
-					fontSize: '1pt'
+					fontSize
 				}
 			},
 			body: {
+				style: {
+					fontFamily
+				},
 				classList: {
 					add: classListAdd,
 					contains: function(className) {
@@ -31,10 +35,10 @@ describe('sync-font', () => {
 			}
 		};
 		global.window = {
-			getComputedStyle: function() {
+			getComputedStyle: function(element) {
 				return {
-					fontFamily: fontFamily,
-					fontSize: '20pt'
+					fontFamily: element.style.fontFamily,
+					fontSize: element.style.fontSize
 				};
 			}
 		};
@@ -46,8 +50,8 @@ describe('sync-font', () => {
 
 		beforeEach(() => {
 			response = {
-				family: 'foo',
-				size: '20px'
+				family: fontFamily,
+				size: fontSize
 			};
 			client = new MockClient();
 			request = sinon.stub(client, 'request').returns(
@@ -68,7 +72,7 @@ describe('sync-font', () => {
 
 		it('should apply font size to HTML element', (done) => {
 			clientSyncFont(client).then(() => {
-				expect(document.documentElement.style.fontSize).to.equal('20px');
+				expect(document.documentElement.style.fontSize).to.equal(fontSize);
 				done();
 			});
 		});
@@ -105,8 +109,8 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				family: 'comic sans',
-				size: '20pt',
+				family: fontFamily,
+				size: fontSize,
 				visualRedesign: false
 			});
 		});
@@ -116,8 +120,8 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				family: 'comic sans',
-				size: '20pt',
+				family: fontFamily,
+				size: fontSize,
 				visualRedesign: true
 			});
 		});
