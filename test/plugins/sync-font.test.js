@@ -10,6 +10,8 @@ chai.use(sinonChai).should();
 describe('sync-font', () => {
 
 	const fontFamily = 'comic sans';
+	const rootFontSize = '20px';
+	const bodyFontSize = '10px';
 	let classListAdd;
 
 	beforeEach(() => {
@@ -17,10 +19,14 @@ describe('sync-font', () => {
 		global.document = {
 			documentElement: {
 				style: {
-					fontSize: '1pt'
+					fontSize: rootFontSize
 				}
 			},
 			body: {
+				style: {
+					fontFamily,
+					fontSize: bodyFontSize
+				},
 				classList: {
 					add: classListAdd,
 					contains: function(className) {
@@ -31,10 +37,10 @@ describe('sync-font', () => {
 			}
 		};
 		global.window = {
-			getComputedStyle: function() {
+			getComputedStyle: function(element) {
 				return {
-					fontFamily: fontFamily,
-					fontSize: '20pt'
+					fontFamily: element.style.fontFamily,
+					fontSize: element.style.fontSize
 				};
 			}
 		};
@@ -46,8 +52,9 @@ describe('sync-font', () => {
 
 		beforeEach(() => {
 			response = {
-				family: 'foo',
-				size: '20px'
+				family: fontFamily,
+				size: bodyFontSize,
+				sizeRoot: rootFontSize
 			};
 			client = new MockClient();
 			request = sinon.stub(client, 'request').returns(
@@ -68,15 +75,24 @@ describe('sync-font', () => {
 
 		it('should apply font size to HTML element', (done) => {
 			clientSyncFont(client).then(() => {
-				expect(document.documentElement.style.fontSize).to.equal('20px');
+				expect(document.documentElement.style.fontSize).to.equal(rootFontSize);
 				done();
 			});
 		});
 
-		it('should have the same font size', (done) => {
-			response.size = '13px';
+		it('should have the same font size no root', (done) => {
+			response.size = '0px';
+			response.sizeRoot = undefined;
 			clientSyncFont(client).then(() => {
-				expect(document.documentElement.style.fontSize).to.equal('13px');
+				expect(document.documentElement.style.fontSize).to.equal('0px');
+				done();
+			});
+		});
+
+		it('should have the same font size with root', (done) => {
+			response.sizeRoot = '30px';
+			clientSyncFont(client).then(() => {
+				expect(document.documentElement.style.fontSize).to.equal('30px');
 				done();
 			});
 		});
@@ -105,8 +121,9 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				family: 'comic sans',
-				size: '20pt',
+				family: fontFamily,
+				size: bodyFontSize,
+				sizeRoot: rootFontSize,
 				visualRedesign: false
 			});
 		});
@@ -116,8 +133,9 @@ describe('sync-font', () => {
 			hostSyncFont(host);
 			const value = onRequest.args[0][1]();
 			expect(value).to.eql({
-				family: 'comic sans',
-				size: '20pt',
+				family: fontFamily,
+				size: bodyFontSize,
+				sizeRoot: rootFontSize,
 				visualRedesign: true
 			});
 		});
