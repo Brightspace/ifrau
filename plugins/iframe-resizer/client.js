@@ -14,7 +14,7 @@ export function clientResizer(resizerOptions) {
 		}
 
 		const resizerContentWindow = document.createElement('script');
-		resizerContentWindow.src = 'https://s.brightspace.com/lib/iframe-resizer/3.6.5/iframeResizer.contentWindow.js';
+		resizerContentWindow.src = 'https://s.brightspace.com/lib/iframe-resizer/3.6.6/iframeResizer.contentWindow.min.deumdified.js';
 		document.head.appendChild(resizerContentWindow);
 	};
 	return resizer;
