@@ -16,7 +16,7 @@ export function hostResizer(host) {
 		};
 
 		const resizerScript = document.createElement('script');
-		resizerScript.src = 'https://s.brightspace.com/lib/iframe-resizer/3.6.5/iframeResizer.min.js';
+		resizerScript.src = 'https://s.brightspace.com/lib/iframe-resizer/3.6.6/iframeResizer.min.deumdified.js';
 		resizerScript.onload = resize;
 		document.head.appendChild(resizerScript);
 
