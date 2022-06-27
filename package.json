@@ -42,7 +42,7 @@
     "chai": "^4",
     "chai-as-promised": "^7",
     "eslint": "^8",
-    "eslint-config-brightspace": "^0.17",
+    "eslint-config-brightspace": "^0.18",
     "eslint-plugin-html": "^6",
     "eslint-plugin-import": "^2",
     "eslint-plugin-sort-class-members": "^1",
