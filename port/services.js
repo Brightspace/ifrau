@@ -4,10 +4,6 @@ const typeNameValidator = /^[a-zA-Z]+[a-zA-Z-]*$/;
 
 export class PortWithServices extends PortWithRequests {
 
-	constructor(endPoint, targetOrigin, options) {
-		super(endPoint, targetOrigin, options);
-	}
-
 	async getService(serviceType, version) {
 		if (!this._isConnected) {
 			throw new Error('Cannot getService() before connect() has completed');
@@ -25,12 +21,13 @@ export class PortWithServices extends PortWithRequests {
 						args[i + 1] = arguments[i];
 					}
 
+					// eslint-disable-next-line prefer-spread
 					return me.request.apply(me, args);
 				};
 			}
 
 			const proxy = {};
-			methodNames.forEach(function(name) {
+			methodNames.forEach((name) => {
 				proxy[name] = createProxyMethod(name);
 			});
 			return proxy;

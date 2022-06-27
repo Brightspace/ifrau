@@ -22,7 +22,7 @@ export function hostResizer(host) {
 
 		initialized = true;
 	});
-	host.onClose(function() {
+	host.onClose(() => {
 		if (host.iframe && host.iframe.iFrameResizer) {
 			host.iframe.iFrameResizer.close(host.iframe);
 		}

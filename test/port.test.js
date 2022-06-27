@@ -63,8 +63,8 @@ describe('port', () => {
 
 		it('should wait for plugin startup before resolving', (done) => {
 			let resolvePluginStartup;
-			port.use(function(/*port*/) {
-				return new Promise(function(resolve) {
+			port.use((/*port*/) => {
+				return new Promise((resolve) => {
 					resolvePluginStartup = resolve;
 				});
 			});
@@ -86,16 +86,16 @@ describe('port', () => {
 
 		it('should reject if plugin startup rejects', () => {
 			let expectedError;
-			port.use(function(/*port*/) {
+			port.use((/*port*/) => {
 				expectedError = new Error();
 				return Promise.reject(expectedError);
 			});
 
 			return port.connect().then(
-				function resolveHandler() {
+				() => {
 					throw new Error('should have rejected');
 				},
-				function rejectHandler(e) {
+				(e) => {
 					expect(e).to.equal(expectedError);
 				}
 			);
@@ -103,8 +103,8 @@ describe('port', () => {
 
 		it('should fire off connect queue before waiting', (done) => {
 			let resolvePluginStartup;
-			port.use(function(/*port*/) {
-				return new Promise(function(resolve) {
+			port.use((/*port*/) => {
+				return new Promise((resolve) => {
 					resolvePluginStartup = resolve;
 				});
 			});
@@ -210,7 +210,7 @@ describe('port', () => {
 
 	describe('open', () => {
 
-		it('should listen for "message" events', ()=> {
+		it('should listen for "message" events', () => {
 			port.open();
 			global.window.addEventListener
 				.should.have.been.calledWith('message');
