@@ -1,7 +1,7 @@
 function installClientPolling(sync) {
 	let title = '';
 
-	setInterval(function() {
+	setInterval(() => {
 		const newTitle = document.title;
 		if (newTitle !== title) {
 			title = newTitle;
@@ -19,7 +19,7 @@ function installClientMutation(sync) {
 	}
 	sync(document.title);
 
-	const observer = new window.MutationObserver(function(mutations) {
+	const observer = new window.MutationObserver((mutations) => {
 		sync(mutations[0].target.textContent);
 	});
 	observer.observe(

@@ -23,7 +23,7 @@ function deErrorifyObject(input) {
 
 	const propTarget = isError ? result.props : result;
 
-	Object.keys(input).forEach(function(key) {
+	Object.keys(input).forEach((key) => {
 		const prop = fromError(input[key]);
 		propTarget[key] = prop;
 	});
@@ -38,7 +38,7 @@ function errorifyObject(input) {
 	if (isError) result.name = input.name;
 
 	const propSource = isError ? input.props : input;
-	Object.keys(propSource).forEach(function(key) {
+	Object.keys(propSource).forEach((key) => {
 		const prop = toError(propSource[key]);
 		result[key] = prop;
 	});

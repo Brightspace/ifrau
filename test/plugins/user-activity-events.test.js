@@ -90,7 +90,7 @@ describe('user-activity-events', () => {
 			let addEventListener;
 			let sendEvent;
 			let onClose;
-			beforeEach(function() {
+			beforeEach(() => {
 				const now = Date.now();
 				clock = sinon.useFakeTimers(now);
 				addEventListener = sinon.spy();

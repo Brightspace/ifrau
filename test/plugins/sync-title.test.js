@@ -7,7 +7,6 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai).should();
 
 class MockClient {
-	constructor() { }
 	sendEvent() { }
 }
 
@@ -21,7 +20,6 @@ class MockMutationObserver {
 
 let onEventCallback = null;
 class MockHost {
-	constructor() { }
 	onEvent(evt, cb) {
 		onEventCallback = cb;
 	}

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
+import { fromError } from '../port/transform-error.js';
 import { Port } from '../port/port.js';
 import { PortWithRequests } from '../port/requests.js';
-import { fromError } from '../port/transform-error.js';
 import { RequestTypeError } from '../port/request-type-error.js';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
