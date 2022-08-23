@@ -60,7 +60,7 @@ Parameters:
 Creating a Client is even simpler:
 
 ```javascript
-import { Client } from 'ifrau/client.js';
+import { Client } from 'ifrau/client/client.js';
 
 var client = new Client(options);
 client
