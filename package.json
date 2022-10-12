@@ -1,6 +1,6 @@
 {
   "name": "ifrau",
-  "version": "0.39.7",
+  "version": "0.40.0",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "type": "module",
   "exports": {
