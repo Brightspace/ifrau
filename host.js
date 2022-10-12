@@ -55,7 +55,7 @@ const tryGetOrigin = (url) => {
 	if (url && url.indexOf('//') === 0) {
 		url = window.location.protocol + url;
 	} else if (url && url.indexOf('/d2l/') === 0) {
-		url = window.location.origin + url;
+		return window.location.origin;
 	}
 
 	const match = originRe.exec(url);

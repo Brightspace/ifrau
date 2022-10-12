@@ -70,6 +70,11 @@ describe('host', () => {
 			expect(host._targetOrigin).to.equal('https://foo.com');
 		});
 
+		it('should resolve LMS-relative origin', () => {
+			const host = new Host(() => element, '/d2l/foo');
+			expect(host._targetOrigin).to.equal(window.location.origin);
+		});
+
 		it('should throw if parent missing', () => {
 			expect(() => {
 				new Host(() => null, 'http://cdn.com/foo.html');
