@@ -95,7 +95,7 @@ export class Host extends PortWithServices {
 			this.use(hostSyncTimezone);
 			this.use(hostSyncOslo);
 		}
-		this.use(hostSyncTitle({ page: options.syncPageTitle ? true : false }));
+		this.use(hostSyncTitle({ page: !!options.syncPageTitle }));
 
 		if (!(options.height || options.height === 0) && options.resizeFrame !== false) {
 			this.use(hostResizer);
