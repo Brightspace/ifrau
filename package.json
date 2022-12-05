@@ -47,7 +47,7 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-sort-class-members": "^1",
     "mocha": "^10",
-    "sinon": "^14",
+    "sinon": "^15",
     "sinon-chai": "^3"
   }
 }
