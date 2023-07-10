@@ -70,7 +70,7 @@ describe('port', () => {
 			});
 
 			let connectHasResolved = false;
-			port.connect().then(() =>  connectHasResolved = true);
+			port.connect().then(() => connectHasResolved = true);
 
 			setTimeout(() => {
 				expect(connectHasResolved).to.be.false;
