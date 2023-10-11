@@ -20,7 +20,7 @@ npm install ifrau
 * **Host**: Created once for each FRA by the AppLoader within Brightspace.
 It will build an `IFRAME` element, point it at the FRA endpoint, and wait for the FRA to load and connect. It can then respond to events and requests from the FRA.
 * **Client**: Created by the free-range app, it will establish communication with the host and can then be used to send/receive requests and events.
-* **SlimClient**: A lighter-weight client created by components within free-range apps that may need to send/receive requests and events with the host. This assumes the parent app has already created a full client to manage syncing options. 
+* **SlimClient**: A lighter-weight client created by components within free-range apps that may need to send/receive requests and events with the host. This assumes the parent app has already created a full client to manage syncing options.
 
 To create a Host:
 
@@ -56,6 +56,7 @@ Parameters:
  * `allowScreenCapture`: whether the frame will allow access to record the screen, `false` by default
  * `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
  * `allowAutoplay`:  whether the frame will allow access to autoplay, `false` by default
+ * `allowClipboard`: whether the frame will allow access to the clipboard (copy/paste), `false` by default
 
 Creating a Client is even simpler:
 
