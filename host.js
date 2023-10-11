@@ -10,7 +10,7 @@ import { hostSyncTimezone } from './plugins/sync-timezone/host.js';
 import { hostSyncTitle } from './plugins/sync-title/host.js';
 import { PortWithServices } from './port/services.js';
 
-const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay) => {
+const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay, allowClipboard) => {
 	const iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
@@ -23,7 +23,7 @@ const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, al
 	if (frameId) {
 		iframe.id = frameId;
 	}
-	if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia || allowAutoplay) {
+	if (allowMicrophone || allowCamera || allowScreenCapture || allowEncryptedMedia || allowAutoplay || allowClipboard) {
 		const allow = [];
 		if (allowCamera) {
 			allow.push('camera *;');
@@ -39,6 +39,9 @@ const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, al
 		}
 		if (allowAutoplay) {
 			allow.push('autoplay *;');
+		}
+		if (allowClipboard) {
+			allow.push('clipboard-write *;');
 		}
 		iframe.setAttribute('allow', allow.join(' '));
 	}
