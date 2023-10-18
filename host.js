@@ -85,7 +85,8 @@ export class Host extends PortWithServices {
 			options.allowCamera,
 			options.allowScreenCapture,
 			options.allowEncryptedMedia,
-			options.allowAutoplay
+			options.allowAutoplay,
+			options.allowClipboard
 		);
 		parent.appendChild(iframe);
 
