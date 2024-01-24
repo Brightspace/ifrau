@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node
         uses: Brightspace/third-party-actions@actions/setup-node
         with:
-          node-version: '14'
+          node-version-file: .nvmrc
       - name: Install dependencies
         run: npm install
       - name: Semantic Release
