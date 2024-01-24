@@ -19,13 +19,14 @@ jobs:
       - name: Setup Node
         uses: Brightspace/third-party-actions@actions/setup-node
         with:
-          node-version: '14'
+          node-version-file: .nvmrc
       - name: Install dependencies
         run: npm install
       - name: Semantic Release
         id: semantic-release
-        uses: BrightspaceUI/actions/semantic-release@master
+        uses: BrightspaceUI/actions/semantic-release@main
         with:
-          GITHUB_TOKEN: ${{ secrets.D2L_GITHUB_TOKEN }}
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.D2L_RELEASE_TOKEN }}
           NPM: true
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
