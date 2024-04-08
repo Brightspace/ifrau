@@ -41,7 +41,7 @@
     "@babel/eslint-parser": "^7",
     "chai": "^4",
     "chai-as-promised": "^7",
-    "eslint": "^8",
+    "eslint": "^9",
     "eslint-config-brightspace": "^1.0",
     "eslint-plugin-html": "^7",
     "eslint-plugin-import": "^2",
