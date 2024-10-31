@@ -1,9 +1,0 @@
-{
-  "extends": "brightspace/browser-config",
-  "env": {
-    "node": true
-  },
-  "rules": {
-    "no-empty": ["error", { "allowEmptyCatch": true }]
-  }
-}

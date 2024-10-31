@@ -10,7 +10,7 @@ export function hostSyncOslo(host) {
 				osloData.collection = new window.URL(osloData.collection, window.location.origin).href;
 
 				return osloData;
-			} catch (e) {}
+			} catch {}
 		}
 		return;
 	});

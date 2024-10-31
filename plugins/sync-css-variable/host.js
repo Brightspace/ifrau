@@ -6,7 +6,7 @@ export function hostSyncCssVariable(host) {
 				return JSON.parse(
 					htmlElems[0].getAttribute('data-css-vars')
 				);
-			} catch (e) {}
+			} catch {}
 		}
 		return {};
 	});

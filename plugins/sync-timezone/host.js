@@ -6,7 +6,7 @@ export function hostSyncTimezone(host) {
 				return JSON.parse(
 					htmlElems[0].getAttribute('data-timezone')
 				);
-			} catch (e) {}
+			} catch {}
 		}
 		return {
 			identifier: '',

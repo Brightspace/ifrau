@@ -6,7 +6,7 @@ export function hostSyncIntl(host) {
 				return JSON.parse(
 					htmlElems[0].getAttribute('data-intl-overrides')
 				);
-			} catch (e) {}
+			} catch {}
 		}
 		return {};
 	});
