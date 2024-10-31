@@ -1,6 +1,6 @@
 {
   "name": "ifrau",
-  "version": "0.41.2",
+  "version": "0.41.3",
   "description": "Free-range app utility for IFRAME-based FRAs",
   "type": "module",
   "exports": {
@@ -42,7 +42,7 @@
     "@eslint/compat": "^1",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9",
-	"globals": "^15",
+    "globals": "^15",
     "chai": "^4",
     "chai-as-promised": "^8",
     "eslint": "^9",
