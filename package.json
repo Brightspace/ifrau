@@ -47,9 +47,6 @@
     "chai-as-promised": "^8",
     "eslint": "^9",
     "eslint-config-brightspace": "^2",
-    "eslint-plugin-html": "^8",
-    "eslint-plugin-import": "^2",
-    "eslint-plugin-sort-class-members": "^1",
     "mocha": "^10",
     "sinon": "^19",
     "sinon-chai": "^3"
