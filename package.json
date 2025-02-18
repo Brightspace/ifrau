@@ -49,6 +49,6 @@
     "eslint-config-brightspace": "^2",
     "mocha": "^11",
     "sinon": "^19",
-    "sinon-chai": "^3"
+    "sinon-chai": "^4"
   }
 }
