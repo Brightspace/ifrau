@@ -38,7 +38,7 @@
   "homepage": "https://github.com/Brightspace/ifrau",
   "devDependencies": {
     "globals": "^17",
-    "chai": "^4",
+    "chai": "^6",
     "chai-as-promised": "^8",
     "eslint": "^9",
     "eslint-config-brightspace": "^2",
