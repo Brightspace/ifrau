@@ -41,7 +41,7 @@
     "@babel/eslint-parser": "^7",
     "@eslint/compat": "^2",
     "@eslint/eslintrc": "^3",
-    "@eslint/js": "^9",
+    "@eslint/js": "^10",
     "globals": "^17",
     "chai": "^4",
     "chai-as-promised": "^8",
