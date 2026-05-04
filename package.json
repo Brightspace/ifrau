@@ -41,7 +41,7 @@
     "chai": "^4",
     "chai-as-promised": "^8",
     "eslint": "^9",
-    "eslint-config-brightspace": "^2",
+    "eslint-config-brightspace": "^3",
     "mocha": "^11",
     "sinon": "^21",
     "sinon-chai": "^3"
