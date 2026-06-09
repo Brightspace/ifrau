@@ -57,6 +57,7 @@ Parameters:
  * `allowEncryptedMedia`:  whether the frame will allow access to encrypted media, `false` by default
  * `allowAutoplay`:  whether the frame will allow access to autoplay, `false` by default
  * `allowClipboard`: whether the frame will allow access to the clipboard (copy/paste), `false` by default
+ * `allowUnload`: whether the iframe will allow the window `unload` event (which is deprecated) to execute
 
 Creating a Client is even simpler:
 

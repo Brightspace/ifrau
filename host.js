@@ -10,7 +10,7 @@ import { hostSyncTimezone } from './plugins/sync-timezone/host.js';
 import { hostSyncTitle } from './plugins/sync-title/host.js';
 import { PortWithServices } from './port/services.js';
 
-const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay, allowClipboard) => {
+const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, allowCamera, allowScreenCapture, allowEncryptedMedia, allowAutoplay, allowClipboard, allowUnload) => {
 	const iframe = document.createElement('iframe');
 	iframe.width = '100%';
 	if (height || height === 0) {
@@ -42,6 +42,9 @@ const createIFrame = (src, frameId, height, allowFullScreen, allowMicrophone, al
 		}
 		if (allowClipboard) {
 			allow.push('clipboard-write *;');
+		}
+		if (allowUnload) {
+			allow.push('unload;');
 		}
 		iframe.setAttribute('allow', allow.join(' '));
 	}
@@ -86,7 +89,8 @@ export class Host extends PortWithServices {
 			options.allowScreenCapture,
 			options.allowEncryptedMedia,
 			options.allowAutoplay,
-			options.allowClipboard
+			options.allowClipboard,
+			options.allowUnload
 		);
 		parent.appendChild(iframe);
 
