@@ -36,6 +36,9 @@
     "url": "https://github.com/Brightspace/ifrau/issues"
   },
   "homepage": "https://github.com/Brightspace/ifrau",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "globals": "^17",
     "chai": "^4",
